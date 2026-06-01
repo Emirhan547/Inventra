@@ -1,0 +1,45 @@
+﻿using Inventra.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Inventra.Persistence.Context
+{
+    public class InventraDbContext : DbContext
+    {
+        public InventraDbContext(
+            DbContextOptions<InventraDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<Product> Products => Set<Product>();
+
+        public DbSet<Category> Categories => Set<Category>();
+
+        public DbSet<Warehouse> Warehouses => Set<Warehouse>();
+
+        public DbSet<Stock> Stocks => Set<Stock>();
+
+        public DbSet<StockMovement> StockMovements
+            => Set<StockMovement>();
+
+        public DbSet<Supplier> Suppliers => Set<Supplier>();
+
+        public DbSet<PurchaseOrder> PurchaseOrders
+            => Set<PurchaseOrder>();
+
+        public DbSet<PurchaseOrderItem> PurchaseOrderItems
+            => Set<PurchaseOrderItem>();
+
+        protected override void OnModelCreating(
+            ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                typeof(InventraDbContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

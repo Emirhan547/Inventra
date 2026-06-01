@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Core/Inventra.Application/Inventra.Application.csproj" />
+    <Project Path="Core/Inventra.Domain/Inventra.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/Inventra.Infrastructure/Inventra.Infrastructure.csproj" />
+    <Project Path="Infrastructure/Inventra.Persistence/Inventra.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="Presentation/Inventra.API/Inventra.API.csproj" />
+  </Folder>
+</Solution>
