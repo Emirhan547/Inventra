@@ -1,6 +1,7 @@
 ﻿using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Domain.Entities;
 using Inventra.Persistence.Context;
+using Inventra.Persistence.Repositories.GenericRepositories;
 using System;
 using System.Collections.Generic;
 using System.Text;

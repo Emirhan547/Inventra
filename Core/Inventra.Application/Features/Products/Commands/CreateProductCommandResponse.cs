@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Products.Commands
 {
-    public class CreateProductCommandResponse:IRequest<Result<Guid>>
+    public class CreateProductCommandResponse
     {
         public Guid Id { get; set; }
     }

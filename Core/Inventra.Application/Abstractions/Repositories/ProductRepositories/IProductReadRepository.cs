@@ -9,8 +9,6 @@ namespace Inventra.Application.Abstractions.Repositories.ProductRepositories
     public interface IProductReadRepository
      : IReadRepository<Product>
     {
-        Task<bool> IsSkuExistsAsync(
-       string sku,
-       CancellationToken cancellationToken);
+        Task<bool> IsSkuExistsAsync(string sku,CancellationToken cancellationToken);
     }
 }

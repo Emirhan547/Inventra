@@ -16,28 +16,20 @@ namespace Inventra.Application.Features.Products.Handlers
             CreateProductCommandRequest request,
             CancellationToken cancellationToken)
         {
-            var isSkuExists = await _readRepository
-      .IsSkuExistsAsync(
-          request.SKU,
-          cancellationToken);
+            var isSkuExists = await _readRepository.IsSkuExistsAsync(request.SKU,cancellationToken);
 
             if (isSkuExists)
             {
-                return Result<CreateProductCommandResponse>
-                    .Failure("SKU already exists");
+                return Result<CreateProductCommandResponse>.Failure("SKU already exists");
             }
 
             var product = request.Adapt<Product>();
 
-            await _writeRepository
-                .AddAsync(product);
+            await _writeRepository.AddAsync(product);
 
-            await _unitOfWork
-                .SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
 
-            return Result<CreateProductCommandResponse>
-                .SuccessResult(
-                    new CreateProductCommandResponse
+            return Result<CreateProductCommandResponse>.SuccessResult(new CreateProductCommandResponse
                     {
                         Id = product.Id
                     },

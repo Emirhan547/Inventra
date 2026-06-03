@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Inventra.Persistence.Repositories
+namespace Inventra.Persistence.Repositories.GenericRepositories
 {
     public class WriteRepository<T>
      : IWriteRepository<T>

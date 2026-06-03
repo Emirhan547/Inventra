@@ -25,6 +25,5 @@ if (app.Environment.IsDevelopment())
 app.UseGlobalExceptionMiddleware();
 
 app.UseHttpsRedirection();
-app.MapProductEndpoints();
-
+app.MapEndpoints();
 app.Run();

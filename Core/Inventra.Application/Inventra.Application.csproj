@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Inventra.Domain\Inventra.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\StockMovements\Validators\" />
+  </ItemGroup>
+
 </Project>

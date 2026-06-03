@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Inventra.Persistence.Repositories.GenericRepositories;
 namespace Inventra.Persistence.Repositories.ProductRepositories
 {
     public class ProductReadRepository
