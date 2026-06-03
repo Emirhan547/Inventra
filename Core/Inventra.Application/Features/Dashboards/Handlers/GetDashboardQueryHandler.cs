@@ -8,7 +8,7 @@ namespace Inventra.Application.Features.Dashboards.Handlers;
 
 public class GetDashboardQueryHandler
     : IRequestHandler<
-        GetDashboardQuery,
+        GetDashboardQueryRequest,
         Result<GetDashboardQueryResponse>>
 {
     private readonly IDashboardReadRepository
@@ -23,7 +23,7 @@ public class GetDashboardQueryHandler
     public async Task<
         Result<GetDashboardQueryResponse>>
         Handle(
-            GetDashboardQuery request,
+            GetDashboardQueryRequest request,
             CancellationToken cancellationToken)
     {
         var dashboard =

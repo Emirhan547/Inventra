@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Dashboards.Queries
 {
-    public class GetDashboardQuery
+    public class GetDashboardQueryRequest
     : IRequest<Result<GetDashboardQueryResponse>>
     {
     }

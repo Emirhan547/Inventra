@@ -12,6 +12,7 @@ namespace Inventra.API.Extensions
             app.MapStockEndpoints();
             app.MapStockMovementEndpoints();
             app.MapSupplierEndpoints();
+            app.MapDashboardEndpoints();
            
         }
     }
