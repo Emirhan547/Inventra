@@ -1,0 +1,119 @@
+﻿@using Inventra.WebUI.Dtos.StockMovementDtos
+@model List<ResultStockMovementDto>
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Stok Hareketleri</h2>
+
+        <p class="text-muted">
+            Tüm stok hareketleri
+        </p>
+
+    </div>
+
+</div>
+
+<div class="content-card">
+
+    <table class="table table-hover align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>Tarih</th>
+
+                <th>Ürün</th>
+
+                <th>Depo</th>
+
+                <th>Tip</th>
+
+                <th>Miktar</th>
+
+                <th>Açıklama</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @item.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @item.ProductName
+                        </td>
+
+                        <td>
+                            @item.WarehouseName
+                        </td>
+
+                        <td>
+
+                            @switch (item.Type)
+                            {
+                                case StockMovementType.StockIn:
+
+                                    <span class="badge bg-success">
+                                        Giriş
+                                    </span>
+                                    break;
+
+                                case StockMovementType.StockOut:
+
+                                    <span class="badge bg-danger">
+                                        Çıkış
+                                    </span>
+                                    break;
+
+                                case StockMovementType.Transfer:
+
+                                    <span class="badge bg-primary">
+                                        Transfer
+                                    </span>
+                                    break;
+                            }
+
+                        </td>
+
+                        <td>
+                            @item.Quantity
+                        </td>
+
+                        <td>
+                            @item.Description
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="6"
+                        class="text-center">
+
+                        Hareket bulunamadı
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

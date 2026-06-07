@@ -26,8 +26,14 @@ public class GetProductsQueryHandler
             GetProductsQueryRequest request,
             CancellationToken cancellationToken)
     {
-        var products =await _readRepository.GetAllAsync();
-        var mapped = products.Adapt<List<GetProductsQueryResponse>>();
+        var products =
+     await _readRepository
+         .GetAllWithCategoryAsync(
+             cancellationToken);
+
+        var mapped =
+            products.Adapt<
+                List<GetProductsQueryResponse>>();
 
         return Result<List<GetProductsQueryResponse>>
             .SuccessResult(mapped);

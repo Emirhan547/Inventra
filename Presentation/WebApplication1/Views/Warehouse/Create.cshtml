@@ -1,0 +1,38 @@
+﻿@using Inventra.WebUI.Dtos.WarehouseDtos
+@model CreateWarehouseDto
+
+<div class="content-card">
+
+    <h2 class="mb-4">
+        Yeni Depo
+    </h2>
+
+    <form asp-action="Create">
+
+        <div class="mb-3">
+
+            <label>Depo Adı</label>
+
+            <input asp-for="Name"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Lokasyon</label>
+
+            <input asp-for="Location"
+                   class="form-control" />
+
+        </div>
+
+        <button class="btn btn-primary">
+
+            Kaydet
+
+        </button>
+
+    </form>
+
+</div>

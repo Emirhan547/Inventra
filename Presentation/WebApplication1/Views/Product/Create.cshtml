@@ -1,0 +1,72 @@
+﻿@using Inventra.WebUI.Dtos.ProductDtos
+@model CreateProductDto
+
+<div class="content-card">
+
+    <h2 class="mb-4">
+        Yeni Ürün
+    </h2>
+
+    <form asp-action="Create">
+
+        <div class="mb-3">
+
+            <label>Kategori</label>
+
+            <select asp-for="CategoryId"
+                    asp-items="ViewBag.Categories"
+                    class="form-select">
+
+                <option value="">
+                    Kategori Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Ürün Adı</label>
+
+            <input asp-for="Name"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>SKU</label>
+
+            <input asp-for="SKU"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Birim Fiyat</label>
+
+            <input asp-for="UnitPrice"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Minimum Stok</label>
+
+            <input asp-for="MinimumStockLevel"
+                   class="form-control" />
+
+        </div>
+
+        <button class="btn btn-primary">
+
+            Kaydet
+
+        </button>
+
+    </form>
+
+</div>

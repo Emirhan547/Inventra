@@ -1,0 +1,73 @@
+﻿@using Inventra.WebUI.Dtos.StockDtos
+@model CreateStockOutDto
+
+<div class="content-card">
+
+    <h2 class="mb-4">
+
+        Stok Çıkışı
+
+    </h2>
+
+    <form asp-action="StockOut">
+
+        <div class="mb-3">
+
+            <label>Ürün</label>
+
+            <select asp-for="ProductId"
+                    asp-items="ViewBag.Products"
+                    class="form-select">
+
+                <option value="">
+                    Ürün Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Depo</label>
+
+            <select asp-for="WarehouseId"
+                    asp-items="ViewBag.Warehouses"
+                    class="form-select">
+
+                <option value="">
+                    Depo Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Miktar</label>
+
+            <input asp-for="Quantity"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Açıklama</label>
+
+            <textarea asp-for="Description"
+                      class="form-control">
+            </textarea>
+
+        </div>
+
+        <button class="btn btn-danger">
+
+            Stoktan Düş
+
+        </button>
+
+    </form>
+
+</div>

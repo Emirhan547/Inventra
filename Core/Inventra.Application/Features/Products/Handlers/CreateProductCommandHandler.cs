@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Abstractions.Repositories.ProductRepositories;
+﻿using Inventra.Application.Abstractions.Repositories.CategoryRepositories;
+using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
 using Inventra.Application.Features.Products.Commands;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace Inventra.Application.Features.Products.Handlers
 {
-    public class CreateProductCommandHandler (IProductWriteRepository _writeRepository,IProductReadRepository _readRepository,IUnitOfWork _unitOfWork): IRequestHandler<CreateProductCommandRequest, Result<CreateProductCommandResponse>>
+    public class CreateProductCommandHandler (IProductWriteRepository _writeRepository,IProductReadRepository _readRepository,IUnitOfWork _unitOfWork,ICategoryReadRepository _categoryReadRepository): IRequestHandler<CreateProductCommandRequest, Result<CreateProductCommandResponse>>
     {
         public async Task<
         Result<CreateProductCommandResponse>>
@@ -22,7 +23,17 @@ namespace Inventra.Application.Features.Products.Handlers
             {
                 return Result<CreateProductCommandResponse>.Failure("SKU already exists");
             }
+            var categoryExists =
+    await _categoryReadRepository
+        .AnyAsync(
+            x => x.Id == request.CategoryId,
+            cancellationToken);
 
+            if (!categoryExists)
+            {
+                return Result<CreateProductCommandResponse>
+                    .Failure("Category not found.");
+            }
             var product = request.Adapt<Product>();
 
             await _writeRepository.AddAsync(product);

@@ -1,0 +1,102 @@
+﻿@using Inventra.WebUI.Dtos.StockDtos
+@model List<ResultStockDto>
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Stoklar</h2>
+
+        <p class="text-muted">
+            Güncel stok durumu
+        </p>
+
+    </div>
+
+</div>
+
+<div class="content-card">
+
+    <table class="table table-hover align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>Ürün</th>
+
+                <th>Depo</th>
+
+                <th>Miktar</th>
+
+                <th>Durum</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @if (Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @item.ProductName
+                        </td>
+
+                        <td>
+                            @item.WarehouseName
+                        </td>
+
+                        <td>
+                            @item.Quantity
+                        </td>
+
+                        <td>
+
+                            @if (item.Quantity == 0)
+                            {
+                                <span class="badge bg-danger">
+                                    Tükendi
+                                </span>
+                            }
+                            else if (item.Quantity < 10)
+                            {
+                                <span class="badge bg-warning">
+                                    Kritik
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Normal
+                                </span>
+                            }
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td colspan="4"
+                        class="text-center">
+
+                        Kayıt bulunamadı
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

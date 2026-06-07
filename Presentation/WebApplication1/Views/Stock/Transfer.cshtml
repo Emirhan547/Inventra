@@ -1,0 +1,89 @@
+﻿@using Inventra.WebUI.Dtos.StockDtos
+@model CreateTransferStockDto
+
+<div class="content-card">
+
+    <h2 class="mb-4">
+
+        Depolar Arası Transfer
+
+    </h2>
+
+    <form asp-action="Transfer">
+
+        <div class="mb-3">
+
+            <label>Ürün</label>
+
+            <select asp-for="ProductId"
+                    asp-items="ViewBag.Products"
+                    class="form-select">
+
+                <option value="">
+                    Ürün Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Kaynak Depo</label>
+
+            <select asp-for="SourceWarehouseId"
+                    asp-items="ViewBag.Warehouses"
+                    class="form-select">
+
+                <option value="">
+                    Kaynak Depo Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Hedef Depo</label>
+
+            <select asp-for="DestinationWarehouseId"
+                    asp-items="ViewBag.Warehouses"
+                    class="form-select">
+
+                <option value="">
+                    Hedef Depo Seçiniz
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Miktar</label>
+
+            <input asp-for="Quantity"
+                   class="form-control" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Açıklama</label>
+
+            <textarea asp-for="Description"
+                      class="form-control">
+            </textarea>
+
+        </div>
+
+        <button class="btn btn-primary">
+
+            Transfer Et
+
+        </button>
+
+    </form>
+
+</div>

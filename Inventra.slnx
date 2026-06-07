@@ -9,5 +9,6 @@
   </Folder>
   <Folder Name="/Presentation/">
     <Project Path="Presentation/Inventra.API/Inventra.API.csproj" />
+    <Project Path="Presentation/WebApplication1/Inventra.WebUI.csproj" Id="2c50fc9a-906f-4239-b579-32f3fcbeec92" />
   </Folder>
 </Solution>

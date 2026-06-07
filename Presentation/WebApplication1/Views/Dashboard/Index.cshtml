@@ -1,0 +1,414 @@
+﻿@using Inventra.WebUI.Dtos.DashboardDtos
+@model DashboardSummaryDto
+
+<div class="page-header">
+
+    <div>
+
+        <h2>
+            Dashboard
+        </h2>
+
+        <p class="text-muted">
+            Inventra Envanter Yönetim Sistemi Genel Durumu
+        </p>
+
+    </div>
+
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card stat-blue">
+
+        <div class="stat-icon">
+            📦
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalProducts
+            </h3>
+
+            <span>
+                Toplam Ürün
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-purple">
+
+        <div class="stat-icon">
+            🏢
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalWarehouses
+            </h3>
+
+            <span>
+                Toplam Depo
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-green">
+
+        <div class="stat-icon">
+            📊
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalStocks
+            </h3>
+
+            <span>
+                Toplam Stok Kaydı
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-orange">
+
+        <div class="stat-icon">
+            🔄
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalStockMovements
+            </h3>
+
+            <span>
+                Toplam Stok Hareketi
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-dark">
+
+        <div class="stat-icon">
+            🤝
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalSuppliers
+            </h3>
+
+            <span>
+                Toplam Tedarikçi
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-red">
+
+        <div class="stat-icon">
+            🛒
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.TotalPurchaseOrders
+            </h3>
+
+            <span>
+                Satın Alma Siparişi
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="content-card">
+
+        <h4>
+            Hızlı İşlemler
+        </h4>
+
+        <hr />
+
+        <div class="quick-actions">
+
+            <a asp-controller="Product"
+               asp-action="Create"
+               class="btn btn-primary">
+
+                Yeni Ürün
+
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="Create"
+               class="btn btn-success">
+
+                Yeni Tedarikçi
+
+            </a>
+
+            <a asp-controller="Stock"
+               asp-action="StockIn"
+               class="btn btn-warning">
+
+                Stok Girişi
+
+            </a>
+
+            <a asp-controller="Stock"
+               asp-action="StockOut"
+               class="btn btn-danger">
+
+                Stok Çıkışı
+
+            </a>
+
+            <a asp-controller="PurchaseOrder"
+               asp-action="Create"
+               class="btn btn-dark">
+
+                Satın Alma Siparişi
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="content-card">
+
+        <h4>
+            Sistem Özeti
+        </h4>
+
+        <hr />
+
+        <ul class="summary-list">
+
+            <li>
+
+                Toplam ürün sayısı:
+
+                <strong>
+                    @Model.TotalProducts
+                </strong>
+
+            </li>
+
+            <li>
+
+                Toplam depo sayısı:
+
+                <strong>
+                    @Model.TotalWarehouses
+                </strong>
+
+            </li>
+
+            <li>
+
+                Toplam tedarikçi sayısı:
+
+                <strong>
+                    @Model.TotalSuppliers
+                </strong>
+
+            </li>
+
+            <li>
+
+                Toplam satın alma siparişi:
+
+                <strong>
+                    @Model.TotalPurchaseOrders
+                </strong>
+
+            </li>
+
+            <li>
+
+                Bekleyen sipariş sayısı:
+
+                <strong>
+                    @Model.PendingPurchaseOrders
+                </strong>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<div class="dashboard-grid mt-4">
+
+    <div class="content-card">
+
+        <h4>
+            Son Stok Hareketleri
+        </h4>
+
+        <hr />
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Ürün</th>
+
+                    <th>Depo</th>
+
+                    <th>Tip</th>
+
+                    <th>Miktar</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model.RecentMovements.Any())
+                {
+                    @foreach (var item in Model.RecentMovements)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.ProductName
+                            </td>
+
+                            <td>
+                                @item.WarehouseName
+                            </td>
+
+                            <td>
+                                @item.Type
+                            </td>
+
+                            <td>
+                                @item.Quantity
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="4"
+                            class="text-center">
+
+                            Hareket bulunamadı
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="content-card">
+
+        <h4>
+            Kritik Stoklar
+        </h4>
+
+        <hr />
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Ürün</th>
+
+                    <th>Depo</th>
+
+                    <th>Mevcut</th>
+
+                    <th>Minimum</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (Model.CriticalStocks.Any())
+                {
+                    @foreach (var item in Model.CriticalStocks)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.ProductName
+                            </td>
+
+                            <td>
+                                @item.WarehouseName
+                            </td>
+
+                            <td>
+                                @item.Quantity
+                            </td>
+
+                            <td>
+                                @item.MinimumStockLevel
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="4"
+                            class="text-center">
+
+                            Kritik stok bulunamadı
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

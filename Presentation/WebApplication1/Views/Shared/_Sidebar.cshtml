@@ -1,0 +1,124 @@
+﻿<aside class="sidebar">
+
+    <div class="logo">
+
+        <h3>Inventra</h3>
+
+        <span>Envanter Yönetim Sistemi</span>
+
+    </div>
+
+    <nav>
+
+        <div class="menu-group">
+
+            <span class="menu-title">
+                GENEL
+            </span>
+
+            <a asp-controller="Dashboard"
+               asp-action="Index">
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+        <div class="menu-group">
+
+            <span class="menu-title">
+                TANIMLAR
+            </span>
+
+            <a asp-controller="Category"
+               asp-action="Index">
+
+                Categories
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index">
+
+                Products
+
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="Index">
+
+                Suppliers
+
+            </a>
+
+            <a asp-controller="Warehouse"
+               asp-action="Index">
+
+                Warehouses
+
+            </a>
+
+        </div>
+
+        <div class="menu-group">
+
+            <span class="menu-title">
+                STOK YÖNETİMİ
+            </span>
+
+            <a asp-controller="Stock"
+               asp-action="Index">
+
+                Stocks
+
+            </a>
+
+            <a asp-controller="Stock"
+               asp-action="StockIn">
+
+                Stock In
+
+            </a>
+
+            <a asp-controller="Stock"
+               asp-action="StockOut">
+
+                Stock Out
+
+            </a>
+
+            <a asp-controller="Stock"
+               asp-action="Transfer">
+
+                Transfer
+
+            </a>
+
+            <a asp-controller="StockMovement"
+               asp-action="Index">
+
+                Stock Movements
+
+            </a>
+
+        </div>
+
+        <div class="menu-group">
+
+            <span class="menu-title">
+                SATIN ALMA
+            </span>
+
+            <a asp-controller="PurchaseOrder"
+               asp-action="Index">
+
+                Purchase Orders
+
+            </a>
+
+        </div>
+
+    </nav>
+
+</aside>

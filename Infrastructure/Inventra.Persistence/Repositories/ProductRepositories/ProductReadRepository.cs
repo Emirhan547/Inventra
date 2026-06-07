@@ -26,5 +26,13 @@ namespace Inventra.Persistence.Repositories.ProductRepositories
             return await Table
                 .AnyAsync(x => x.SKU == sku, cancellationToken);
         }
+        public async Task<List<Product>>
+            GetAllWithCategoryAsync(
+                CancellationToken cancellationToken = default)
+        {
+            return await Table
+                .Include(x => x.Category)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

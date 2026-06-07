@@ -1,0 +1,61 @@
+﻿@using Inventra.WebUI.Dtos.CategoryDtos
+@model CreateCategoryDto
+
+@{
+    ViewData["Title"] = "Yeni Kategori";
+}
+
+<div class="content-card">
+
+    <div class="mb-4">
+
+        <h2>Yeni Kategori</h2>
+
+        <p class="text-muted">
+            Sisteme yeni kategori ekleyin.
+        </p>
+
+    </div>
+
+    <form asp-action="Create"
+          method="post">
+
+        <div class="mb-3">
+
+            <label asp-for="Name"
+                   class="form-label">
+
+                Kategori Adı
+
+            </label>
+
+            <input asp-for="Name"
+                   class="form-control" />
+
+            <span asp-validation-for="Name"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                Kaydet
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Vazgeç
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>

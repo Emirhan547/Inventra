@@ -8,6 +8,7 @@ namespace Inventra.Domain.Entities
 {
     public class PurchaseOrder : BaseEntity
     {
+        public string OrderNumber { get; set; }
         public Guid SupplierId { get; set; }
 
         public Supplier Supplier { get; set; }

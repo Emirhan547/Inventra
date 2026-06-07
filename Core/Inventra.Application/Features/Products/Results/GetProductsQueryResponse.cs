@@ -13,5 +13,9 @@ namespace Inventra.Application.Features.Products.Results
         public string SKU { get; set; }
 
         public decimal UnitPrice { get; set; }
+
+        public int MinimumStockLevel { get; set; }
+
+        public string CategoryName { get; set; }
     }
 }
