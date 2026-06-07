@@ -1,12 +1,14 @@
 # Inventra
 
-Inventra, modern .NET teknolojileri ve Onion Architecture prensipleri kullanılarak geliştirilen bir Envanter Yönetim API projesidir.
+Inventra, modern .NET teknolojileri ve Onion Architecture prensipleri kullanılarak geliştirilen bir Envanter ve Stok Yönetim Sistemidir.
 
-Bu projenin amacı; gerçek dünya senaryolarına yakın bir sistem geliştirirken CQRS, MediatR, Minimal API, FluentValidation, Unit Of Work ve diğer modern backend yaklaşımlarını uygulamalı olarak kullanmaktır.
+Proje; gerçek dünya senaryolarına yakın bir yapı oluşturmak amacıyla geliştirilmiş olup CQRS, MediatR, Minimal API, Entity Framework Core, FluentValidation, Result Pattern ve modern katmanlı mimari yaklaşımlarını uygulamalı olarak içermektedir.
 
 ---
 
 # Kullanılan Teknolojiler
+
+### Backend
 
 * ASP.NET Core 9
 * Minimal API
@@ -17,8 +19,16 @@ Bu projenin amacı; gerçek dünya senaryolarına yakın bir sistem geliştirirk
 * Mapster
 * Onion Architecture
 * CQRS Pattern
-* Result Pattern
+* Repository Pattern
 * Unit Of Work Pattern
+* Result Pattern
+
+### Frontend
+
+* ASP.NET Core MVC
+* Razor Views
+* Bootstrap
+* HttpClient
 
 ---
 
@@ -31,6 +41,7 @@ Inventra.API
 Inventra.Application
 Inventra.Domain
 Inventra.Persistence
+Inventra.WebUI
 ```
 
 ## Domain Katmanı
@@ -43,7 +54,7 @@ Inventra.Persistence
 
 * CQRS (Command & Query)
 * MediatR Handler'ları
-* FluentValidation Doğrulamaları
+* FluentValidation
 * Result Pattern
 * Repository Soyutlamaları
 * Unit Of Work Soyutlamaları
@@ -60,17 +71,33 @@ Inventra.Persistence
 
 * Minimal API Endpoint'leri
 * Middleware'ler
-* OpenAPI / Scalar Yapılandırmaları
+* OpenAPI
+* Scalar
+
+## WebUI Katmanı
+
+* ASP.NET Core MVC
+* Razor View'lar
+* Dashboard
+* Yönetim Panelleri
+* API Tüketimi
 
 ---
 
-# Tamamlanan Özellikler
+# Tamamlanan Modüller
+
+## Kategori Yönetimi
+
+* Kategori oluşturma
+* Kategori listeleme
+* Kategori güncelleme
+* Kategori silme
 
 ## Ürün Yönetimi
 
 * Ürün oluşturma
 * Ürün listeleme
-* Id ile ürün getirme
+* Ürün detay görüntüleme
 * Ürün güncelleme
 * Ürün silme
 
@@ -78,7 +105,6 @@ Inventra.Persistence
 
 * Depo oluşturma
 * Depo listeleme
-* Id ile depo getirme
 * Depo güncelleme
 * Depo silme
 
@@ -86,46 +112,58 @@ Inventra.Persistence
 
 * Tedarikçi oluşturma
 * Tedarikçi listeleme
-* Id ile tedarikçi getirme
 * Tedarikçi güncelleme
 * Tedarikçi silme
 
 ## Stok Yönetimi
 
-* Stok girişi (Stock In)
-* Stok çıkışı (Stock Out)
-* Depolar arası stok transferi
+* Stock In
+* Stock Out
+* Depolar arası transfer
 * Stok sorgulama
 
 ## Stok Hareketleri
 
-* Stock In hareketleri
-* Stock Out hareketleri
-* Transfer hareketleri
 * Hareket geçmişi görüntüleme
+* Giriş hareketleri
+* Çıkış hareketleri
+* Transfer hareketleri
+
+## Satın Alma Yönetimi
+
+* Satın alma siparişi oluşturma
+* Sipariş detay görüntüleme
+* Sipariş onaylama
+* Sipariş tamamlama
+* Sipariş durum yönetimi
 
 ## Dashboard
 
 * Toplam ürün sayısı
 * Toplam depo sayısı
-* Toplam stok kaydı sayısı
-* Toplam stok hareketi sayısı
+* Toplam tedarikçi sayısı
+* Toplam stok kaydı
+* Toplam stok hareketi
+* Toplam satın alma siparişi
+* Bekleyen sipariş sayısı
+* Son stok hareketleri
+* Kritik stoklar
 
 ---
 
 # Altyapı Özellikleri
 
-## Doğrulama Altyapısı
+## Validation Pipeline
 
 FluentValidation ve MediatR Pipeline Behavior kullanılarak merkezi doğrulama mekanizması oluşturulmuştur.
 
 ## Global Exception Handling
 
-Uygulama genelinde oluşan hatalar merkezi bir middleware üzerinden yönetilmektedir.
+Uygulama genelinde oluşan hatalar merkezi middleware üzerinden yönetilmektedir.
 
 ## Audit Altyapısı
 
-EF Core Interceptor kullanılarak aşağıdaki alanlar otomatik olarak yönetilmektedir:
+EF Core Interceptor kullanılarak aşağıdaki alanlar otomatik yönetilmektedir:
 
 * CreatedDate
 * UpdatedDate
@@ -158,28 +196,31 @@ dotnet ef database update -p Inventra.Persistence -s Inventra.API
 
 Proje OpenAPI ve Scalar kullanmaktadır.
 
-Uygulama çalıştırıldıktan sonra aşağıdaki adresten API dokümantasyonuna erişilebilir:
+Uygulama çalıştırıldıktan sonra:
 
 ```text
 /scalar/v1
 ```
 
+adresinden API dokümantasyonuna erişilebilir.
+
 ---
 
 # Yol Haritası
 
-* Purchase Order Yönetimi
-* Purchase Order Item Yönetimi
-* Sipariş Teslim Alma Süreci
+* ASP.NET Core Identity
+* JWT Authentication
+* Refresh Token
+* Role Management
+* Policy Based Authorization
 * SignalR Entegrasyonu
 * RabbitMQ Entegrasyonu
 * Logging & Monitoring
 * Cache Mekanizması
-* Authentication & Authorization
-* Web UI
+* Docker Desteği
 
 ---
 
 # Durum
 
-Proje aktif olarak geliştirilmektedir ve yeni modüller eklenmeye devam edilmektedir.
+Proje aktif olarak geliştirilmektedir ve yeni modüller eklenmeye devam etmektedir.
