@@ -10,8 +10,6 @@ namespace Inventra.Application.Abstractions.Repositories.ProductRepositories
      : IReadRepository<Product>
     {
         Task<bool> IsSkuExistsAsync(string sku,CancellationToken cancellationToken);
-        Task<List<Product>>
-            GetAllWithCategoryAsync(
-                CancellationToken cancellationToken = default);
+        Task<List<Product>>GetAllWithCategoryAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -9,13 +9,7 @@ namespace Inventra.Application.Abstractions.Repositories.StockRepositories
 {
     public interface IStockReadRepository:IReadRepository<Stock>
     {
-        Task<Stock?> GetByProductAndWarehouseAsync(
-        Guid productId,
-        Guid warehouseId,
-        bool tracking = true,
-        CancellationToken cancellationToken = default);
-        Task<List<GetStocksQueryResponse>>
-    GetStocksAsync(
-        CancellationToken cancellationToken = default);
+        Task<Stock?> GetByProductAndWarehouseAsync(Guid productId,Guid warehouseId,bool tracking = true,CancellationToken cancellationToken = default);
+        Task<List<GetStocksQueryResponse>>GetStocksAsync(CancellationToken cancellationToken = default);
     }
 }

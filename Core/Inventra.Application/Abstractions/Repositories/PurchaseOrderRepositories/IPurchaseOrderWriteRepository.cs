@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories
 {
-    public interface IPurchaseOrderWriteRepository
-       : IWriteRepository<PurchaseOrder>
+    public interface IPurchaseOrderWriteRepository: IWriteRepository<PurchaseOrder>
     {
     }
 }

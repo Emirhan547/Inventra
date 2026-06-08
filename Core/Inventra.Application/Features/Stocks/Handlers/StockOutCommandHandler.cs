@@ -12,8 +12,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Stocks.Handlers
 {
-    public class StockOutCommandHandler
-    : IRequestHandler<StockOutCommand, Result>
+    public class StockOutCommandHandler: IRequestHandler<StockOutCommand, Result>
     {
         private readonly IStockReadRepository _stockReadRepository;
         private readonly IStockMovementWriteRepository _stockMovementWriteRepository;
@@ -29,34 +28,23 @@ namespace Inventra.Application.Features.Stocks.Handlers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result> Handle(
-            StockOutCommand request,
-            CancellationToken cancellationToken)
+        public async Task<Result> Handle(StockOutCommand request,CancellationToken cancellationToken)
         {
-            var stock =
-                await _stockReadRepository
-                    .GetByProductAndWarehouseAsync(
-                        request.ProductId,
-                        request.WarehouseId,
-                        tracking: true,
-                        cancellationToken);
+            var stock =await _stockReadRepository.GetByProductAndWarehouseAsync(request.ProductId,request.WarehouseId,tracking: true,cancellationToken);
 
             if (stock is null)
             {
-                return Result.Failure(
-                    "Stock not found.");
+                return Result.Failure("Stock not found.");
             }
 
             if (stock.Quantity < request.Quantity)
             {
-                return Result.Failure(
-                    "Insufficient stock.");
+                return Result.Failure("Insufficient stock.");
             }
 
             stock.Quantity -= request.Quantity;
 
-            await _stockMovementWriteRepository
-                .AddAsync(new StockMovement
+            await _stockMovementWriteRepository.AddAsync(new StockMovement
                 {
                     Stock = stock,
                     Quantity = request.Quantity,
@@ -64,11 +52,8 @@ namespace Inventra.Application.Features.Stocks.Handlers
                     Description = request.Description
                 });
 
-            await _unitOfWork
-                .SaveChangeAsync();
-
-            return Result.SuccessResult(
-                "Stock removed successfully.");
+            await _unitOfWork.SaveChangeAsync();
+            return Result.SuccessResult("Stock removed successfully.");
         }
     }
 }

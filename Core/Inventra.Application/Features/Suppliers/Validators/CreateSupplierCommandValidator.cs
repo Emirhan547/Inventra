@@ -11,16 +11,9 @@ namespace Inventra.Application.Features.Suppliers.Validators
     {
         public CreateSupplierCommandValidator()
         {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .MaximumLength(150);
-
-            RuleFor(x => x.Phone)
-                .NotEmpty();
-
-            RuleFor(x => x.Email)
-                .NotEmpty()
-                .EmailAddress();
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(150);
+            RuleFor(x => x.Phone).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty().EmailAddress();
         }
     }
 }

@@ -9,8 +9,6 @@ namespace Inventra.Application.Abstractions.Repositories.StockMovementRepositori
 {
     public interface IStockMovementReadRepository:IReadRepository<StockMovement>
     {
-        Task<List<GetStockMovementsQueryResponse>>
-    GetStockMovementsAsync(
-        CancellationToken cancellationToken = default);
+        Task<List<GetStockMovementsQueryResponse>>GetStockMovementsAsync(CancellationToken cancellationToken = default);
     }
 }

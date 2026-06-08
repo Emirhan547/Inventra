@@ -11,13 +11,8 @@ namespace Inventra.Application.Features.Warehouses.Validators
     {
         public CreateWarehouseCommandValidator()
         {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .MaximumLength(100);
-
-            RuleFor(x => x.Location)
-                .NotEmpty()
-                .MaximumLength(250);
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Location).NotEmpty().MaximumLength(250);
         }
     }
 }

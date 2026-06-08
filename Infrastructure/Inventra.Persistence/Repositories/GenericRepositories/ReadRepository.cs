@@ -19,72 +19,45 @@ namespace Inventra.Persistence.Repositories.GenericRepositories
             _context = context;
         }
 
-        protected DbSet<T> Table =>
-            _context.Set<T>();
+        protected DbSet<T> Table =>_context.Set<T>();
 
-        public async Task<T?> GetByIdAsync(
-            Guid id,
-            bool tracking = false,
-            CancellationToken cancellationToken = default)
+        public async Task<T?> GetByIdAsync(Guid id,bool tracking = false,CancellationToken cancellationToken = default)
         {
             var query = Table.AsQueryable();
-
             if (!tracking)
                 query = query.AsNoTracking();
 
-            return await query.FirstOrDefaultAsync(
-                x => x.Id == id,
-                cancellationToken);
+            return await query.FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         }
 
-        public async Task<List<T>> GetAllAsync(
-            bool tracking = false,
-            CancellationToken cancellationToken = default)
+        public async Task<List<T>> GetAllAsync(bool tracking = false,CancellationToken cancellationToken = default)
         {
             var query = Table.AsQueryable();
-
             if (!tracking)
                 query = query.AsNoTracking();
-
-            return await query.ToListAsync(
-                cancellationToken);
+            return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<T>> GetWhereAsync(
-            Expression<Func<T, bool>> predicate,
-            bool tracking = false,
-            CancellationToken cancellationToken = default)
+        public async Task<List<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,bool tracking = false,CancellationToken cancellationToken = default)
         {
             var query = Table.Where(predicate);
-
             if (!tracking)
                 query = query.AsNoTracking();
-
-            return await query.ToListAsync(
-                cancellationToken);
+            return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<T?> GetSingleAsync(
-            Expression<Func<T, bool>> predicate,
-            bool tracking = false,
-            CancellationToken cancellationToken = default)
+        public async Task<T?> GetSingleAsync(Expression<Func<T, bool>> predicate,bool tracking = false,CancellationToken cancellationToken = default)
         {
             var query = Table.Where(predicate);
-
             if (!tracking)
                 query = query.AsNoTracking();
 
-            return await query.FirstOrDefaultAsync(
-                cancellationToken);
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<bool> AnyAsync(
-            Expression<Func<T, bool>> predicate,
-            CancellationToken cancellationToken = default)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken = default)
         {
-            return await Table.AnyAsync(
-                predicate,
-                cancellationToken);
+            return await Table.AnyAsync(   predicate,cancellationToken);
         }
     }
 }

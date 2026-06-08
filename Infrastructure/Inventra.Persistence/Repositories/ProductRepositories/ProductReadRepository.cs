@@ -8,31 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Inventra.Persistence.Repositories.GenericRepositories;
 namespace Inventra.Persistence.Repositories.ProductRepositories
 {
-    public class ProductReadRepository
-     : ReadRepository<Product>,
-       IProductReadRepository
+    public class ProductReadRepository: ReadRepository<Product>,IProductReadRepository
     {
-        public ProductReadRepository(
-            InventraDbContext context)
-            : base(context)
+        public ProductReadRepository(InventraDbContext context): base(context)
         {
 
         }
 
-        public async Task<bool> IsSkuExistsAsync(
-     string sku,
-     CancellationToken cancellationToken)
+        public async Task<bool> IsSkuExistsAsync(string sku,CancellationToken cancellationToken)
         {
-            return await Table
-                .AnyAsync(x => x.SKU == sku, cancellationToken);
+            return await Table.AnyAsync(x => x.SKU == sku, cancellationToken);
         }
-        public async Task<List<Product>>
-            GetAllWithCategoryAsync(
-                CancellationToken cancellationToken = default)
+        public async Task<List<Product>>GetAllWithCategoryAsync(CancellationToken cancellationToken = default)
         {
-            return await Table
-                .Include(x => x.Category)
-                .ToListAsync(cancellationToken);
+            return await Table.Include(x => x.Category).ToListAsync(cancellationToken);
         }
     }
 }

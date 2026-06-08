@@ -9,12 +9,7 @@ namespace Inventra.Application.Abstractions.Repositories.SupplierRepositories
 {
     public interface ISupplierReadRepository:IReadRepository<Supplier>
     {
-        Task<List<GetSuppliersQueryResponse>>
-    GetSuppliersAsync(
-        CancellationToken cancellationToken = default);
-        Task<GetSupplierByIdQueryResponse?>
-    GetSupplierByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default);
+        Task<List<GetSuppliersQueryResponse>>GetSuppliersAsync(CancellationToken cancellationToken = default);
+        Task<GetSupplierByIdQueryResponse?>GetSupplierByIdAsync(Guid id,CancellationToken cancellationToken = default);
     }
 }

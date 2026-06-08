@@ -23,20 +23,11 @@ namespace Inventra.Application.Behaviors
         {
             if (_validators.Any())
             {
-                var context =
-                    new ValidationContext<TRequest>(request);
+                var context =new ValidationContext<TRequest>(request);
 
-                var validationResults =
-                    await Task.WhenAll(
-                        _validators.Select(x =>
-                            x.ValidateAsync(
-                                context,
-                                cancellationToken)));
+                var validationResults =await Task.WhenAll(_validators.Select(x =>x.ValidateAsync(context,cancellationToken)));
 
-                var failures = validationResults
-                    .SelectMany(x => x.Errors)
-                    .Where(x => x is not null)
-                    .ToList();
+                var failures = validationResults.SelectMany(x => x.Errors).Where(x => x is not null).ToList();
 
                 if (failures.Any())
                 {

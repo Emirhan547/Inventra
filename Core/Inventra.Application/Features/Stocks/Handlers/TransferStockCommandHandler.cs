@@ -14,38 +14,19 @@ namespace Inventra.Application.Features.Stocks.Handlers
 {
     public class TransferStockCommandHandler(IStockReadRepository _stockReadRepository,IUnitOfWork _unitOfWork,IStockMovementWriteRepository _stockMovementWriteRepository,IStockWriteRepository _stockWriteRepository) : IRequestHandler<TransferStockCommand, Result>
     {
-        public async Task<Result> Handle(
-     TransferStockCommand request,
-     CancellationToken cancellationToken)
+        public async Task<Result> Handle(TransferStockCommand request,CancellationToken cancellationToken)
         {
-            var sourceStock =
-                await _stockReadRepository
-                    .GetByProductAndWarehouseAsync(
-                        request.ProductId,
-                        request.SourceWarehouseId,
-                        tracking: true,
-                        cancellationToken);
-
+            var sourceStock =await _stockReadRepository.GetByProductAndWarehouseAsync(request.ProductId,request.SourceWarehouseId,tracking: true,cancellationToken);
             if (sourceStock is null)
             {
-                return Result.Failure(
-                    "Source stock not found.");
+                return Result.Failure("Source stock not found.");
             }
 
             if (sourceStock.Quantity < request.Quantity)
             {
-                return Result.Failure(
-                    "Insufficient stock.");
+                return Result.Failure("Insufficient stock.");
             }
-
-            var destinationStock =
-                await _stockReadRepository
-                    .GetByProductAndWarehouseAsync(
-                        request.ProductId,
-                        request.DestinationWarehouseId,
-                        tracking: true,
-                        cancellationToken);
-
+            var destinationStock = await _stockReadRepository.GetByProductAndWarehouseAsync(request.ProductId,request.DestinationWarehouseId,tracking: true,cancellationToken);
             if (destinationStock is null)
             {
                 destinationStock = new Stock
@@ -55,16 +36,14 @@ namespace Inventra.Application.Features.Stocks.Handlers
                     Quantity = 0
                 };
 
-                await _stockWriteRepository
-                    .AddAsync(destinationStock);
+                await _stockWriteRepository.AddAsync(destinationStock);
             }
 
             sourceStock.Quantity -= request.Quantity;
 
             destinationStock.Quantity += request.Quantity;
 
-            await _stockMovementWriteRepository
-                .AddAsync(new StockMovement
+            await _stockMovementWriteRepository.AddAsync(new StockMovement
                 {
                     Stock = sourceStock,
                     Quantity = request.Quantity,
@@ -73,8 +52,7 @@ namespace Inventra.Application.Features.Stocks.Handlers
                         $"Transfer Out - {request.Description}"
                 });
 
-            await _stockMovementWriteRepository
-                .AddAsync(new StockMovement
+            await _stockMovementWriteRepository.AddAsync(new StockMovement
                 {
                     Stock = destinationStock,
                     Quantity = request.Quantity,
@@ -83,11 +61,9 @@ namespace Inventra.Application.Features.Stocks.Handlers
                         $"Transfer In - {request.Description}"
                 });
 
-            await _unitOfWork
-                .SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
 
-            return Result.SuccessResult(
-                "Stock transferred successfully.");
+            return Result.SuccessResult("Stock transferred successfully.");
         }
     }
 }

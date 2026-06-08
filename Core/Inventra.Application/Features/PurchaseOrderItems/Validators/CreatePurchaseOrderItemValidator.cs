@@ -11,14 +11,9 @@ namespace Inventra.Application.Features.PurchaseOrderItems.Validators
     {
         public CreatePurchaseOrderItemValidator()
         {
-            RuleFor(x => x.ProductId)
-                .NotEmpty();
-
-            RuleFor(x => x.Quantity)
-                .GreaterThan(0);
-
-            RuleFor(x => x.UnitPrice)
-                .GreaterThan(0);
+            RuleFor(x => x.ProductId).NotEmpty();
+            RuleFor(x => x.Quantity).GreaterThan(0);
+            RuleFor(x => x.UnitPrice).GreaterThan(0);
         }
     }
 }

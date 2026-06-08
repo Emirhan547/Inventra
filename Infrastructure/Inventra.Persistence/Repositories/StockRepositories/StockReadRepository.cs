@@ -16,30 +16,16 @@ namespace Inventra.Persistence.Repositories.StockRepositories
         {
         }
 
-        public async Task<Stock?> GetByProductAndWarehouseAsync(
-         Guid productId,
-         Guid warehouseId,
-         bool tracking = true,
-         CancellationToken cancellationToken = default)
+        public async Task<Stock?> GetByProductAndWarehouseAsync(Guid productId,Guid warehouseId,bool tracking = true,CancellationToken cancellationToken = default)
         {
             var query = Table.AsQueryable();
-
             if (!tracking)
                 query = query.AsNoTracking();
-
-            return await query.FirstOrDefaultAsync(
-                x =>
-                    x.ProductId == productId &&
-                    x.WarehouseId == warehouseId,
-                cancellationToken);
+            return await query.FirstOrDefaultAsync(x =>x.ProductId == productId &&x.WarehouseId == warehouseId,cancellationToken);
         }
-        public async Task<List<GetStocksQueryResponse>>
-    GetStocksAsync(
-        CancellationToken cancellationToken = default)
+        public async Task<List<GetStocksQueryResponse>>GetStocksAsync(CancellationToken cancellationToken = default)
         {
-            return await Table
-                .AsNoTracking()
-                .Select(x => new GetStocksQueryResponse
+            return await Table.AsNoTracking().Select(x => new GetStocksQueryResponse
                 {
                     Id = x.Id,
                     ProductId = x.ProductId,

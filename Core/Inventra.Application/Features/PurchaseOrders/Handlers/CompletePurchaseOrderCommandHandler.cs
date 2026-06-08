@@ -13,46 +13,23 @@ using System.Text;
 
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
-    public class CompletePurchaseOrderCommandHandler(
-    IPurchaseOrderReadRepository _repository,
-    IStockReadRepository _stockReadRepository,
-    IStockWriteRepository _stockWriteRepository,
-    IStockMovementWriteRepository _stockMovementWriteRepository,
-    IUnitOfWork _unitOfWork)
-    : IRequestHandler<
-        CompletePurchaseOrderCommand,
-        Result>
+    public class CompletePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IStockReadRepository _stockReadRepository,IStockWriteRepository _stockWriteRepository,IStockMovementWriteRepository _stockMovementWriteRepository,
+    IUnitOfWork _unitOfWork): IRequestHandler<CompletePurchaseOrderCommand,Result>
     {
-        public async Task<Result> Handle(
-            CompletePurchaseOrderCommand request,
-            CancellationToken cancellationToken)
+        public async Task<Result> Handle(CompletePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
-            var purchaseOrder =
-     await _repository
-         .GetDetailAsync(
-             request.Id,
-             cancellationToken);
+            var purchaseOrder =await _repository.GetDetailAsync(request.Id,cancellationToken);
             if (purchaseOrder is null)
             {
-                return Result.Failure(
-                    "Purchase order not found.");
+                return Result.Failure("Purchase order not found.");
             }
-
-            if (purchaseOrder.Status !=
-                PurchaseOrderStatus.Approved)
+            if (purchaseOrder.Status !=PurchaseOrderStatus.Approved)
             {
-                return Result.Failure(
-                    "Purchase order must be approved.");
+                return Result.Failure("Purchase order must be approved.");
             }
             foreach (var item in purchaseOrder.Item)
             {
-                var stock =
-                    await _stockReadRepository
-                        .GetByProductAndWarehouseAsync(
-                            item.ProductId,
-                            request.WarehouseId,
-                            true,
-                            cancellationToken);
+                var stock =await _stockReadRepository.GetByProductAndWarehouseAsync(item.ProductId,request.WarehouseId,true,cancellationToken);
 
                 if (stock is null)
                 {
@@ -62,16 +39,10 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
                         WarehouseId = request.WarehouseId,
                         Quantity = 0
                     };
-
-                    await _stockWriteRepository
-                        .AddAsync(stock);
+               await _stockWriteRepository.AddAsync(stock);
                 }
-
                 stock.Quantity += item.Quantity;
-
-                await _stockMovementWriteRepository
-                    .AddAsync(
-                        new StockMovement
+                await _stockMovementWriteRepository.AddAsync(new StockMovement
                         {
                             Stock = stock,
 
@@ -79,33 +50,20 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
 
                             Type = StockMovementType.StockIn,
 
-                            Description =
-                                $"Purchase Order {purchaseOrder.OrderNumber}"
+                            Description =$"Purchase Order {purchaseOrder.OrderNumber}"
                         });
             }
-
             if (purchaseOrder is null)
             {
-                return Result.Failure(
-                    "Purchase order not found.");
+                return Result.Failure("Purchase order not found.");
             }
-
-            if (purchaseOrder.Status !=
-                PurchaseOrderStatus.Approved)
+            if (purchaseOrder.Status !=PurchaseOrderStatus.Approved)
             {
-                return Result.Failure(
-                    "Purchase order must be approved.");
+                return Result.Failure("Purchase order must be approved.");
             }
-
-            purchaseOrder.Status =
-                PurchaseOrderStatus.Completed;
-
-            await _unitOfWork
-                .SaveChangeAsync(
-                    );
-
-            return Result.SuccessResult(
-                "Purchase order completed.");
+            purchaseOrder.Status =PurchaseOrderStatus.Completed;
+            await _unitOfWork.SaveChangeAsync();
+            return Result.SuccessResult("Purchase order completed.");
         }
     }
 }

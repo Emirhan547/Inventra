@@ -15,40 +15,20 @@ namespace Inventra.Persistence.Repositories.StockMovementRepositories
         public StockMovementReadRepository(InventraDbContext context) : base(context)
         {
         }
-        public async Task<
-    List<GetStockMovementsQueryResponse>>
-    GetStockMovementsAsync(
-        CancellationToken cancellationToken = default)
+        public async Task<List<GetStockMovementsQueryResponse>>GetStockMovementsAsync(CancellationToken cancellationToken = default)
         {
-            return await Table
-                .AsNoTracking()
-                .Select(x =>
-                    new GetStockMovementsQueryResponse
+            return await Table.AsNoTracking().Select(x =>new GetStockMovementsQueryResponse
                     {
                         Id = x.Id,
-
                         StockId = x.StockId,
-
-                        ProductName =
-                            x.Stock.Product.Name,
-
-                        WarehouseName =
-                            x.Stock.Warehouse.Name,
-
+                        ProductName =x.Stock.Product.Name,
+                        WarehouseName = x.Stock.Warehouse.Name,
                         Type = x.Type,
-
                         Quantity = x.Quantity,
-
-                        Description =
-                            x.Description,
-
-                        CreatedDate =
-                            x.CreatedDate
+                        Description =x.Description,
+                        CreatedDate =x.CreatedDate
                     })
-                .OrderByDescending(
-                    x => x.CreatedDate)
-                .ToListAsync(
-                    cancellationToken);
+                .OrderByDescending(x => x.CreatedDate).ToListAsync(cancellationToken);
         }
     }
 }

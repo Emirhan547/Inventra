@@ -11,8 +11,7 @@ using MediatR;
 
 namespace Inventra.Application.Features.Stocks.Handlers;
 
-public class StockInCommandHandler
-    : IRequestHandler<StockInCommand, Result>
+public class StockInCommandHandler: IRequestHandler<StockInCommand, Result>
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IWarehouseReadRepository _warehouseReadRepository;
@@ -37,38 +36,20 @@ public class StockInCommandHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(
-        StockInCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result> Handle(StockInCommand request,CancellationToken cancellationToken)
     {
-        var productExists =
-            await _productReadRepository.AnyAsync(
-                x => x.Id == request.ProductId,
-                cancellationToken);
-
+        var productExists =await _productReadRepository.AnyAsync(x => x.Id == request.ProductId,cancellationToken);
         if (!productExists)
         {
-            return Result.Failure(
-                "Product not found.");
+            return Result.Failure("Product not found.");
         }
-
-        var warehouseExists =
-            await _warehouseReadRepository.AnyAsync(
-                x => x.Id == request.WarehouseId,
-                cancellationToken);
+        var warehouseExists =await _warehouseReadRepository.AnyAsync( x => x.Id == request.WarehouseId,cancellationToken);
 
         if (!warehouseExists)
         {
-            return Result.Failure(
-                "Warehouse not found.");
+            return Result.Failure("Warehouse not found.");
         }
-
-        var stock =
-            await _stockReadRepository
-                .GetByProductAndWarehouseAsync(
-                    request.ProductId,
-                    request.WarehouseId,
-                    cancellationToken: cancellationToken);
+        var stock =await _stockReadRepository.GetByProductAndWarehouseAsync( request.ProductId, request.WarehouseId,cancellationToken: cancellationToken);
 
         if (stock is null)
         {
@@ -78,26 +59,18 @@ public class StockInCommandHandler
                 WarehouseId = request.WarehouseId,
                 Quantity = 0
             };
-
-            await _stockWriteRepository
-                .AddAsync(stock);
+            await _stockWriteRepository.AddAsync(stock);
         }
+             stock.Quantity += request.Quantity;
 
-        stock.Quantity += request.Quantity;
-
-        await _stockMovementWriteRepository
-            .AddAsync(new StockMovement
+        await _stockMovementWriteRepository.AddAsync(new StockMovement
             {
                 Stock = stock,
                 Quantity = request.Quantity,
                 Type = StockMovementType.StockIn,
                 Description = request.Description
             });
-
-        await _unitOfWork
-            .SaveChangeAsync();
-
-        return Result.SuccessResult(
-            "Stock added successfully.");
+        await _unitOfWork.SaveChangeAsync();
+        return Result.SuccessResult("Stock added successfully.");
     }
 }

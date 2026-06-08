@@ -4,8 +4,7 @@ namespace Inventra.API.Extensions
 {
     public static class EndpointExtensions
     {
-        public static void MapEndpoints(
-            this WebApplication app)
+        public static void MapEndpoints( this WebApplication app)
         {
             app.MapProductEndpoints();
             app.MapWarehouseEndpoints();
@@ -15,7 +14,9 @@ namespace Inventra.API.Extensions
             app.MapDashboardEndpoints();
             app.MapPurchaseOrderEndpoints();
             app.MapCategoryEndpoints();
-           
+            app.MapAuthEndpoints();
+
+
         }
     }
 }

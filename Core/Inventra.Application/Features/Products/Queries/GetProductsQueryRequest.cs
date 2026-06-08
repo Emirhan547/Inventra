@@ -7,8 +7,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Products.Queries
 {
-    public class GetProductsQueryRequest
-    : IRequest<Result<List<GetProductsQueryResponse>>>
+    public class GetProductsQueryRequest: IRequest<Result<List<GetProductsQueryResponse>>>
     {
     }
 }

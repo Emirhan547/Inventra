@@ -16,15 +16,9 @@ namespace Inventra.Persistence.Repositories.SupplierRepositories
         {
         }
 
-        public async Task<GetSupplierByIdQueryResponse?>
-     GetSupplierByIdAsync(
-         Guid id,
-         CancellationToken cancellationToken = default)
+        public async Task<GetSupplierByIdQueryResponse?>GetSupplierByIdAsync(Guid id,CancellationToken cancellationToken = default)
         {
-            return await Table
-                .AsNoTracking()
-                .Where(x => x.Id == id)
-                .Select(x => new GetSupplierByIdQueryResponse
+            return await Table.AsNoTracking().Where(x => x.Id == id).Select(x => new GetSupplierByIdQueryResponse
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -34,13 +28,9 @@ namespace Inventra.Persistence.Repositories.SupplierRepositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<GetSuppliersQueryResponse>>
-    GetSuppliersAsync(
-        CancellationToken cancellationToken = default)
+        public async Task<List<GetSuppliersQueryResponse>>GetSuppliersAsync(CancellationToken cancellationToken = default)
         {
-            return await Table
-                .AsNoTracking()
-                .Select(x => new GetSuppliersQueryResponse
+            return await Table.AsNoTracking().Select(x => new GetSuppliersQueryResponse
                 {
                     Id = x.Id,
                     Name = x.Name,

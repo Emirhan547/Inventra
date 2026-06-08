@@ -9,27 +9,15 @@ using System.Text;
 
 namespace Inventra.Persistence.Repositories.PurchaseOrderRepositories
 {
-    public class PurchaseOrderReadRepository
-        : ReadRepository<PurchaseOrder>,
-        IPurchaseOrderReadRepository
+    public class PurchaseOrderReadRepository: ReadRepository<PurchaseOrder>,IPurchaseOrderReadRepository
     {
-        public PurchaseOrderReadRepository(
-            InventraDbContext context)
-            : base(context)
+        public PurchaseOrderReadRepository(InventraDbContext context): base(context)
         {
         }
 
-        public async Task<PurchaseOrder?> GetDetailAsync(
-     Guid id,
-     CancellationToken cancellationToken = default)
+        public async Task<PurchaseOrder?> GetDetailAsync(Guid id,CancellationToken cancellationToken = default)
         {
-            return await Table
-                .Include(x => x.Supplier)
-                .Include(x => x.Item)
-                    .ThenInclude(x => x.Product)
-                .FirstOrDefaultAsync(
-                    x => x.Id == id,
-                    cancellationToken);
+            return await Table.Include(x => x.Supplier).Include(x => x.Item).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
         }
     }
 }

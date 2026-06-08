@@ -11,14 +11,9 @@ namespace Inventra.Application.Features.Stocks.Validators
     {
         public StockOutCommandValidator()
         {
-            RuleFor(x => x.ProductId)
-                .NotEmpty();
-
-            RuleFor(x => x.WarehouseId)
-                .NotEmpty();
-
-            RuleFor(x => x.Quantity)
-                .GreaterThan(0);
+            RuleFor(x => x.ProductId).NotEmpty();
+            RuleFor(x => x.WarehouseId).NotEmpty();
+            RuleFor(x => x.Quantity).GreaterThan(0);
         }
     }
 }

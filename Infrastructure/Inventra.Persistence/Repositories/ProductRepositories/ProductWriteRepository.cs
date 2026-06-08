@@ -2,19 +2,13 @@
 using Inventra.Domain.Entities;
 using Inventra.Persistence.Context;
 using Inventra.Persistence.Repositories.GenericRepositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Inventra.Persistence.Repositories.ProductRepositories
 {
-    public class ProductWriteRepository
-     : WriteRepository<Product>,
-       IProductWriteRepository
+    public class ProductWriteRepository : WriteRepository<Product>,IProductWriteRepository
     {
-        public ProductWriteRepository(
-            InventraDbContext context)
-            : base(context)
+        public ProductWriteRepository(InventraDbContext context): base(context)
         {
         }
     }

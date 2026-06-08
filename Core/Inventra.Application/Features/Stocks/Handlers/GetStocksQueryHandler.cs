@@ -9,35 +9,17 @@ using System.Text;
 
 namespace Inventra.Application.Features.Stocks.Handlers
 {
-    public class GetStocksQueryHandler
-    : IRequestHandler<
-        GetStocksQuery,
-        Result<List<GetStocksQueryResponse>>>
+    public class GetStocksQueryHandler: IRequestHandler<GetStocksQuery,Result<List<GetStocksQueryResponse>>>
     {
-        private readonly IStockReadRepository
-            _stockReadRepository;
-
-        public GetStocksQueryHandler(
-            IStockReadRepository stockReadRepository)
+        private readonly IStockReadRepository _stockReadRepository;
+        public GetStocksQueryHandler(IStockReadRepository stockReadRepository)
         {
-            _stockReadRepository =
-                stockReadRepository;
+            _stockReadRepository = stockReadRepository;
         }
-
-        public async Task<
-            Result<List<GetStocksQueryResponse>>>
-            Handle(
-                GetStocksQuery request,
-                CancellationToken cancellationToken)
+        public async Task<Result<List<GetStocksQueryResponse>>>Handle(GetStocksQuery request,CancellationToken cancellationToken)
         {
-            var stocks =
-                await _stockReadRepository
-                    .GetStocksAsync(
-                        cancellationToken);
-
-            return Result<
-                List<GetStocksQueryResponse>>
-                .SuccessResult(stocks);
+            var stocks =await _stockReadRepository.GetStocksAsync(cancellationToken);
+            return Result<List<GetStocksQueryResponse>>.SuccessResult(stocks);
         }
     }
 }

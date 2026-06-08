@@ -6,11 +6,8 @@ using System.Text;
 
 namespace Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories
 {
-    public interface IPurchaseOrderReadRepository
-         : IReadRepository<PurchaseOrder>
+    public interface IPurchaseOrderReadRepository: IReadRepository<PurchaseOrder>
     {
-        Task<PurchaseOrder?> GetDetailAsync(
-    Guid id,
-    CancellationToken cancellationToken = default);
+        Task<PurchaseOrder?> GetDetailAsync(Guid id,CancellationToken cancellationToken = default);
     }
 }

@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Abstractions.Repositories.ProductRepositories
 {
-    public interface IProductWriteRepository
-      : IWriteRepository<Product>
+    public interface IProductWriteRepository: IWriteRepository<Product>
     {
     }
 }

@@ -10,10 +10,7 @@ namespace Inventra.API.Endpoints
         {
             var group = app.MapGroup("/warehouses").WithTags("Warehouses");
 
-            group.MapPost("/",
-           async (
-               CreateWarehouseCommandRequest request,
-               IMediator mediator) =>
+            group.MapPost("/",async (CreateWarehouseCommandRequest request,IMediator mediator) =>
            {
                var result =await mediator.Send(request);
 
@@ -24,21 +21,15 @@ namespace Inventra.API.Endpoints
                return Results.Created($"/warehouses/{result.Data}",result);
            });
 
-            group.MapGet("/",
-                async (
-                    IMediator mediator) =>
+            group.MapGet("/",async (IMediator mediator) =>
                 {
                     var result = await mediator.Send(new GetWarehouseQueryRequest());
                     return Results.Ok(result);
                 });
 
-            group.MapGet("/{id:guid}",
-                async (
-                    Guid id,
-                    IMediator mediator) =>
+            group.MapGet("/{id:guid}",async (Guid id,IMediator mediator) =>
                 {
-                    var result =await mediator.Send(
-                            new GetWarehouseByIdQueryRequest
+                    var result =await mediator.Send(new GetWarehouseByIdQueryRequest
                             {
                                 Id = id
                             });
@@ -50,11 +41,7 @@ namespace Inventra.API.Endpoints
                     return Results.Ok(result);
                 });
 
-            group.MapPut("/{id:guid}",
-                async (
-                    Guid id,
-                    UpdateWarehouseCommand command,
-                    IMediator mediator) =>
+            group.MapPut("/{id:guid}", async (Guid id,UpdateWarehouseCommand command,IMediator mediator) =>
                 {
                     command.Id = id;
 
@@ -68,13 +55,9 @@ namespace Inventra.API.Endpoints
                     return Results.Ok(result);
                 });
 
-            group.MapDelete("/{id:guid}",
-                async (
-                    Guid id,
-                    IMediator mediator) =>
+            group.MapDelete("/{id:guid}",async (Guid id,IMediator mediator) =>
                 {
-                    var result =await mediator.Send(
-                            new RemoveWarehouseCommand
+                    var result =await mediator.Send(new RemoveWarehouseCommand
                             {
                                 Id = id
                             });

@@ -8,13 +8,9 @@ using System.Text;
 
 namespace Inventra.Persistence.Repositories.PurchaseOrderRepositories
 {
-    public class PurchaseOrderWriteRepository
-        : WriteRepository<PurchaseOrder>,
-        IPurchaseOrderWriteRepository
+    public class PurchaseOrderWriteRepository: WriteRepository<PurchaseOrder>,IPurchaseOrderWriteRepository
     {
-        public PurchaseOrderWriteRepository(
-            InventraDbContext context)
-            : base(context)
+        public PurchaseOrderWriteRepository(InventraDbContext context): base(context)
         {
         }
     }
