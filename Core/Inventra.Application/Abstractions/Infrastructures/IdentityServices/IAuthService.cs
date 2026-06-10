@@ -1,6 +1,7 @@
 ﻿using Inventra.Application.Common.Results;
 using Inventra.Application.Features.Auths.Logins;
 using Inventra.Application.Features.Auths.Registers;
+using Inventra.Application.Features.Auths.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,6 @@ namespace Inventra.Application.Abstractions.Infrastructures.IdentityServices
         Task<Result> RegisterAsync(RegisterCommandRequest request);
 
         Task<Result<LoginCommandResponse>>LoginAsync(LoginCommandRequest request);
+        Task<Result<LoginCommandResponse>>RefreshTokenAsync(RefreshTokenCommandRequest request);
     }
 }

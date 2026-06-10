@@ -17,6 +17,10 @@ namespace Inventra.Infrastructure.Extensions
         {
             services.AddScoped<IAuthService,AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<ICurrentUserService,CurrentUserService>();
             return services;
         }
     }

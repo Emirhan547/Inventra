@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Auths.Logins
 {
-    public class LoginCommandRequest: IRequest<
-Result<LoginCommandResponse>>
+    public class LoginCommandRequest: IRequest<Result<LoginCommandResponse>>
     {
         public string UserName { get; set; }
 

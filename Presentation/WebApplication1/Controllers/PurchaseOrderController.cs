@@ -8,103 +8,55 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Inventra.WebUI.Controllers
 {
-    public class PurchaseOrderController(
-     IPurchaseOrderService _purchaseOrderService,
-     ISupplierService _supplierService,
-     IProductService _productService,
-     IWarehouseService _warehouseService)
-     : Controller
+    public class PurchaseOrderController(IPurchaseOrderService _purchaseOrderService,ISupplierService _supplierService,IProductService _productService, IWarehouseService _warehouseService): Controller
     {
-        public async Task<IActionResult>
-            Index()
+        public async Task<IActionResult>Index()
         {
-            var orders =
-                await _purchaseOrderService
-                    .GetAllAsync();
-
+            var orders =await _purchaseOrderService.GetAllAsync();
             return View(orders);
         }
 
-        public async Task<IActionResult>
-            Create()
+        public async Task<IActionResult>Create()
         {
-            ViewBag.Suppliers =
-                new SelectList(
-                    await _supplierService
-                        .GetAllAsync(),
-                    "Id",
-                    "Name");
-
-            ViewBag.Products =
-                new SelectList(
-                    await _productService
-                        .GetAllAsync(),
-                    "Id",
-                    "Name");
-
+            ViewBag.Suppliers =new SelectList(await _supplierService.GetAllAsync(),"Id","Name");
+            ViewBag.Products =new SelectList(await _productService.GetAllAsync(),"Id","Name");
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-            Create(
-                CreatePurchaseOrderDto model)
+        public async Task<IActionResult>Create(CreatePurchaseOrderDto model)
         {
-            await _purchaseOrderService
-                .CreateAsync(model);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _purchaseOrderService.CreateAsync(model);
+            return RedirectToAction( nameof(Index));
         }
 
-        public async Task<IActionResult>
-            Details(Guid id)
+        public async Task<IActionResult>Details(Guid id)
         {
-            var order =
-                await _purchaseOrderService
-                    .GetByIdAsync(id);
-
+            var order = await _purchaseOrderService .GetByIdAsync(id);
             return View(order);
         }
 
-        public async Task<IActionResult>
-            Approve(Guid id)
+        public async Task<IActionResult> Approve(Guid id)
         {
-            await _purchaseOrderService
-                .ApproveAsync(id);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _purchaseOrderService.ApproveAsync(id);
+            return RedirectToAction( nameof(Index));
         }
-        public async Task<IActionResult>
-    Complete(Guid id)
+        public async Task<IActionResult>Complete(Guid id)
         {
-            var warehouses =
-                await _warehouseService
-                    .GetAllAsync();
+            var warehouses =await _warehouseService.GetAllAsync();
+            ViewBag.Warehouses = new SelectList( warehouses,"Id","Name");
 
-            ViewBag.Warehouses =
-                new SelectList(
-                    warehouses,
-                    "Id",
-                    "Name");
-
-            return View(
-                new CompletePurchaseOrderDto
+            return View( new CompletePurchaseOrderDto
                 {
                     PurchaseOrderId = id
                 });
         }
         [HttpPost]
-        public async Task<IActionResult>
-    Complete(
+        public async Task<IActionResult> Complete(
         CompletePurchaseOrderDto model)
         {
-            await _purchaseOrderService
-                .CompleteAsync(model);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _purchaseOrderService .CompleteAsync(model);
+            return RedirectToAction( nameof(Index));
         }
     }
 }

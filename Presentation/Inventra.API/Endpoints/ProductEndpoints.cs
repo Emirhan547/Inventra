@@ -1,37 +1,61 @@
 ﻿using Inventra.Application.Features.Products.Commands;
 using Inventra.Application.Features.Products.Queries;
+using Inventra.Domain.Constants;
 using MediatR;
 
 namespace Inventra.API.Endpoints;
 
 public static class ProductEndpoints
 {
-    public static void MapProductEndpoints(this IEndpointRouteBuilder app)
+    public static void MapProductEndpoints(
+        this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/products")
-            .WithTags("Products");
+        var group =
+            app.MapGroup("/products")
+               .WithTags("Products");
 
-        group.MapPost("/",async (CreateProductCommandRequest request,IMediator mediator) =>
+        group.MapPost(
+            "/",
+            async (
+                CreateProductCommandRequest request,
+                IMediator mediator) =>
             {
-                var result =await mediator.Send(request);
+                var result =
+                    await mediator.Send(request);
 
                 if (!result.Success)
                 {
                     return Results.BadRequest(result);
                 }
 
-                return Results.Created($"/products/{result.Data}",result);
-            });
+                return Results.Created(
+                    $"/products/{result.Data}",
+                    result);
+            })
+            .RequireAuthorization(
+                Policies.ProductManagement);
 
-        group.MapGet("/",async (IMediator mediator) =>
+        group.MapGet(
+            "/",
+            async (
+                IMediator mediator) =>
             {
-                var result = await mediator.Send(new GetProductsQueryRequest());
+                var result =
+                    await mediator.Send(
+                        new GetProductsQueryRequest());
+
                 return Results.Ok(result);
-            });
+            })
+            .RequireAuthorization();
 
-        group.MapGet("/{id:guid}",async (Guid id,IMediator mediator) =>
+        group.MapGet(
+            "/{id:guid}",
+            async (
+                Guid id,
+                IMediator mediator) =>
             {
-                var result =await mediator.Send(
+                var result =
+                    await mediator.Send(
                         new GetProductByIdQueryRequest
                         {
                             Id = id
@@ -43,22 +67,40 @@ public static class ProductEndpoints
                 }
 
                 return Results.Ok(result);
-            });
+            })
+            .RequireAuthorization();
 
-        group.MapPut("/{id:guid}",async (Guid id,UpdateProductCommand command, IMediator mediator) =>
+        group.MapPut(
+            "/{id:guid}",
+            async (
+                Guid id,
+                UpdateProductCommand command,
+                IMediator mediator) =>
             {
                 command.Id = id;
-                var result =await mediator.Send(command);
+
+                var result =
+                    await mediator.Send(
+                        command);
+
                 if (!result.Success)
                 {
                     return Results.BadRequest(result);
                 }
-                return Results.Ok(result);
-            });
 
-        group.MapDelete("/{id:guid}",async (Guid id,IMediator mediator) =>
+                return Results.Ok(result);
+            })
+            .RequireAuthorization(
+                Policies.ProductManagement);
+
+        group.MapDelete(
+            "/{id:guid}",
+            async (
+                Guid id,
+                IMediator mediator) =>
             {
-                var result =await mediator.Send(
+                var result =
+                    await mediator.Send(
                         new RemoveProductCommand
                         {
                             Id = id
@@ -70,6 +112,8 @@ public static class ProductEndpoints
                 }
 
                 return Results.Ok(result);
-            });
+            })
+            .RequireAuthorization(
+                Policies.ProductManagement);
     }
 }

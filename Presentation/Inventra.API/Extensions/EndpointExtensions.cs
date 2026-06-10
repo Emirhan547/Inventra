@@ -15,7 +15,7 @@ namespace Inventra.API.Extensions
             app.MapPurchaseOrderEndpoints();
             app.MapCategoryEndpoints();
             app.MapAuthEndpoints();
-
+            app.MapUserEndpoints();
 
         }
     }

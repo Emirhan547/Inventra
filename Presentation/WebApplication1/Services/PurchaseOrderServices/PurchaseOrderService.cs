@@ -3,90 +3,56 @@ using Inventra.WebUI.Dtos.PurchaseOrders;
 
 namespace Inventra.WebUI.Services.PurchaseOrderServices
 {
-    public class PurchaseOrderService
-         : IPurchaseOrderService
+    public class PurchaseOrderService: IPurchaseOrderService
     {
         private readonly HttpClient _client;
 
-        public PurchaseOrderService(
-            IHttpClientFactory httpClientFactory)
+        public PurchaseOrderService(IHttpClientFactory httpClientFactory)
         {
-            _client =
-                httpClientFactory
-                    .CreateClient("InventraApi");
+            _client = httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<
-            List<ResultPurchaseOrderDto>>
-            GetAllAsync()
+        public async Task<List<ResultPurchaseOrderDto>> GetAllAsync()
         {
-            var response =
-                await _client.GetFromJsonAsync<
-                    ApiResponse<
-                        List<ResultPurchaseOrderDto>>>(
-                            "puchaseOrder");
+            var response =await _client.GetFromJsonAsync<ApiResponse< List<ResultPurchaseOrderDto>>>("puchaseOrder");
 
             return response?.Data ?? [];
         }
 
-        public async Task<
-            PurchaseOrderDetailDto?>
-            GetByIdAsync(Guid id)
+        public async Task<PurchaseOrderDetailDto?>GetByIdAsync(Guid id)
         {
-            var response =
-                await _client.GetFromJsonAsync<
-                    ApiResponse<
-                        PurchaseOrderDetailDto>>(
-                            $"puchaseOrder/{id}");
-
+            var response =await _client.GetFromJsonAsync< ApiResponse<PurchaseOrderDetailDto>>($"puchaseOrder/{id}");
             return response?.Data;
         }
 
-        public async Task CreateAsync(
-            CreatePurchaseOrderDto model)
+        public async Task CreateAsync(CreatePurchaseOrderDto model)
         {
-            var request =
-                new
+            var request = new
                 {
-                    SupplierId =
-                        model.SupplierId,
+                    SupplierId =model.SupplierId,
 
-                    Items =
-                        new[]
+                    Items =new[]
                         {
                             new
                             {
-                                ProductId =
-                                    model.ProductId,
-
-                                Quantity =
-                                    model.Quantity,
-
-                                UnitPrice =
-                                    model.UnitPrice
+                                ProductId =model.ProductId,
+                                Quantity =model.Quantity,
+                                UnitPrice =model.UnitPrice
                             }
                         }
                 };
 
-            await _client.PostAsJsonAsync(
-                "puchaseOrder",
-                request);
+            await _client.PostAsJsonAsync("puchaseOrder",request);
         }
 
-        public async Task ApproveAsync(
-            Guid id)
+        public async Task ApproveAsync(Guid id)
         {
-            await _client.PatchAsync(
-                $"puchaseOrder/{id}/approve",
-                null);
+            await _client.PatchAsync($"puchaseOrder/{id}/approve",null);
         }
 
-        public async Task CompleteAsync(
-     CompletePurchaseOrderDto model)
+        public async Task CompleteAsync(CompletePurchaseOrderDto model)
         {
-            await _client.PatchAsync(
-                $"puchaseOrder/{model.PurchaseOrderId}/complete?warehouseId={model.WarehouseId}",
-                null);
+            await _client.PatchAsync($"puchaseOrder/{model.PurchaseOrderId}/complete?warehouseId={model.WarehouseId}",null);
         }
     }
 }

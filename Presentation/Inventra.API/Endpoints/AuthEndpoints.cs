@@ -1,5 +1,6 @@
 ﻿using Inventra.Application.Features.Auths.Logins;
 using Inventra.Application.Features.Auths.Registers;
+using Inventra.Application.Features.Auths.Tokens;
 using MediatR;
 
 namespace Inventra.API.Endpoints
@@ -33,6 +34,8 @@ namespace Inventra.API.Endpoints
 
                     return Results.Ok(result);
                 });
+            group.MapPost("/refresh-token",async (RefreshTokenCommandRequest request,IMediator mediator)=> await mediator.Send(request));
         }
+
     }
 }

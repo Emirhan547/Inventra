@@ -4,7 +4,9 @@ using Inventra.Application.Common.Results;
 using Inventra.Application.Features.Auths.Logins;
 using Inventra.Application.Features.Auths.Registers;
 using Inventra.Application.Features.Auths.Tokens;
+using Inventra.Domain.Constants;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,12 +37,23 @@ namespace Inventra.Infrastructure.Identity.AuthServices
             {
                 return Result<LoginCommandResponse>.Failure("Kullanıcı adı veya şifre hatalı.");
             }
+            var roles =await _userManager.GetRolesAsync(user);
             var token =_tokenService.CreateToken(new TokenUser
                     {
                         Id = user.Id,
                         UserName = user.UserName!,
-                        Email = user.Email!
-                    });
+                        Email = user.Email!,
+                         Roles = roles
+            });
+            var refreshToken =_tokenService.CreateRefreshToken();
+
+            user.RefreshToken =refreshToken;
+
+            user.RefreshTokenExpireDate =DateTime.UtcNow.AddDays(7);
+
+            await _userManager.UpdateAsync(user);
+
+            token.RefreshToken =refreshToken;
             return Result< LoginCommandResponse>.SuccessResult(token);
         }
 
@@ -64,13 +77,45 @@ namespace Inventra.Infrastructure.Identity.AuthServices
                 UserName =request.UserName,
                 Email =request.Email
             };
+
             var result =await _userManager.CreateAsync(user,request.Password);
 
             if (!result.Succeeded)
             {
                 return Result.Failure(string.Join(Environment.NewLine,result.Errors.Select(x => x.Description)));
             }
+            await _userManager.AddToRoleAsync(user,Roles.Employee);
             return Result.SuccessResult("Kullanıcı başarıyla oluşturuldu.");
+        }
+        public async Task<Result<LoginCommandResponse>>RefreshTokenAsync(RefreshTokenCommandRequest request)
+        {
+            var user =await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken ==request.RefreshToken);
+            if (user is null)
+            {
+                return Result<LoginCommandResponse>.Failure("Geçersiz refresh token.");
+            }
+
+            if (user.RefreshTokenExpireDate <DateTime.UtcNow)
+            {
+                return Result<LoginCommandResponse>.Failure("Refresh token süresi dolmuş.");
+            }
+            var roles =await _userManager.GetRolesAsync(user);
+
+            var token =_tokenService.CreateToken(
+                    new TokenUser
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName!,
+                        Email = user.Email!,
+                        Roles = roles
+                    });
+
+            var newRefreshToken = _tokenService.CreateRefreshToken();
+            user.RefreshToken =newRefreshToken;
+            user.RefreshTokenExpireDate =DateTime.UtcNow.AddDays(7);
+            await _userManager .UpdateAsync(user);
+            token.RefreshToken =newRefreshToken;
+            return Result<LoginCommandResponse>.SuccessResult(token);
         }
     }
 }

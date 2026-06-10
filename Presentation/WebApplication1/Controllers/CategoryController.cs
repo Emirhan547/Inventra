@@ -8,17 +8,14 @@ namespace Inventra.WebUI.Controllers
     {
         private readonly ICategoryService _service;
 
-        public CategoryController(
-            ICategoryService service)
+        public CategoryController(ICategoryService service)
         {
             _service = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categories =
-                await _service.GetAllAsync();
-
+            var categories = await _service.GetAllAsync();
             return View(categories);
         }
 
@@ -37,8 +34,7 @@ namespace Inventra.WebUI.Controllers
             }
             await _service.CreateAsync(model);
 
-            return RedirectToAction(
-                nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)

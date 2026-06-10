@@ -11,14 +11,20 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection(
-        "JwtSettings"));
+    builder.Configuration.GetSection("JwtSettings"));
+builder.Services .AddJwtAuthentication(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddInventraAuthorization();
 builder.Services.AddApplicationExt();
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<InventraDbContext>().AddDefaultTokenProviders();
+builder.Services
+    .AddIdentityCore<AppUser>(options => { })
+    .AddRoles<AppRole>()
+    .AddEntityFrameworkStores<InventraDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -31,5 +37,18 @@ if (app.Environment.IsDevelopment())
 app.UseGlobalExceptionMiddleware();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+
+app.UseAuthorization();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager =
+        scope.ServiceProvider
+            .GetRequiredService<
+                RoleManager<AppRole>>();
+
+    await RoleSeeder
+        .SeedAsync(roleManager);
+}
 app.MapEndpoints();
 app.Run();

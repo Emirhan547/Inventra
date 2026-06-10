@@ -4,7 +4,6 @@ namespace Inventra.WebUI.Services.StockMovementServices
 {
     public interface IStockMovementService
     {
-        Task<List<ResultStockMovementDto>>
-            GetAllAsync();
+        Task<List<ResultStockMovementDto>>GetAllAsync();
     }
 }

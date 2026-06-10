@@ -4,17 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.WebUI.Controllers
 {
-    public class WarehouseController(
-         IWarehouseService _warehouseService)
-         : Controller
+    public class WarehouseController(IWarehouseService _warehouseService): Controller
     {
-        public async Task<IActionResult>
-            Index()
+        public async Task<IActionResult> Index()
         {
-            var warehouses =
-                await _warehouseService
-                    .GetAllAsync();
-
+            var warehouses =await _warehouseService.GetAllAsync();
             return View(warehouses);
         }
 
@@ -24,53 +18,35 @@ namespace Inventra.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-            Create(
-                CreateWarehouseDto model)
+        public async Task<IActionResult>Create(CreateWarehouseDto model)
         {
-            await _warehouseService
-                .CreateAsync(model);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _warehouseService.CreateAsync(model);
+            return RedirectToAction( nameof(Index));
         }
 
-        public async Task<IActionResult>
-            Update(Guid id)
+        public async Task<IActionResult>Update(Guid id)
         {
-            var warehouse =
-                await _warehouseService
-                    .GetByIdAsync(id);
+            var warehouse = await _warehouseService.GetByIdAsync(id);
 
             if (warehouse is null)
             {
-                return RedirectToAction(
-                    nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(warehouse);
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-            Update(
-                UpdateWarehouseDto model)
+        public async Task<IActionResult>Update(UpdateWarehouseDto model)
         {
-            await _warehouseService
-                .UpdateAsync(model);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _warehouseService.UpdateAsync(model);
+            return RedirectToAction(  nameof(Index));
         }
 
-        public async Task<IActionResult>
-            Delete(Guid id)
+        public async Task<IActionResult>Delete(Guid id)
         {
-            await _warehouseService
-                .DeleteAsync(id);
-
-            return RedirectToAction(
-                nameof(Index));
+            await _warehouseService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

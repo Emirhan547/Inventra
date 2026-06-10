@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Inventra.Infrastructure.JwtServices
@@ -31,7 +32,10 @@ namespace Inventra.Infrastructure.JwtServices
                 new(ClaimTypes.Name,user.UserName),
                 new(ClaimTypes.Email,user.Email)
                 };
-
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role,role));
+            }
             var securityKey =new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var signingCredentials =new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
             var token =new JwtSecurityToken(
@@ -47,6 +51,11 @@ namespace Inventra.Infrastructure.JwtServices
                 AccessToken = accessToken,
                 ExpirationTime =expireDate
             };
+        }
+        public string CreateRefreshToken()
+        {
+            return Convert.ToBase64String(
+                RandomNumberGenerator.GetBytes(64));
         }
     }
 }

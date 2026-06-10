@@ -7,56 +7,37 @@ namespace Inventra.WebUI.Services.WarehouseServices
     {
         private readonly HttpClient _client;
 
-        public WarehouseService(
-            IHttpClientFactory httpClientFactory)
+        public WarehouseService(IHttpClientFactory httpClientFactory)
         {
-            _client =
-                httpClientFactory
-                    .CreateClient("InventraApi");
+            _client =httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultWarehouseDto>>
-            GetAllAsync()
+        public async Task<List<ResultWarehouseDto>>GetAllAsync()
         {
-            var response =
-                await _client.GetFromJsonAsync<
-                    ApiResponse<List<ResultWarehouseDto>>>(
-                        "warehouses");
+            var response =await _client.GetFromJsonAsync<ApiResponse<List<ResultWarehouseDto>>>("warehouses");
 
             return response?.Data ?? [];
         }
 
-        public async Task<UpdateWarehouseDto?>
-            GetByIdAsync(Guid id)
+        public async Task<UpdateWarehouseDto?>GetByIdAsync(Guid id)
         {
-            var response =
-                await _client.GetFromJsonAsync<
-                    ApiResponse<UpdateWarehouseDto>>(
-                        $"warehouses/{id}");
-
+            var response =await _client.GetFromJsonAsync<ApiResponse<UpdateWarehouseDto>>($"warehouses/{id}");
             return response?.Data;
         }
 
-        public async Task CreateAsync(
-            CreateWarehouseDto model)
+        public async Task CreateAsync(CreateWarehouseDto model)
         {
-            await _client.PostAsJsonAsync(
-                "warehouses",
-                model);
+            await _client.PostAsJsonAsync("warehouses",model);
         }
 
-        public async Task UpdateAsync(
-            UpdateWarehouseDto model)
+        public async Task UpdateAsync(UpdateWarehouseDto model)
         {
-            await _client.PutAsJsonAsync(
-                $"warehouses/{model.Id}",
-                model);
+            await _client.PutAsJsonAsync($"warehouses/{model.Id}",model);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            await _client.DeleteAsync(
-                $"warehouses/{id}");
+            await _client.DeleteAsync($"warehouses/{id}");
         }
     }
 }

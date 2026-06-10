@@ -11,5 +11,7 @@ namespace Inventra.Application.Features.Auths.Tokens
         public string UserName { get; set; }
 
         public string Email { get; set; }
+
+        public IList<string> Roles { get; set; } = [];
     }
 }

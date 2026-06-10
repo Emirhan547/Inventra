@@ -4,7 +4,6 @@ namespace Inventra.WebUI.Services.DashboardServices
 {
     public interface IDashboardService
     {
-        Task<DashboardSummaryDto?>
-            GetDashboardAsync();
+        Task<DashboardSummaryDto?>GetDashboardAsync();
     }
 }

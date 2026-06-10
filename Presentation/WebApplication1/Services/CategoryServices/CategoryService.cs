@@ -7,55 +7,36 @@ namespace Inventra.WebUI.Services.CategoryServices
     {
         private readonly HttpClient _client;
 
-        public CategoryService(
-            IHttpClientFactory httpClientFactory)
+        public CategoryService(IHttpClientFactory httpClientFactory)
         {
-            _client =
-                httpClientFactory
-                    .CreateClient("InventraApi");
+            _client =httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultCategoryDto>>
-            GetAllAsync()
+        public async Task<List<ResultCategoryDto>>GetAllAsync()
         {
-            var response =
-                await _client.GetFromJsonAsync<
-                    ApiResponse<List<ResultCategoryDto>>>(
-                        "categories");
-
+            var response =await _client.GetFromJsonAsync<ApiResponse<List<ResultCategoryDto>>>("categories");
             return response?.Data ?? [];
         }
 
-        public async Task<UpdateCategoryDto?>
-            GetByIdAsync(Guid id)
+        public async Task<UpdateCategoryDto?>GetByIdAsync(Guid id)
         {
-            var response =
-                await _client.GetFromJsonAsync<ApiResponse<UpdateCategoryDto>>(
-                        $"categories/{id}");
-
+            var response =await _client.GetFromJsonAsync<ApiResponse<UpdateCategoryDto>>($"categories/{id}");
             return response?.Data;
         }
 
-        public async Task CreateAsync(
-            CreateCategoryDto model)
+        public async Task CreateAsync(CreateCategoryDto model)
         {
-            await _client.PostAsJsonAsync(
-                "categories",
-                model);
+            await _client.PostAsJsonAsync("categories",model);
         }
 
-        public async Task UpdateAsync(
-            UpdateCategoryDto model)
+        public async Task UpdateAsync(UpdateCategoryDto model)
         {
-            await _client.PutAsJsonAsync(
-                $"categories/{model.Id}",
-                model);
+            await _client.PutAsJsonAsync( $"categories/{model.Id}",model);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            await _client.DeleteAsync(
-                $"categories/{id}");
+            await _client.DeleteAsync($"categories/{id}");
         }
     }
 }

@@ -3,17 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.WebUI.Controllers
 {
-    public class DashboardController(
-          IDashboardService _dashboardService)
-          : Controller
+    public class DashboardController(IDashboardService _dashboardService): Controller
     {
-        public async Task<IActionResult>
-            Index()
+        public async Task<IActionResult> Index()
         {
-            var data =
-                await _dashboardService
-                    .GetDashboardAsync();
-
+            var data =await _dashboardService.GetDashboardAsync();
             return View(data);
         }
     }

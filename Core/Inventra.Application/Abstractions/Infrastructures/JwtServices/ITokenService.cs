@@ -9,5 +9,7 @@ namespace Inventra.Application.Abstractions.Infrastructures.JwtServices
     public interface ITokenService
     {
        LoginCommandResponse CreateToken(TokenUser user);
+
+        string CreateRefreshToken();
     }
 }
