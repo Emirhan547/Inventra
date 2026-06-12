@@ -1,19 +1,35 @@
 ﻿using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
+using Inventra.Application.Common.Pagination;
 using Inventra.Application.Common.Results;
 using Inventra.Application.Features.PurchaseOrders.Queries;
 using Inventra.Application.Features.PurchaseOrders.Results;
 using Mapster;
 using MediatR;
 
-
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
-    public class GetPurchaseOrdersQueryHandler(IPurchaseOrderReadRepository _repository): IRequestHandler<GetPurchaseOrdersQueryRequest,Result<List<GetPurchaseOrdersQueryResponse>>>
+    public class GetPurchaseOrdersQueryHandler: IRequestHandler<GetPurchaseOrdersQueryRequest,Result<PagedResponse<GetPurchaseOrdersQueryResponse>>>
     {
-        public async Task<Result<List<GetPurchaseOrdersQueryResponse>>>Handle(GetPurchaseOrdersQueryRequest request, CancellationToken cancellationToken)
+        private readonly IPurchaseOrderReadRepository _repository;
+
+        public GetPurchaseOrdersQueryHandler(IPurchaseOrderReadRepository repository)
         {
-            var purchaseOrders =await _repository.GetAllAsync(cancellationToken:cancellationToken);
-            return Result<List<GetPurchaseOrdersQueryResponse>>.SuccessResult( purchaseOrders.Adapt<List<GetPurchaseOrdersQueryResponse>>());
+            _repository = repository;
+        }
+
+        public async Task< Result<PagedResponse<GetPurchaseOrdersQueryResponse>>>Handle( GetPurchaseOrdersQueryRequest request, CancellationToken cancellationToken)
+        {
+            var pagedPurchaseOrders = await _repository.GetPagedAsync(request.PageNumber,request.PageSize,request.Status,request.SupplierId,cancellationToken);
+            var response =new PagedResponse<GetPurchaseOrdersQueryResponse>
+                {
+                    Items =pagedPurchaseOrders.Items.Adapt<List<GetPurchaseOrdersQueryResponse>>(),
+                    PageNumber =pagedPurchaseOrders.PageNumber,
+                    PageSize =pagedPurchaseOrders.PageSize,
+                    TotalCount =pagedPurchaseOrders.TotalCount,
+                    TotalPages =pagedPurchaseOrders.TotalPages
+                };
+
+            return Result<PagedResponse< GetPurchaseOrdersQueryResponse>>.SuccessResult(response);
         }
     }
 }

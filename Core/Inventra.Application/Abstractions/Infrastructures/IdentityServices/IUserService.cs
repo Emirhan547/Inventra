@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Common.Results;
+﻿using Inventra.Application.Common.Pagination;
+using Inventra.Application.Common.Results;
 using Inventra.Application.Features.Users.Commands;
 using Inventra.Application.Features.Users.Results;
 
@@ -6,7 +7,7 @@ namespace Inventra.Application.Abstractions.Infrastructures.IdentityServices
 {
     public interface IUserService
     {
-        Task<Result<List<GetUsersQueryResponse>>>GetUsersAsync();
+        Task<Result<PagedResponse<GetUsersQueryResponse>>>GetUsersAsync(int pageNumber,int pageSize,string? search);
         Task<Result<GetUserByIdQueryResponse>>GetUserByIdAsync(Guid userId);
         Task<Result<GetUserRolesQueryResponse>>GetUserRolesAsync(Guid userId);
         Task<Result>AssignRoleAsync(AssignRoleCommandRequest request);

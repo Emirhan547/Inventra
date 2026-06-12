@@ -1,4 +1,5 @@
 ﻿using Inventra.Application.Abstractions.Repositories.StockRepositories;
+using Inventra.Application.Common.Pagination;
 using Inventra.Application.Features.Stocks.Results;
 using Inventra.Domain.Entities;
 using Inventra.Persistence.Context;
@@ -19,22 +20,31 @@ namespace Inventra.Persistence.Repositories.StockRepositories
         public async Task<Stock?> GetByProductAndWarehouseAsync(Guid productId,Guid warehouseId,bool tracking = true,CancellationToken cancellationToken = default)
         {
             var query = Table.AsQueryable();
+
             if (!tracking)
+            {
                 query = query.AsNoTracking();
-            return await query.FirstOrDefaultAsync(x =>x.ProductId == productId &&x.WarehouseId == warehouseId,cancellationToken);
+            }
+
+            return await query.Include(x => x.Product).Include(x => x.Warehouse).FirstOrDefaultAsync( x => x.ProductId == productId && x.WarehouseId == warehouseId, cancellationToken);
         }
-        public async Task<List<GetStocksQueryResponse>>GetStocksAsync(CancellationToken cancellationToken = default)
+
+        public async Task<PagedResponse<Stock>>GetPagedStocksAsync(int pageNumber,int pageSize,CancellationToken cancellationToken = default)
         {
-            return await Table.AsNoTracking().Select(x => new GetStocksQueryResponse
-                {
-                    Id = x.Id,
-                    ProductId = x.ProductId,
-                    ProductName = x.Product.Name,
-                    WarehouseId = x.WarehouseId,
-                    WarehouseName = x.Warehouse.Name,
-                    Quantity = x.Quantity
-                })
-                .ToListAsync(cancellationToken);
+            var query = Table.AsNoTracking().Include(x => x.Product).Include(x => x.Warehouse);
+
+            var totalCount =await query.CountAsync(cancellationToken);
+
+            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+
+            return new PagedResponse<Stock>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages =(int)Math.Ceiling(totalCount /(double)pageSize)
+            };
         }
     }
 }

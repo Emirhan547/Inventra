@@ -20,7 +20,7 @@ namespace Inventra.Persistence.Context
         public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
         public DbSet<PurchaseOrderItem> PurchaseOrderItems
             => Set<PurchaseOrderItem>();
-
+        public DbSet<AuditLog> AuditLogs { get; set; }
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {

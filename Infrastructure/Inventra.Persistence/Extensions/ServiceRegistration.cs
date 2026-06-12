@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Abstractions.Repositories.CategoryRepositories;
+﻿using Inventra.Application.Abstractions.Repositories.AuditLogRepositories;
+using Inventra.Application.Abstractions.Repositories.CategoryRepositories;
 using Inventra.Application.Abstractions.Repositories.DashboardRepositories;
 using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
@@ -9,6 +10,7 @@ using Inventra.Application.Abstractions.Repositories.WarehouseRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Persistence.Context;
 using Inventra.Persistence.Interceptors;
+using Inventra.Persistence.Repositories.AuditLogRepositories;
 using Inventra.Persistence.Repositories.CategoryRepositories;
 using Inventra.Persistence.Repositories.DashboardRepositories;
 using Inventra.Persistence.Repositories.ProductRepositories;
@@ -52,7 +54,13 @@ namespace Inventra.Persistence.Extensions
             services.AddScoped<ISupplierWriteRepository, SupplierWriteRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPurchaseOrderReadRepository,PurchaseOrderReadRepository>();
+            services.AddScoped<
+    IAuditLogReadRepository,
+    AuditLogReadRepository>();
 
+            services.AddScoped<
+                IAuditLogWriteRepository,
+                AuditLogWriteRepository>();
             services.AddScoped<IPurchaseOrderWriteRepository,PurchaseOrderWriteRepository>();
             services.AddScoped<ICategoryReadRepository,CategoryReadRepository>();
             services.AddScoped<ICategoryWriteRepository,CategoryWriteRepository>();

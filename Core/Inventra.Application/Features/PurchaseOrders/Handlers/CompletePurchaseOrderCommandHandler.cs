@@ -1,9 +1,12 @@
-﻿using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
+﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
 using Inventra.Application.Abstractions.Repositories.StockRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
+using Inventra.Application.Features.Notifications;
 using Inventra.Application.Features.PurchaseOrders.Commands;
+using Inventra.Domain.Constants;
 using Inventra.Domain.Entities;
 using Inventra.Domain.Enums;
 using MediatR;
@@ -14,7 +17,7 @@ using System.Text;
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
     public class CompletePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IStockReadRepository _stockReadRepository,IStockWriteRepository _stockWriteRepository,IStockMovementWriteRepository _stockMovementWriteRepository,
-    IUnitOfWork _unitOfWork): IRequestHandler<CompletePurchaseOrderCommand,Result>
+    IUnitOfWork _unitOfWork, INotificationService _notificationService) : IRequestHandler<CompletePurchaseOrderCommand,Result>
     {
         public async Task<Result> Handle(CompletePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
@@ -23,10 +26,7 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
             {
                 return Result.Failure("Purchase order not found.");
             }
-            if (purchaseOrder.Status !=PurchaseOrderStatus.Approved)
-            {
-                return Result.Failure("Purchase order must be approved.");
-            }
+           
             foreach (var item in purchaseOrder.Item)
             {
                 var stock =await _stockReadRepository.GetByProductAndWarehouseAsync(item.ProductId,request.WarehouseId,true,cancellationToken);
@@ -62,8 +62,20 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
                 return Result.Failure("Purchase order must be approved.");
             }
             purchaseOrder.Status =PurchaseOrderStatus.Completed;
+
             await _unitOfWork.SaveChangeAsync();
-            return Result.SuccessResult("Purchase order completed.");
+
+            var notification = new NotificationMessage
+            {
+                Title = "Satın Alma Süreci Tamamlandı",
+                Message = $"{purchaseOrder.OrderNumber} numaralı sipariş tamamlandı.",
+                Type ="PurchaseOrderCompleted",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _notificationService.SendToRoleAsync(Roles.Employee,notification);
+
+            return Result.SuccessResult( "Purchase order completed.");
         }
     }
 }

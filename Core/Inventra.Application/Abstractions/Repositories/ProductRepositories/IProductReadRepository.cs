@@ -1,4 +1,5 @@
 ﻿using Inventra.Application.Abstractions.Repositories.GenericRepositories;
+using Inventra.Application.Common.Pagination;
 using Inventra.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Inventra.Application.Abstractions.Repositories.ProductRepositories
      : IReadRepository<Product>
     {
         Task<bool> IsSkuExistsAsync(string sku,CancellationToken cancellationToken);
-        Task<List<Product>>GetAllWithCategoryAsync(CancellationToken cancellationToken = default);
+        Task<PagedResponse<Product>>GetPagedWithCategoryAsync(int pageNumber, int pageSize,string? search,Guid? categoryId,CancellationToken cancellationToken = default);
     }
 }

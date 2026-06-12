@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Common.Results;
+﻿using Inventra.Application.Common.Pagination;
+using Inventra.Application.Common.Results;
 using Inventra.Application.Features.Users.Results;
 using MediatR;
 using System;
@@ -7,7 +8,8 @@ using System.Text;
 
 namespace Inventra.Application.Features.Users.Queries
 {
-    public class GetUsersQueryRequest: IRequest<Result<List<GetUsersQueryResponse>>>
+    public sealed class GetUsersQueryRequest: PagedRequest,IRequest<Result<PagedResponse<GetUsersQueryResponse>>>
     {
+        public string? Search { get; set; }
     }
 }
