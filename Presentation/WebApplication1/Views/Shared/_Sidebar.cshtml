@@ -25,99 +25,130 @@
 
         </div>
 
-        <div class="menu-group">
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="menu-group">
 
-            <span class="menu-title">
-                TANIMLAR
-            </span>
+                <span class="menu-title">
+                    YÖNETİM
+                </span>
 
-            <a asp-controller="Category"
-               asp-action="Index">
+                <a asp-controller="User"
+                   asp-action="Index">
 
-                Categories
+                    Users
 
-            </a>
+                </a>
 
-            <a asp-controller="Product"
-               asp-action="Index">
+            </div>
+        }
 
-                Products
+        @if (User.IsInRole("Admin") ||
+             User.IsInRole("Manager"))
+        {
+            <div class="menu-group">
 
-            </a>
+                <span class="menu-title">
+                    TANIMLAR
+                </span>
 
-            <a asp-controller="Supplier"
-               asp-action="Index">
+                <a asp-controller="Category"
+                   asp-action="Index">
 
-                Suppliers
+                    Categories
 
-            </a>
+                </a>
 
-            <a asp-controller="Warehouse"
-               asp-action="Index">
+                <a asp-controller="Product"
+                   asp-action="Index">
 
-                Warehouses
+                    Products
 
-            </a>
+                </a>
 
-        </div>
+                <a asp-controller="Supplier"
+                   asp-action="Index">
 
-        <div class="menu-group">
+                    Suppliers
 
-            <span class="menu-title">
-                STOK YÖNETİMİ
-            </span>
+                </a>
 
-            <a asp-controller="Stock"
-               asp-action="Index">
+                <a asp-controller="Warehouse"
+                   asp-action="Index">
 
-                Stocks
+                    Warehouses
 
-            </a>
+                </a>
 
-            <a asp-controller="Stock"
-               asp-action="StockIn">
+            </div>
+        }
 
-                Stock In
+        @if (User.IsInRole("Admin") ||
+             User.IsInRole("Manager") ||
+             User.IsInRole("Employee"))
+        {
+            <div class="menu-group">
 
-            </a>
+                <span class="menu-title">
+                    STOK YÖNETİMİ
+                </span>
 
-            <a asp-controller="Stock"
-               asp-action="StockOut">
+                <a asp-controller="Stock"
+                   asp-action="Index">
 
-                Stock Out
+                    Stocks
 
-            </a>
+                </a>
 
-            <a asp-controller="Stock"
-               asp-action="Transfer">
+                <a asp-controller="Stock"
+                   asp-action="StockIn">
 
-                Transfer
+                    Stock In
 
-            </a>
+                </a>
 
-            <a asp-controller="StockMovement"
-               asp-action="Index">
+                <a asp-controller="Stock"
+                   asp-action="StockOut">
 
-                Stock Movements
+                    Stock Out
 
-            </a>
+                </a>
 
-        </div>
+                <a asp-controller="Stock"
+                   asp-action="Transfer">
 
-        <div class="menu-group">
+                    Transfer
 
-            <span class="menu-title">
-                SATIN ALMA
-            </span>
+                </a>
 
-            <a asp-controller="PurchaseOrder"
-               asp-action="Index">
+                <a asp-controller="StockMovement"
+                   asp-action="Index">
 
-                Purchase Orders
+                    Stock Movements
 
-            </a>
+                </a>
 
-        </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Admin") ||
+             User.IsInRole("Manager"))
+        {
+            <div class="menu-group">
+
+                <span class="menu-title">
+                    SATIN ALMA
+                </span>
+
+                <a asp-controller="PurchaseOrder"
+                   asp-action="Index">
+
+                    Purchase Orders
+
+                </a>
+
+            </div>
+        }
 
     </nav>
 

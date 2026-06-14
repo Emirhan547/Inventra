@@ -1,9 +1,10 @@
-﻿using Inventra.WebUI.Dtos.StockMovementDtos;
+﻿using Inventra.WebUI.Common;
+using Inventra.WebUI.Dtos.StockMovementDtos;
 
 namespace Inventra.WebUI.Services.StockMovementServices
 {
     public interface IStockMovementService
     {
-        Task<List<ResultStockMovementDto>>GetAllAsync();
+        Task<PagedResponse<ResultStockMovementDto>> GetAllAsync();
     }
 }

@@ -19,7 +19,7 @@ public class GetProductsQueryHandler: IRequestHandler<GetProductsQueryRequest,Re
 
     public async Task<Result<PagedResponse<GetProductsQueryResponse>>>Handle(GetProductsQueryRequest request,CancellationToken cancellationToken)
     {
-        var pagedProducts =await _readRepository.GetPagedWithCategoryAsync(request.PageNumber,request.PageSize,cancellationToken);
+        var pagedProducts =await _readRepository.GetPagedWithCategoryAsync(request.PageNumber,request.PageSize,request.Search,request.CategoryId,cancellationToken);
         var mapped =pagedProducts.Items.Adapt<List<GetProductsQueryResponse>>();
         var response =new PagedResponse<GetProductsQueryResponse>
             {

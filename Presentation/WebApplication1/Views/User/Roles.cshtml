@@ -1,0 +1,111 @@
+﻿@using Inventra.WebUI.Dtos.UserDtos
+@model UserRolesDto
+
+@{
+    var userId = (Guid)ViewBag.UserId;
+
+    var allRoles = new[]
+    {
+        "Admin",
+        "Manager",
+        "Employee"
+    };
+}
+
+<div class="page-header">
+
+    <div>
+        <h2>Kullanıcı Rolleri</h2>
+        <p class="text-muted">
+            Rol yönetimi
+        </p>
+    </div>
+
+</div>
+
+<div class="content-card">
+
+    <h5 class="mb-4">
+        Atanmış Roller
+    </h5>
+
+    @foreach (var role in Model.Roles)
+    {
+        <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+
+            <span>
+                @role
+            </span>
+
+            <form asp-action="RemoveRole"
+                  method="post">
+
+                <input type="hidden"
+                       name="userId"
+                       value="@userId" />
+
+                <input type="hidden"
+                       name="roleName"
+                       value="@role" />
+
+                <button type="submit"
+                        class="btn btn-danger btn-sm">
+
+                    Kaldır
+
+                </button>
+
+            </form>
+
+        </div>
+    }
+
+</div>
+
+<div class="content-card mt-4">
+
+    <h5 class="mb-4">
+        Rol Ekle
+    </h5>
+
+    <form asp-action="AssignRole"
+          method="post">
+
+        <input type="hidden"
+               name="userId"
+               value="@userId" />
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <select name="roleName"
+                        class="form-select">
+
+                    @foreach (var role in allRoles)
+                    {
+                        <option value="@role">
+                            @role
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Rol Ata
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

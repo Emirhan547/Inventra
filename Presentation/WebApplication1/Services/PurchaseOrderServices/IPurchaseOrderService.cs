@@ -1,10 +1,11 @@
-﻿using Inventra.WebUI.Dtos.PurchaseOrders;
+﻿using Inventra.WebUI.Common;
+using Inventra.WebUI.Dtos.PurchaseOrders;
 
 namespace Inventra.WebUI.Services.PurchaseOrderServices
 {
     public interface IPurchaseOrderService
     {
-        Task<List<ResultPurchaseOrderDto>>GetAllAsync();
+        Task<PagedResponse<ResultPurchaseOrderDto>> GetAllAsync();
 
         Task<PurchaseOrderDetailDto?>GetByIdAsync(Guid id);
 

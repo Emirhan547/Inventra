@@ -14,15 +14,17 @@ namespace Inventra.WebUI.Services.StockServices
                 httpClientFactory
                     .CreateClient("InventraApi");
         }
-        public async Task<List<ResultStockDto>>
+        public async Task<PagedResponse<ResultStockDto>>
      GetAllAsync()
         {
             var response =
                 await _client.GetFromJsonAsync<
-                    ApiResponse<List<ResultStockDto>>>(
-                        "stocks");
+                    ApiResponse<
+                        PagedResponse<ResultStockDto>>>(
+                            "stocks");
 
-            return response?.Data ?? [];
+            return response?.Data
+                   ?? new PagedResponse<ResultStockDto>();
         }
         public async Task StockInAsync(
     CreateStockInDto model)

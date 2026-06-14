@@ -1,6 +1,7 @@
-﻿@using Inventra.WebUI.Dtos.PurchaseOrders
+﻿@using Inventra.WebUI.Common
+@using Inventra.WebUI.Dtos.PurchaseOrders
 
-@model List<ResultPurchaseOrderDto>
+@model PagedResponse<ResultPurchaseOrderDto>
 
 <div class="page-header">
 
@@ -51,7 +52,7 @@
 
         <tbody>
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.Items)
             {
                 <tr>
 

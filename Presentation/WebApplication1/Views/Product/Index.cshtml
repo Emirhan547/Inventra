@@ -1,5 +1,7 @@
-﻿@using Inventra.WebUI.Dtos.ProductDtos
-@model List<ResultProductDto>
+﻿@using Inventra.WebUI.Common
+@using Inventra.WebUI.Dtos.ProductDtos
+
+@model PagedResponse<ResultProductDto>
 
 <div class="page-header">
 
@@ -21,6 +23,60 @@
     </a>
 
 </div>
+
+<form method="get" class="mb-4">
+
+    <div class="row g-2">
+
+        <div class="col-md-4">
+
+            <input type="text"
+                   name="Search"
+                   value="@Context.Request.Query["Search"]"
+                   class="form-control"
+                   placeholder="Ürün adı veya SKU ara..." />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <select name="CategoryId"
+                    asp-items="ViewBag.Categories"
+                    class="form-select">
+
+                <option value="">
+                    Tüm Kategoriler
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                Filtrele
+
+            </button>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+
+                Temizle
+
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
 
 <div class="content-card">
 
@@ -50,47 +106,63 @@
 
         <tbody>
 
-            @foreach (var item in Model)
+            @if (Model.Items.Any())
+            {
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+
+                        <td>
+                            @item.CategoryName
+                        </td>
+
+                        <td>
+                            @item.Name
+                        </td>
+
+                        <td>
+                            @item.SKU
+                        </td>
+
+                        <td>
+                            @item.UnitPrice.ToString("C")
+                        </td>
+
+                        <td>
+                            @item.MinimumStockLevel
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Update"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-warning">
+
+                                Düzenle
+
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-danger">
+
+                                Sil
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
 
-                    <td>
-                        @item.CategoryName
-                    </td>
+                    <td colspan="6"
+                        class="text-center">
 
-                    <td>
-                        @item.Name
-                    </td>
-
-                    <td>
-                        @item.SKU
-                    </td>
-
-                    <td>
-                        @item.UnitPrice.ToString("C")
-                    </td>
-
-                    <td>
-                        @item.MinimumStockLevel
-                    </td>
-
-                    <td>
-
-                        <a asp-action="Update"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-warning">
-
-                            Düzenle
-
-                        </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-danger">
-
-                            Sil
-
-                        </a>
+                        Kayıt bulunamadı.
 
                     </td>
 
@@ -102,3 +174,62 @@
     </table>
 
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Search="@Context.Request.Query["Search"]"
+                   asp-route-CategoryId="@Context.Request.Query["CategoryId"]">
+
+                    Önceki
+
+                </a>
+
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-PageNumber="@i"
+                       asp-route-PageSize="@Model.PageSize"
+                       asp-route-Search="@Context.Request.Query["Search"]"
+                       asp-route-CategoryId="@Context.Request.Query["CategoryId"]">
+
+                        @i
+
+                    </a>
+
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Search="@Context.Request.Query["Search"]"
+                   asp-route-CategoryId="@Context.Request.Query["CategoryId"]">
+
+                    Sonraki
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}

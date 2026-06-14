@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Inventra.Application.Features.Auths.Logins
+﻿namespace Inventra.WebUI.Dtos.LoginDtos
 {
-    public class LoginCommandResponse
+    public sealed class LoginResponseDto
     {
         public string AccessToken { get; set; }
 
         public string RefreshToken { get; set; }
 
         public DateTime ExpirationTime { get; set; }
-
         public List<string> Roles { get; set; } = [];
     }
 }

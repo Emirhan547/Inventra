@@ -1,16 +1,22 @@
-﻿using Inventra.WebUI.Dtos.ProductDtos;
+﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.ProductDtos;
 using Inventra.WebUI.Services.CategoryServices;
 using Inventra.WebUI.Services.ProductServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Inventra.WebUI.Controllers
 {
+    [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class ProductController(IProductService _productService,ICategoryService _categoryService): Controller
     {
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult> Index(ProductFilterDto filter)
         {
-            var products =await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(filter);
+            var categories =await _categoryService.GetAllAsync();
+            ViewBag.Categories =new SelectList(categories,"Id","Name",filter.CategoryId);
+
             return View(products);
         }
 

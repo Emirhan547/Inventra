@@ -36,17 +36,18 @@ public static class ProductEndpoints
                 Policies.ProductManagement);
 
         group.MapGet(
-            "/",
-            async (
-                IMediator mediator) =>
-            {
-                var result =
-                    await mediator.Send(
-                        new GetProductsQueryRequest());
+     "/",
+     async (
+         [AsParameters]
+        GetProductsQueryRequest request,
+         IMediator mediator) =>
+     {
+         var result =
+             await mediator.Send(request);
 
-                return Results.Ok(result);
-            })
-            .RequireAuthorization();
+         return Results.Ok(result);
+     })
+     .RequireAuthorization();
 
         group.MapGet(
             "/{id:guid}",

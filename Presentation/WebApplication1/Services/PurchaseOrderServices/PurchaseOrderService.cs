@@ -12,17 +12,15 @@ namespace Inventra.WebUI.Services.PurchaseOrderServices
             _client = httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultPurchaseOrderDto>> GetAllAsync()
+        public async Task<PagedResponse<ResultPurchaseOrderDto>> GetAllAsync()
         {
-            var response =await _client.GetFromJsonAsync<ApiResponse< List<ResultPurchaseOrderDto>>>("puchaseOrder");
+            var response =
+                await _client.GetFromJsonAsync<
+                    ApiResponse<PagedResponse<ResultPurchaseOrderDto>>>(
+                        "purchase-orders");
 
-            return response?.Data ?? [];
-        }
-
-        public async Task<PurchaseOrderDetailDto?>GetByIdAsync(Guid id)
-        {
-            var response =await _client.GetFromJsonAsync< ApiResponse<PurchaseOrderDetailDto>>($"puchaseOrder/{id}");
-            return response?.Data;
+            return response?.Data
+                   ?? new PagedResponse<ResultPurchaseOrderDto>();
         }
 
         public async Task CreateAsync(CreatePurchaseOrderDto model)
@@ -42,17 +40,26 @@ namespace Inventra.WebUI.Services.PurchaseOrderServices
                         }
                 };
 
-            await _client.PostAsJsonAsync("puchaseOrder",request);
+            await _client.PostAsJsonAsync("purchase-orders",request);
+        }
+        public async Task<PurchaseOrderDetailDto?> GetByIdAsync(Guid id)
+        {
+            var response =
+                await _client.GetFromJsonAsync<
+                    ApiResponse<PurchaseOrderDetailDto>>(
+                        $"purchase-orders/{id}");
+
+            return response?.Data;
         }
 
         public async Task ApproveAsync(Guid id)
         {
-            await _client.PatchAsync($"puchaseOrder/{id}/approve",null);
+            await _client.PatchAsync($"purchase-orders/{id}/approve",null);
         }
 
         public async Task CompleteAsync(CompletePurchaseOrderDto model)
         {
-            await _client.PatchAsync($"puchaseOrder/{model.PurchaseOrderId}/complete?warehouseId={model.WarehouseId}",null);
+            await _client.PatchAsync($"purchase-orders/{model.PurchaseOrderId}/complete?warehouseId={model.WarehouseId}",null);
         }
     }
 }

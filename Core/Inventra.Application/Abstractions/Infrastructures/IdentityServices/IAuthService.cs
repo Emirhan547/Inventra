@@ -12,7 +12,7 @@ namespace Inventra.Application.Abstractions.Infrastructures.IdentityServices
     {
         Task<Result> RegisterAsync(RegisterCommandRequest request);
 
-        Task<Result<LoginCommandResponse>>LoginAsync(LoginCommandRequest request);
-        Task<Result<LoginCommandResponse>>RefreshTokenAsync(RefreshTokenCommandRequest request);
+        Task<Result<LoginCommandResponse>> LoginAsync(LoginCommandRequest request);
+        Task<Result<LoginCommandResponse>> RefreshTokenAsync(RefreshTokenCommandRequest request);
     }
 }

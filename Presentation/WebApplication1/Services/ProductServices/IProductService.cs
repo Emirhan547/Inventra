@@ -1,11 +1,11 @@
-﻿using Inventra.WebUI.Dtos.ProductDtos;
+﻿using Inventra.WebUI.Common;
+using Inventra.WebUI.Dtos.ProductDtos;
 
 namespace Inventra.WebUI.Services.ProductServices
 {
     public interface IProductService
     {
-        Task<List<ResultProductDto>> GetAllAsync();
-
+        Task<PagedResponse<ResultProductDto>>GetAllAsync(ProductFilterDto? filter = null);
         Task<UpdateProductDto?> GetByIdAsync(Guid id);
 
         Task CreateAsync(CreateProductDto model);

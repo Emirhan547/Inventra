@@ -12,10 +12,20 @@ namespace Inventra.WebUI.Services.ProductServices
             _client =httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultProductDto>>GetAllAsync()
+        public async Task<PagedResponse<ResultProductDto>>GetAllAsync(ProductFilterDto? filter = null)
         {
-            var response = await _client.GetFromJsonAsync< ApiResponse<List<ResultProductDto>>>("products");
-            return response?.Data ?? [];
+            filter ??= new ProductFilterDto();
+            var url =$"products?pageNumber={filter.PageNumber}" +$"&pageSize={filter.PageSize}";
+            if (!string.IsNullOrWhiteSpace(filter.Search))
+            {
+                url += $"&search={filter.Search}";
+            }
+            if (filter.CategoryId.HasValue)
+            {
+                url += $"&categoryId={filter.CategoryId}";
+            }
+            var response =await _client.GetFromJsonAsync<ApiResponse<PagedResponse<ResultProductDto>>>(url);
+            return response?.Data?? new PagedResponse<ResultProductDto>();
         }
 
         public async Task<UpdateProductDto?> GetByIdAsync(Guid id)

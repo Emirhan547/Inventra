@@ -1,13 +1,16 @@
-﻿using Inventra.WebUI.Dtos.PurchaseOrders;
+﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.PurchaseOrders;
 using Inventra.WebUI.Services.ProductServices;
 using Inventra.WebUI.Services.PurchaseOrderServices;
 using Inventra.WebUI.Services.SupplierServices;
 using Inventra.WebUI.Services.WarehouseServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Inventra.WebUI.Controllers
 {
+    [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class PurchaseOrderController(IPurchaseOrderService _purchaseOrderService,ISupplierService _supplierService,IProductService _productService, IWarehouseService _warehouseService): Controller
     {
         public async Task<IActionResult>Index()
@@ -19,7 +22,9 @@ namespace Inventra.WebUI.Controllers
         public async Task<IActionResult>Create()
         {
             ViewBag.Suppliers =new SelectList(await _supplierService.GetAllAsync(),"Id","Name");
-            ViewBag.Products =new SelectList(await _productService.GetAllAsync(),"Id","Name");
+            var products =await _productService.GetAllAsync();
+
+            ViewBag.Products =new SelectList(products.Items,"Id","Name"); 
             return View();
         }
 

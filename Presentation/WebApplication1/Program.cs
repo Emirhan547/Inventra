@@ -1,3 +1,5 @@
+using Inventra.WebUI.Handlers;
+using Inventra.WebUI.Services.AuthServices;
 using Inventra.WebUI.Services.CategoryServices;
 using Inventra.WebUI.Services.DashboardServices;
 using Inventra.WebUI.Services.ProductServices;
@@ -5,10 +7,22 @@ using Inventra.WebUI.Services.PurchaseOrderServices;
 using Inventra.WebUI.Services.StockMovementServices;
 using Inventra.WebUI.Services.StockServices;
 using Inventra.WebUI.Services.SupplierServices;
+using Inventra.WebUI.Services.UserServices;
 using Inventra.WebUI.Services.WarehouseServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services
+    .AddAuthentication(
+        CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
 
+        options.AccessDeniedPath =
+            "/Auth/AccessDenied";
+    });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -29,13 +43,21 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IDashboardService,
     DashboardService>();
+builder.Services.AddScoped<
+    IUserService,
+    UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient(
     "InventraApi",
     client =>
     {
         client.BaseAddress =
             new Uri("https://localhost:7041/");
-    });
+    })
+    .AddHttpMessageHandler<JwtTokenHandler>();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddTransient<JwtTokenHandler>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,6 +71,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

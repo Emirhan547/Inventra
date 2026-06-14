@@ -12,10 +12,17 @@ namespace Inventra.WebUI.Services.StockMovementServices
             _client =httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultStockMovementDto>>GetAllAsync()
+        public async Task<PagedResponse<ResultStockMovementDto>>
+     GetAllAsync()
         {
-            var response =await _client.GetFromJsonAsync<ApiResponse<List<ResultStockMovementDto>>>("stock-movements");
-            return response?.Data ?? [];
+            var response =
+                await _client.GetFromJsonAsync<
+                    ApiResponse<
+                        PagedResponse<ResultStockMovementDto>>>(
+                            "stock-movements");
+
+            return response?.Data
+                   ?? new PagedResponse<ResultStockMovementDto>();
         }
     }
 }

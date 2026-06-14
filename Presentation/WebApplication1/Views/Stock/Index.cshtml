@@ -1,5 +1,6 @@
-﻿@using Inventra.WebUI.Dtos.StockDtos
-@model List<ResultStockDto>
+﻿@using Inventra.WebUI.Common
+@using Inventra.WebUI.Dtos.StockDtos
+@model PagedResponse<ResultStockDto>
 
 <div class="page-header">
 
@@ -37,9 +38,9 @@
 
         <tbody>
 
-            @if (Model.Any())
+            @if (Model.Items.Any())
             {
-                @foreach (var item in Model)
+                @foreach (var item in Model.Items)
                 {
                     <tr>
 

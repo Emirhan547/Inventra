@@ -1,0 +1,61 @@
+﻿@using Inventra.WebUI.Dtos.UserDtos
+@model UserDetailDto
+
+<div class="page-header">
+
+    <div>
+        <h2>Kullanıcı Detayı</h2>
+        <p class="text-muted">
+            Kullanıcı bilgileri
+        </p>
+    </div>
+
+</div>
+
+<div class="content-card">
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <label class="form-label">
+                Ad
+            </label>
+
+            <input class="form-control"
+                   value="@Model.FirstName"
+                   readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">
+                Soyad
+            </label>
+
+            <input class="form-control"
+                   value="@Model.LastName"
+                   readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">
+                Kullanıcı Adı
+            </label>
+
+            <input class="form-control"
+                   value="@Model.UserName"
+                   readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">
+                Email
+            </label>
+
+            <input class="form-control"
+                   value="@Model.Email"
+                   readonly />
+        </div>
+
+    </div>
+
+</div>

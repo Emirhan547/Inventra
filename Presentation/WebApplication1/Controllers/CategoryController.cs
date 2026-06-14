@@ -1,9 +1,12 @@
-﻿using Inventra.WebUI.Dtos.CategoryDtos;
+﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.CategoryDtos;
 using Inventra.WebUI.Services.CategoryServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.WebUI.Controllers
 {
+    [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _service;

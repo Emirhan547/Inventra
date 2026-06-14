@@ -1,9 +1,12 @@
-﻿using Inventra.WebUI.Dtos.WarehouseDtos;
+﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.WarehouseDtos;
 using Inventra.WebUI.Services.WarehouseServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.WebUI.Controllers
 {
+    [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class WarehouseController(IWarehouseService _warehouseService): Controller
     {
         public async Task<IActionResult> Index()

@@ -49,7 +49,8 @@ namespace Inventra.Infrastructure.JwtServices
             return new LoginCommandResponse
             {
                 AccessToken = accessToken,
-                ExpirationTime =expireDate
+                ExpirationTime = expireDate,
+                Roles = user.Roles.ToList()
             };
         }
         public string CreateRefreshToken()

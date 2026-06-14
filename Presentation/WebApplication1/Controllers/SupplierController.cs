@@ -1,9 +1,12 @@
-﻿using Inventra.WebUI.Dtos.SupplierDtos;
+﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.SupplierDtos;
 using Inventra.WebUI.Services.SupplierServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.WebUI.Controllers
 {
+    [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class SupplierController( ISupplierService _supplierService): Controller
     {
         public async Task<IActionResult>Index()
