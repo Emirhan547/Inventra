@@ -8,7 +8,6 @@ using Inventra.Infrastructure.SignalR;
 using Inventra.Persistence.Context;
 using Inventra.Persistence.Extensions;
 using Microsoft.AspNetCore.Identity;
-using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using Serilog;
 var builder = WebApplication.CreateBuilder(args);
@@ -35,14 +34,7 @@ builder.Services
     .AddSignInManager()
     .AddDefaultTokenProviders();
 builder.Services.AddSignalR();
-builder.Services
-    .AddOpenTelemetry()
-    .WithTracing(tracing =>
-    {
-        tracing
-            .AddAspNetCoreInstrumentation()
-            .AddHttpClientInstrumentation();
-    });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("SignalR", policy =>
