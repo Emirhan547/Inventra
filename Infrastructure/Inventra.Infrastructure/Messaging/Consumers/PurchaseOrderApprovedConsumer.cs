@@ -2,6 +2,7 @@
 using Inventra.Application.Contracts.Events;
 using Inventra.Application.Features.Notifications;
 using Inventra.Domain.Constants;
+using Inventra.Domain.Entities;
 using MassTransit;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Inventra.Infrastructure.Messaging.Consumers
         public async Task Consume(
             ConsumeContext<PurchaseOrderApprovedEvent> context)
         {
-            var notification = new NotificationMessage
+            var notification = new Notification
             {
                 Title = "Satın Alma Talebi Onaylandı",
                 Message =

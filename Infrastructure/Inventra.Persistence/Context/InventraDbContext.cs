@@ -18,6 +18,7 @@ namespace Inventra.Persistence.Context
         public DbSet<StockMovement> StockMovements=> Set<StockMovement>();
         public DbSet<Supplier> Suppliers => Set<Supplier>();
         public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItems
             => Set<PurchaseOrderItem>();
         public DbSet<AuditLog> AuditLogs { get; set; }

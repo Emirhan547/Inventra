@@ -35,5 +35,7 @@ namespace Inventra.Domain.Constants
 
         public const string UserManagement =
             nameof(UserManagement);
+        public const string AuditLogView =
+    nameof(AuditLogView);
     }
 }

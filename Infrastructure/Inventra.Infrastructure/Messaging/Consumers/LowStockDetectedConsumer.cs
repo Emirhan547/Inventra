@@ -2,6 +2,7 @@
 using Inventra.Application.Contracts.Events;
 using Inventra.Application.Features.Notifications;
 using Inventra.Domain.Constants;
+using Inventra.Domain.Entities;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,7 +23,7 @@ namespace Inventra.Infrastructure.Messaging.Consumers
 
         public async Task Consume(ConsumeContext<LowStockDetectedEvent> context)
         {
-            var notification = new NotificationMessage
+            var notification = new Notification
             {
                 Title = "Kritik Stok Uyarısı",
 

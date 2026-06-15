@@ -1,8 +1,11 @@
-﻿using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
+﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
 using Inventra.Application.Abstractions.Repositories.StockRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
+using Inventra.Application.Features.Notifications;
 using Inventra.Application.Features.Stocks.Commands;
+using Inventra.Domain.Constants;
 using Inventra.Domain.Entities;
 using Inventra.Domain.Enums;
 using MediatR;
@@ -12,7 +15,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Stocks.Handlers
 {
-    public class TransferStockCommandHandler(IStockReadRepository _stockReadRepository,IUnitOfWork _unitOfWork,IStockMovementWriteRepository _stockMovementWriteRepository,IStockWriteRepository _stockWriteRepository) : IRequestHandler<TransferStockCommand, Result>
+    public class TransferStockCommandHandler(IStockReadRepository _stockReadRepository,IUnitOfWork _unitOfWork,IStockMovementWriteRepository _stockMovementWriteRepository,IStockWriteRepository _stockWriteRepository, INotificationService _notificationService) : IRequestHandler<TransferStockCommand, Result>
     {
         public async Task<Result> Handle(TransferStockCommand request,CancellationToken cancellationToken)
         {
@@ -62,6 +65,15 @@ namespace Inventra.Application.Features.Stocks.Handlers
                 });
 
             await _unitOfWork.SaveChangeAsync();
+            await _notificationService.SendToRoleAsync(
+    Roles.Manager,
+    new Notification
+    {
+        Title = "Stok Transferi",
+        Message = $"{request.Quantity} adet ürün transfer edildi.",
+        Type = "StockTransfer",
+        CreatedAt = DateTime.UtcNow
+    });
 
             return Result.SuccessResult("Stock transferred successfully.");
         }

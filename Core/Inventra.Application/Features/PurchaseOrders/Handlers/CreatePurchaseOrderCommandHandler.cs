@@ -1,9 +1,11 @@
 ﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+using Inventra.Application.Abstractions.Messaging;
 using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
 using Inventra.Application.Abstractions.Repositories.SupplierRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
+using Inventra.Application.Contracts.Events;
 using Inventra.Application.Features.Notifications;
 using Inventra.Application.Features.PurchaseOrders.Commands;
 using Inventra.Domain.Constants;
@@ -18,7 +20,7 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
     public class CreatePurchaseOrderCommandHandler(ISupplierReadRepository _supplierReadRepository, IProductReadRepository _productReadRepository, IPurchaseOrderWriteRepository _purchaseOrderWriteRepository,
     IUnitOfWork _unitOfWork, INotificationService
-    _notificationService) : IRequestHandler<CreatePurchaseOrderCommandRequest, Result<CreatePurchaseOrderCommandResponse>>
+    _notificationService, IEventBus _eventBus) : IRequestHandler<CreatePurchaseOrderCommandRequest, Result<CreatePurchaseOrderCommandResponse>>
     {
         public async Task<Result<CreatePurchaseOrderCommandResponse>> Handle(CreatePurchaseOrderCommandRequest request, CancellationToken cancellationToken)
         {
@@ -58,7 +60,7 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
 
             await _unitOfWork.SaveChangeAsync();
 
-            var notification = new NotificationMessage
+            var notification = new Notification
             {
                 Title = "Yeni Satın Alma Talebi",
                 Message =$"{purchaseOrder.OrderNumber} numaralı talep oluşturuldu.",
@@ -66,8 +68,12 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _notificationService.SendToRoleAsync(Roles.Manager,notification);
-
+            await _eventBus.PublishAsync(
+    new PurchaseOrderCreatedEvent
+    {
+        PurchaseOrderId = purchaseOrder.Id,
+        OrderNumber = purchaseOrder.OrderNumber
+    });
             return Result<CreatePurchaseOrderCommandResponse>.SuccessResult(new CreatePurchaseOrderCommandResponse
                 {
                     Id = purchaseOrder.Id

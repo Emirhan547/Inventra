@@ -1,7 +1,9 @@
 using Inventra.WebUI.Handlers;
+using Inventra.WebUI.Services.AuditLogServices;
 using Inventra.WebUI.Services.AuthServices;
 using Inventra.WebUI.Services.CategoryServices;
 using Inventra.WebUI.Services.DashboardServices;
+using Inventra.WebUI.Services.NotificationServices;
 using Inventra.WebUI.Services.ProductServices;
 using Inventra.WebUI.Services.PurchaseOrderServices;
 using Inventra.WebUI.Services.StockMovementServices;
@@ -46,7 +48,13 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IUserService,
     UserService>();
+builder.Services.AddScoped<
+    INotificationService,
+    NotificationService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<
+    IAuditLogService,
+    AuditLogService>();
 builder.Services.AddHttpClient(
     "InventraApi",
     client =>

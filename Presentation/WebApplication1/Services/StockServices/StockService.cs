@@ -26,12 +26,18 @@ namespace Inventra.WebUI.Services.StockServices
             return response?.Data
                    ?? new PagedResponse<ResultStockDto>();
         }
-        public async Task StockInAsync(
-    CreateStockInDto model)
+        public async Task StockInAsync(CreateStockInDto model)
         {
-            await _client.PostAsJsonAsync(
+            var response = await _client.PostAsJsonAsync(
                 "stocks/in",
                 model);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"STATUS: {response.StatusCode}");
+            Console.WriteLine(content);
+
+            response.EnsureSuccessStatusCode();
         }
         public async Task StockOutAsync(
     CreateStockOutDto model)

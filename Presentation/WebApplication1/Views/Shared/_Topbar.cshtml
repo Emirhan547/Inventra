@@ -1,4 +1,4 @@
-﻿<header class="topbar">
+<header class="topbar">
 
     <div>
 
@@ -8,26 +8,99 @@
 
     </div>
 
-    <div class="user-info">
+    <div class="topbar-actions">
 
-        <div class="avatar">
+        <div class="notification-center">
 
-            EH
+            <button id="notificationButton"
+                    class="notification-button"
+                    type="button"
+                    aria-expanded="false">
+
+                🔔
+
+                <span id="notificationCount"
+                      class="notification-badge">
+
+                    0
+
+                </span>
+
+                <span id="connectionIndicator"
+                      class="connection-indicator"
+                      data-state="disconnected">
+
+                </span>
+
+            </button>
+
+            <div id="notificationPanel"
+                 class="notification-panel d-none">
+
+                <div class="notification-panel-header">
+
+                    <div>
+
+                        <strong>
+                            Bildirimler
+                        </strong>
+
+                        <small>
+                            Gerçek zamanlı bildirimler
+                        </small>
+
+                    </div>
+
+                    <button id="clearNotifications"
+                            class="notification-clear-button">
+
+                        Temizle
+
+                    </button>
+
+                </div>
+
+                <div id="notificationList"
+                     class="notification-list">
+
+                    <div class="notification-empty">
+
+                        Henüz bildirim bulunmuyor
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div>
+        <div class="user-info">
 
-            <div>
-                Emirhan Hacıoğlu
+            <div class="avatar">
+
+                EH
+
             </div>
 
-            <small>
-                Admin
-            </small>
+            <div>
+
+                <div>
+                    Emirhan Hacıoğlu
+                </div>
+
+                <small>
+                    Admin
+                </small>
+
+            </div>
 
         </div>
 
     </div>
 
 </header>
+
+<div id="toastContainer"
+     class="notification-toast-container">
+</div>

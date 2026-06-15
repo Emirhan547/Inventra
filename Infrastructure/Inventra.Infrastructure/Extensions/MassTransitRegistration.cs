@@ -18,6 +18,11 @@ namespace Inventra.Infrastructure.Extensions
                 x.AddConsumer<LowStockDetectedConsumer>();
                 x.AddConsumer<RoleAssignedAuditConsumer>();
                 x.AddConsumer<PurchaseOrderApprovedAuditConsumer>();
+                x.AddConsumer<PurchaseOrderCreatedConsumer>();
+
+                x.AddConsumer<PurchaseOrderCompletedConsumer>();
+                x.AddConsumer<DashboardUpdatedConsumer>();
+                x.AddConsumer<StockInCompletedConsumer>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(

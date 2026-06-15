@@ -48,14 +48,16 @@ namespace Inventra.WebUI.Services.AuthServices
             var principal =new ClaimsPrincipal(identity);
             await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
 
-            httpContext.Response.Cookies.Append("AccessToken",result.Data!.AccessToken,
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires =result.Data.ExpirationTime
-                });
+            httpContext.Response.Cookies.Append(
+     "AccessToken",
+     result.Data.AccessToken,
+     new CookieOptions
+     {
+         HttpOnly = false, // <-- değiştir
+         Secure = true,
+         SameSite = SameSiteMode.Strict,
+         Expires = result.Data.ExpirationTime
+     });
 
             httpContext.Response.Cookies.Append("RefreshToken",result.Data.RefreshToken,
                 new CookieOptions

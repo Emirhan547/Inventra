@@ -12,6 +12,14 @@ namespace Inventra.Infrastructure.SignalR
     {
         public override async Task OnConnectedAsync()
         {
+            Console.WriteLine("HUB BAGLANDI");
+
+            foreach (var claim in Context.User.Claims)
+            {
+                Console.WriteLine(
+                    $"{claim.Type} = {claim.Value}");
+            }
+
             var roles =
                 Context.User?
                     .Claims
@@ -19,10 +27,16 @@ namespace Inventra.Infrastructure.SignalR
                     .Select(x => x.Value)
                     .ToList();
 
+            Console.WriteLine(
+                $"ROLLER: {string.Join(",", roles ?? [])}");
+
             if (roles is not null)
             {
                 foreach (var role in roles)
                 {
+                    Console.WriteLine(
+                        $"GROUP EKLENIYOR => {role}");
+
                     await Groups.AddToGroupAsync(
                         Context.ConnectionId,
                         role);

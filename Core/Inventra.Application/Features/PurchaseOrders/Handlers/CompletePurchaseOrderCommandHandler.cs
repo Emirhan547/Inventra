@@ -1,9 +1,11 @@
 ﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+using Inventra.Application.Abstractions.Messaging;
 using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
 using Inventra.Application.Abstractions.Repositories.StockRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
+using Inventra.Application.Contracts.Events;
 using Inventra.Application.Features.Notifications;
 using Inventra.Application.Features.PurchaseOrders.Commands;
 using Inventra.Domain.Constants;
@@ -17,7 +19,7 @@ using System.Text;
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
     public class CompletePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IStockReadRepository _stockReadRepository,IStockWriteRepository _stockWriteRepository,IStockMovementWriteRepository _stockMovementWriteRepository,
-    IUnitOfWork _unitOfWork, INotificationService _notificationService) : IRequestHandler<CompletePurchaseOrderCommand,Result>
+    IUnitOfWork _unitOfWork, INotificationService _notificationService,IEventBus _eventBus) : IRequestHandler<CompletePurchaseOrderCommand,Result>
     {
         public async Task<Result> Handle(CompletePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
@@ -53,10 +55,7 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
                             Description =$"Purchase Order {purchaseOrder.OrderNumber}"
                         });
             }
-            if (purchaseOrder is null)
-            {
-                return Result.Failure("Purchase order not found.");
-            }
+           
             if (purchaseOrder.Status !=PurchaseOrderStatus.Approved)
             {
                 return Result.Failure("Purchase order must be approved.");
@@ -65,7 +64,7 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
 
             await _unitOfWork.SaveChangeAsync();
 
-            var notification = new NotificationMessage
+            var notification = new Notification
             {
                 Title = "Satın Alma Süreci Tamamlandı",
                 Message = $"{purchaseOrder.OrderNumber} numaralı sipariş tamamlandı.",
@@ -73,7 +72,12 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _notificationService.SendToRoleAsync(Roles.Employee,notification);
+            await _eventBus.PublishAsync(
+            new PurchaseOrderCompletedEvent
+            {
+                PurchaseOrderId = purchaseOrder.Id,
+                OrderNumber = purchaseOrder.OrderNumber
+            });
 
             return Result.SuccessResult( "Purchase order completed.");
         }

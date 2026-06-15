@@ -1,0 +1,54 @@
+﻿@using Inventra.WebUI.Dtos.AuditLogDtos
+@model List<ResultAuditLogDto>
+
+<div class="page-header">
+
+    <h2>Audit Logları</h2>
+
+</div>
+
+<div class="content-card">
+
+    <table class="table table-hover">
+
+        <thead>
+
+            <tr>
+                <th>Tarih</th>
+                <th>Kullanıcı</th>
+                <th>Olay</th>
+                <th>Açıklama</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @item.OccurredOn.ToString("dd.MM.yyyy HH:mm")
+                    </td>
+
+                    <td>
+                        @item.UserName
+                    </td>
+
+                    <td>
+                        @item.EventName
+                    </td>
+
+                    <td>
+                        @item.Description
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

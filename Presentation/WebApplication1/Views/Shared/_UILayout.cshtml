@@ -31,6 +31,13 @@
         </div>
 
     </div>
-
+    <script>
+            window.accessToken =
+                '@Context.Request.Cookies["AccessToken"]';
+    </script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/notifications.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
 using Inventra.Application.Features.Notifications;
+using Inventra.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Inventra.Infrastructure.SignalR
@@ -13,14 +14,27 @@ namespace Inventra.Infrastructure.SignalR
             _hubContext = hubContext;
         }
 
-        public async Task SendToAllAsync(NotificationMessage notification)
+        public async Task SendToAllAsync(Notification notification)
         {
             await _hubContext.Clients.All.SendAsync("ReceiveNotification", notification);
         }
 
-        public async Task SendToRoleAsync(string role, NotificationMessage notification)
+        public async Task SendToRoleAsync(
+    string role,
+    Notification notification)
         {
-            await _hubContext.Clients.Group(role).SendAsync("ReceiveNotification", notification);
+            Console.WriteLine(
+                $"SIGNALR GONDERILIYOR => {role}");
+
+            await _hubContext
+                .Clients
+                .Group(role)
+                .SendAsync(
+                    "ReceiveNotification",
+                    notification);
+
+            Console.WriteLine(
+                $"SIGNALR GONDERILDI => {role}");
         }
     }
 }
