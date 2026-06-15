@@ -1,8 +1,12 @@
-﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+using Inventra.Application.Abstractions.Infrastructures.SignalR;
+using Inventra.Application.Abstractions.Messaging;
+using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
 using Inventra.Application.Abstractions.Repositories.StockRepositories;
 using Inventra.Application.Abstractions.Uow;
 using Inventra.Application.Common.Results;
+using Inventra.Application.Contracts.Events;
 using Inventra.Application.Features.Notifications;
 using Inventra.Application.Features.Stocks.Commands;
 using Inventra.Domain.Constants;
@@ -15,7 +19,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Stocks.Handlers
 {
-    public class TransferStockCommandHandler(IStockReadRepository _stockReadRepository,IUnitOfWork _unitOfWork,IStockMovementWriteRepository _stockMovementWriteRepository,IStockWriteRepository _stockWriteRepository, INotificationService _notificationService) : IRequestHandler<TransferStockCommand, Result>
+    public class TransferStockCommandHandler(IStockReadRepository _stockReadRepository,IUnitOfWork _unitOfWork,IStockMovementWriteRepository _stockMovementWriteRepository,IStockWriteRepository _stockWriteRepository, INotificationService _notificationService, IProductReadRepository _productReadRepository, ICurrentUserService _currentUserService,IEventBus _eventBus) : IRequestHandler<TransferStockCommand, Result>
     {
         public async Task<Result> Handle(TransferStockCommand request,CancellationToken cancellationToken)
         {
@@ -65,6 +69,19 @@ namespace Inventra.Application.Features.Stocks.Handlers
                 });
 
             await _unitOfWork.SaveChangeAsync();
+            var product =
+    await _productReadRepository.GetByIdAsync(
+        request.ProductId);
+            await _eventBus.PublishAsync(
+    new TransferCompletedEvent
+    {
+        ProductId = request.ProductId,
+        ProductName = product!.Name,
+        Quantity = request.Quantity,
+
+        UserId = _currentUserService.UserId,
+        UserName = _currentUserService.UserName
+    });
             await _notificationService.SendToRoleAsync(
     Roles.Manager,
     new Notification

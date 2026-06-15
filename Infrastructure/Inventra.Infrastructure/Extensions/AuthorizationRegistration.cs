@@ -85,6 +85,11 @@ namespace Inventra.Infrastructure.Extensions
                     policy =>
                         policy.RequireRole(
                             Roles.Admin));
+                options.AddPolicy(
+    Policies.AuditLogView,
+    policy =>
+        policy.RequireRole(
+            Roles.Admin));
             });
 
             return services;

@@ -7,7 +7,9 @@
 
     <div>
 
-        <h2>Satın Alma Siparişleri</h2>
+        <h2>
+            Satın Alma Siparişleri
+        </h2>
 
         <p class="text-muted">
             Oluşturulan tüm siparişler
@@ -24,6 +26,92 @@
 
 </div>
 
+<form method="get"
+      class="mb-4">
+
+    <div class="row g-2">
+
+        <div class="col-md-3">
+
+            <select name="Status"
+                    class="form-select">
+
+                <option value="">
+                    Tüm Durumlar
+                </option>
+
+                <option value="1"
+                        selected="@(Context.Request.Query["Status"] == "1")">
+
+                    Bekliyor
+
+                </option>
+
+                <option value="2"
+                        selected="@(Context.Request.Query["Status"] == "2")">
+
+                    Onaylandı
+
+                </option>
+
+                <option value="3"
+                        selected="@(Context.Request.Query["Status"] == "3")">
+
+                    Tamamlandı
+
+                </option>
+
+                <option value="4"
+                        selected="@(Context.Request.Query["Status"] == "4")">
+
+                    İptal Edildi
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <select name="SupplierId"
+                    asp-items="ViewBag.Suppliers"
+                    class="form-select">
+
+                <option value="">
+                    Tüm Tedarikçiler
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                Filtrele
+
+            </button>
+
+        </div>
+
+        <div class="col-md-2">
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+
+                Temizle
+
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
 <div class="content-card">
 
     <table class="table table-hover align-middle">
@@ -32,15 +120,25 @@
 
             <tr>
 
-                <th>Sipariş No</th>
+                <th>
+                    Sipariş No
+                </th>
 
-                <th>Tedarikçi</th>
+                <th>
+                    Tedarikçi
+                </th>
 
-                <th>Tutar</th>
+                <th>
+                    Tutar
+                </th>
 
-                <th>Durum</th>
+                <th>
+                    Durum
+                </th>
 
-                <th>Tarih</th>
+                <th>
+                    Tarih
+                </th>
 
                 <th width="260">
                     İşlemler
@@ -52,82 +150,98 @@
 
         <tbody>
 
-            @foreach (var item in Model.Items)
+            @if (Model.Items.Any())
+            {
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+
+                        <td>
+                            @item.OrderNumber
+                        </td>
+
+                        <td>
+                            @item.SupplierName
+                        </td>
+
+                        <td>
+                            @item.TotalAmount.ToString("C")
+                        </td>
+
+                        <td>
+
+                            @switch (item.Status)
+                            {
+                                case PurchaseOrderStatus.Pending:
+
+                                    <span class="badge bg-warning">
+                                        Bekliyor
+                                    </span>
+                                    break;
+
+                                case PurchaseOrderStatus.Approved:
+
+                                    <span class="badge bg-primary">
+                                        Onaylandı
+                                    </span>
+                                    break;
+
+                                case PurchaseOrderStatus.Completed:
+
+                                    <span class="badge bg-success">
+                                        Tamamlandı
+                                    </span>
+                                    break;
+
+                                case PurchaseOrderStatus.Cancelled:
+
+                                    <span class="badge bg-danger">
+                                        İptal Edildi
+                                    </span>
+                                    break;
+                            }
+
+                        </td>
+
+                        <td>
+                            @item.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-sm btn-info">
+
+                                Detay
+
+                            </a>
+
+                            @if (item.Status ==
+                                 PurchaseOrderStatus.Pending)
+                            {
+                                <a asp-action="Approve"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-success">
+
+                                    Onayla
+
+                                </a>
+                            }
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
 
-                    <td>
-                        @item.OrderNumber
-                    </td>
+                    <td colspan="6"
+                        class="text-center">
 
-                    <td>
-                        @item.SupplierName
-                    </td>
-
-                    <td>
-                        @item.TotalAmount.ToString("C")
-                    </td>
-
-                    <td>
-
-                        @switch (item.Status)
-                        {
-                            case PurchaseOrderStatus.Pending:
-
-                                <span class="badge bg-warning">
-                                    Pending
-                                </span>
-                                break;
-
-                            case PurchaseOrderStatus.Approved:
-
-                                <span class="badge bg-primary">
-                                    Approved
-                                </span>
-                                break;
-
-                            case PurchaseOrderStatus.Completed:
-
-                                <span class="badge bg-success">
-                                    Completed
-                                </span>
-                                break;
-
-                            case PurchaseOrderStatus.Cancelled:
-
-                                <span class="badge bg-danger">
-                                    Cancelled
-                                </span>
-                                break;
-                        }
-
-                    </td>
-
-                    <td>
-                        @item.CreatedDate.ToString("dd.MM.yyyy HH:mm")
-                    </td>
-
-                    <td>
-
-                        <a asp-action="Details"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-info">
-
-                            Detay
-
-                        </a>
-
-                        @if (item.Status ==
-                             PurchaseOrderStatus.Pending)
-                        {
-                            <a asp-action="Approve"
-                               asp-route-id="@item.Id"
-                               class="btn btn-sm btn-success">
-
-                                Onayla
-
-                            </a>
-                        }
+                        Sipariş bulunamadı
 
                     </td>
 
@@ -139,3 +253,62 @@
     </table>
 
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Status="@Context.Request.Query["Status"]"
+                   asp-route-SupplierId="@Context.Request.Query["SupplierId"]">
+
+                    Önceki
+
+                </a>
+
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-PageNumber="@i"
+                       asp-route-PageSize="@Model.PageSize"
+                       asp-route-Status="@Context.Request.Query["Status"]"
+                       asp-route-SupplierId="@Context.Request.Query["SupplierId"]">
+
+                        @i
+
+                    </a>
+
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Status="@Context.Request.Query["Status"]"
+                   asp-route-SupplierId="@Context.Request.Query["SupplierId"]">
+
+                    Sonraki
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}

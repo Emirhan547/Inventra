@@ -1,3 +1,26 @@
+@using System.Security.Claims
+
+@{
+    var userName =
+        User.Identity?.Name ?? "Kullanıcı";
+
+    var role =
+        User.Claims
+            .FirstOrDefault(
+                x => x.Type == ClaimTypes.Role)
+            ?.Value ?? "Rol Yok";
+
+    var initials =
+        string.Join(
+            "",
+            userName
+                .Split(
+                    ' ',
+                    StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x[0]))
+        .ToUpper();
+}
+
 <header class="topbar">
 
     <div>
@@ -79,18 +102,18 @@
 
             <div class="avatar">
 
-                EH
+                @initials
 
             </div>
 
             <div>
 
                 <div>
-                    Emirhan Hacıoğlu
+                    @userName
                 </div>
 
                 <small>
-                    Admin
+                    @role
                 </small>
 
             </div>

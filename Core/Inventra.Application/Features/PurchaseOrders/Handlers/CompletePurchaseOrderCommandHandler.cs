@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+using Inventra.Application.Abstractions.Infrastructures.SignalR;
 using Inventra.Application.Abstractions.Messaging;
 using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
@@ -19,7 +20,7 @@ using System.Text;
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
     public class CompletePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IStockReadRepository _stockReadRepository,IStockWriteRepository _stockWriteRepository,IStockMovementWriteRepository _stockMovementWriteRepository,
-    IUnitOfWork _unitOfWork, INotificationService _notificationService,IEventBus _eventBus) : IRequestHandler<CompletePurchaseOrderCommand,Result>
+    IUnitOfWork _unitOfWork, INotificationService _notificationService,IEventBus _eventBus, ICurrentUserService _currentUserService) : IRequestHandler<CompletePurchaseOrderCommand,Result>
     {
         public async Task<Result> Handle(CompletePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
@@ -73,11 +74,14 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
             };
 
             await _eventBus.PublishAsync(
-            new PurchaseOrderCompletedEvent
-            {
-                PurchaseOrderId = purchaseOrder.Id,
-                OrderNumber = purchaseOrder.OrderNumber
-            });
+    new PurchaseOrderCompletedEvent
+    {
+        PurchaseOrderId = purchaseOrder.Id,
+        OrderNumber = purchaseOrder.OrderNumber,
+
+        UserId = _currentUserService.UserId,
+        UserName = _currentUserService.UserName
+    });
 
             return Result.SuccessResult( "Purchase order completed.");
         }

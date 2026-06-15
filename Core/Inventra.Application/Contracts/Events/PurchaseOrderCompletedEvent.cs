@@ -9,5 +9,9 @@ namespace Inventra.Application.Contracts.Events
         public Guid PurchaseOrderId { get; set; }
 
         public string OrderNumber { get; set; } = default!;
+
+        public Guid UserId { get; set; }
+
+        public string UserName { get; set; } = default!;
     }
 }

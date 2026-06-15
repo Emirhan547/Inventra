@@ -12,17 +12,44 @@ namespace Inventra.WebUI.Services.StockMovementServices
             _client =httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<PagedResponse<ResultStockMovementDto>>
-     GetAllAsync()
+        public async Task<
+            PagedResponse<ResultStockMovementDto>>
+            GetAllAsync(
+                StockMovementFilterDto filter)
         {
+            var query =
+                $"stock-movements?" +
+                $"PageNumber={filter.PageNumber}" +
+                $"&PageSize={filter.PageSize}";
+
+            if (filter.Type.HasValue)
+            {
+                query +=
+                    $"&Type={(int)filter.Type.Value}";
+            }
+
+            if (filter.StartDate.HasValue)
+            {
+                query +=
+                    $"&StartDate={filter.StartDate.Value:yyyy-MM-dd}";
+            }
+
+            if (filter.EndDate.HasValue)
+            {
+                query +=
+                    $"&EndDate={filter.EndDate.Value:yyyy-MM-dd}";
+            }
+
             var response =
                 await _client.GetFromJsonAsync<
                     ApiResponse<
-                        PagedResponse<ResultStockMovementDto>>>(
-                            "stock-movements");
+                        PagedResponse<
+                            ResultStockMovementDto>>>
+                    (query);
 
             return response?.Data
-                   ?? new PagedResponse<ResultStockMovementDto>();
+                ?? new PagedResponse<
+                    ResultStockMovementDto>();
         }
     }
 }

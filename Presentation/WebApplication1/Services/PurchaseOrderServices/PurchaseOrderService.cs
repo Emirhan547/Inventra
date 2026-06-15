@@ -12,15 +12,38 @@ namespace Inventra.WebUI.Services.PurchaseOrderServices
             _client = httpClientFactory.CreateClient("InventraApi");
         }
 
-        public async Task<PagedResponse<ResultPurchaseOrderDto>> GetAllAsync()
+        public async Task<
+    PagedResponse<ResultPurchaseOrderDto>>
+    GetAllAsync(
+        PurchaseOrderFilterDto filter)
         {
+            var query =
+                $"purchase-orders?" +
+                $"PageNumber={filter.PageNumber}" +
+                $"&PageSize={filter.PageSize}";
+
+            if (filter.Status.HasValue)
+            {
+                query +=
+                    $"&Status={(int)filter.Status.Value}";
+            }
+
+            if (filter.SupplierId.HasValue)
+            {
+                query +=
+                    $"&SupplierId={filter.SupplierId}";
+            }
+
             var response =
                 await _client.GetFromJsonAsync<
-                    ApiResponse<PagedResponse<ResultPurchaseOrderDto>>>(
-                        "purchase-orders");
+                    ApiResponse<
+                        PagedResponse<
+                            ResultPurchaseOrderDto>>>
+                    (query);
 
             return response?.Data
-                   ?? new PagedResponse<ResultPurchaseOrderDto>();
+                   ?? new PagedResponse<
+                       ResultPurchaseOrderDto>();
         }
 
         public async Task CreateAsync(CreatePurchaseOrderDto model)

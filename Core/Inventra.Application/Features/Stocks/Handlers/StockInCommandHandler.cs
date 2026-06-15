@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+using Inventra.Application.Abstractions.Infrastructures.SignalR;
 using Inventra.Application.Abstractions.Messaging;
 using Inventra.Application.Abstractions.Repositories.ProductRepositories;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
@@ -26,6 +27,7 @@ public class StockInCommandHandler: IRequestHandler<StockInCommand, Result>
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationService _notificationService;
     private readonly IEventBus _eventBus;
+    private readonly ICurrentUserService _currentUserService;
     public StockInCommandHandler(
         IProductReadRepository productReadRepository,
         IWarehouseReadRepository warehouseReadRepository,
@@ -34,7 +36,8 @@ public class StockInCommandHandler: IRequestHandler<StockInCommand, Result>
         IStockMovementWriteRepository stockMovementWriteRepository,
         IUnitOfWork unitOfWork,
         INotificationService notificationService,
-        IEventBus eventBus)
+        IEventBus eventBus,
+        ICurrentUserService currentUserService)
     {
         _productReadRepository = productReadRepository;
         _warehouseReadRepository = warehouseReadRepository;
@@ -44,6 +47,7 @@ public class StockInCommandHandler: IRequestHandler<StockInCommand, Result>
         _unitOfWork = unitOfWork;
         _notificationService = notificationService;
         _eventBus = eventBus;
+        _currentUserService = currentUserService;
     }
 
     public async Task<Result> Handle(
@@ -102,12 +106,15 @@ public class StockInCommandHandler: IRequestHandler<StockInCommand, Result>
         await _unitOfWork.SaveChangeAsync();
 
         await _eventBus.PublishAsync(
-            new StockInCompletedEvent
-            {
-                ProductId = product.Id,
-                ProductName = product.Name,
-                Quantity = request.Quantity
-            });
+     new StockInCompletedEvent
+     {
+         ProductId = product.Id,
+         ProductName = product.Name,
+         Quantity = request.Quantity,
+
+         UserId = _currentUserService.UserId,
+         UserName = _currentUserService.UserName
+     });
 
         await _eventBus.PublishAsync(
     new DashboardUpdatedEvent());

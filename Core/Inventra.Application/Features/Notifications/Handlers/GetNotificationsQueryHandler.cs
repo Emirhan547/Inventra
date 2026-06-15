@@ -1,6 +1,8 @@
-﻿using Inventra.Application.Abstractions.Repositories.NotificationRepositories;
+﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+using Inventra.Application.Abstractions.Repositories.NotificationRepositories;
 using Inventra.Application.Features.Notifications.Queries;
 using Inventra.Application.Features.Notifications.Results;
+using Inventra.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,18 @@ namespace Inventra.Application.Features.Notifications.Handlers
         private readonly INotificationReadRepository
             _notificationReadRepository;
 
+        private readonly ICurrentUserService
+            _currentUserService;
+
         public GetNotificationsQueryHandler(
-            INotificationReadRepository notificationReadRepository)
+            INotificationReadRepository notificationReadRepository,
+            ICurrentUserService currentUserService)
         {
             _notificationReadRepository =
                 notificationReadRepository;
+
+            _currentUserService =
+                currentUserService;
         }
 
         public async Task<List<GetNotificationsResponse>>
@@ -28,24 +37,46 @@ namespace Inventra.Application.Features.Notifications.Handlers
         GetNotificationsQuery request,
         CancellationToken cancellationToken)
         {
-            var notifications =
-                await _notificationReadRepository
-                    .GetAllAsync(false);
+            List<Notification> notifications;
+
+            if (_currentUserService.IsAdmin)
+            {
+                notifications =
+                    await _notificationReadRepository
+                        .GetAllAsync(false, cancellationToken);
+            }
+            else
+            {
+                notifications =
+                    await _notificationReadRepository
+                        .GetWhereAsync(
+                            x =>
+                                (x.UserId != null &&
+                                 x.UserId == _currentUserService.UserId)
+
+                                ||
+
+                                (x.RoleName != null &&
+                                 _currentUserService.Roles.Contains(
+                                     x.RoleName)),
+                            false,
+                            cancellationToken);
+            }
 
             return notifications
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(20)
-                .Select(x =>
-                    new GetNotificationsResponse
-                    {
-                        Id = x.Id,
-                        Title = x.Title,
-                        Message = x.Message,
-                        Type = x.Type,
-                        IsRead = x.IsRead,
-                        CreatedAt = x.CreatedAt
-                    })
+                .Select(x => new GetNotificationsResponse
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Message = x.Message,
+                    Type = x.Type,
+                    IsRead = x.IsRead,
+                    CreatedAt = x.CreatedAt
+                })
                 .ToList();
         }
     }
+   
 }

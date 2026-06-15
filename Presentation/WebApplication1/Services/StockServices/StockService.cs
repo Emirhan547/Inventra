@@ -14,17 +14,26 @@ namespace Inventra.WebUI.Services.StockServices
                 httpClientFactory
                     .CreateClient("InventraApi");
         }
-        public async Task<PagedResponse<ResultStockDto>>
-     GetAllAsync()
+        public async Task<
+    PagedResponse<ResultStockDto>>
+    GetAllAsync(
+        StockFilterDto filter)
         {
+            var query =
+                $"stocks?" +
+                $"PageNumber={filter.PageNumber}" +
+                $"&PageSize={filter.PageSize}";
+
             var response =
                 await _client.GetFromJsonAsync<
                     ApiResponse<
-                        PagedResponse<ResultStockDto>>>(
-                            "stocks");
+                        PagedResponse<
+                            ResultStockDto>>>
+                    (query);
 
             return response?.Data
-                   ?? new PagedResponse<ResultStockDto>();
+                   ?? new PagedResponse<
+                       ResultStockDto>();
         }
         public async Task StockInAsync(CreateStockInDto model)
         {

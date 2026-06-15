@@ -12,9 +12,14 @@ namespace Inventra.WebUI.Controllers
     [Authorize(Roles = RoleGroups.AllUsers)]
     public class StockController(IStockService _stockService, IProductService _productService, IWarehouseService _warehouseService): Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult>
+    Index(
+        StockFilterDto filter)
         {
-            var stocks =await _stockService.GetAllAsync();
+            var stocks =
+                await _stockService
+                    .GetAllAsync(filter);
+
             return View(stocks);
         }
         public async Task<IActionResult>StockIn()

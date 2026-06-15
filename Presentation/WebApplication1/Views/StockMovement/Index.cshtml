@@ -16,6 +16,84 @@
 
 </div>
 
+<form method="get" class="mb-4">
+
+    <div class="row g-2">
+
+        <div class="col-md-3">
+
+            <select name="Type"
+                    class="form-select">
+
+                <option value="">
+                    Tüm Hareketler
+                </option>
+
+                <option value="1"
+                        selected="@(Context.Request.Query["Type"] == "1")">
+
+                    Stok Girişi
+
+                </option>
+
+                <option value="2"
+                        selected="@(Context.Request.Query["Type"] == "2")">
+
+                    Stok Çıkışı
+
+                </option>
+
+                <option value="3"
+                        selected="@(Context.Request.Query["Type"] == "3")">
+
+                    Transfer
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <input type="date"
+                   name="StartDate"
+                   value="@Context.Request.Query["StartDate"]"
+                   class="form-control" />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <input type="date"
+                   name="EndDate"
+                   value="@Context.Request.Query["EndDate"]"
+                   class="form-control" />
+
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                Filtrele
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+
+                Temizle
+
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
 <div class="content-card">
 
     <table class="table table-hover align-middle">
@@ -84,6 +162,13 @@
                                         Transfer
                                     </span>
                                     break;
+
+                                case StockMovementType.Adjustment:
+
+                                    <span class="badge bg-warning text-dark">
+                                        Düzeltme
+                                    </span>
+                                    break;
                             }
 
                         </td>
@@ -118,3 +203,65 @@
     </table>
 
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Type="@Context.Request.Query["Type"]"
+                   asp-route-StartDate="@Context.Request.Query["StartDate"]"
+                   asp-route-EndDate="@Context.Request.Query["EndDate"]">
+
+                    Önceki
+
+                </a>
+
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-PageNumber="@i"
+                       asp-route-PageSize="@Model.PageSize"
+                       asp-route-Type="@Context.Request.Query["Type"]"
+                       asp-route-StartDate="@Context.Request.Query["StartDate"]"
+                       asp-route-EndDate="@Context.Request.Query["EndDate"]">
+
+                        @i
+
+                    </a>
+
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-PageSize="@Model.PageSize"
+                   asp-route-Type="@Context.Request.Query["Type"]"
+                   asp-route-StartDate="@Context.Request.Query["StartDate"]"
+                   asp-route-EndDate="@Context.Request.Query["EndDate"]">
+
+                    Sonraki
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}

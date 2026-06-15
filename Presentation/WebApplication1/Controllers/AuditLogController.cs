@@ -1,4 +1,5 @@
 ﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.AuditLogDtos;
 using Inventra.WebUI.Services.AuditLogServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +22,12 @@ namespace Inventra.WebUI.Controllers
         }
 
         public async Task<IActionResult>
-            Index()
+             Index(
+                 AuditLogFilterDto filter)
         {
             var data =
                 await _auditLogService
-                    .GetAllAsync();
+                    .GetAllAsync(filter);
 
             return View(data);
         }

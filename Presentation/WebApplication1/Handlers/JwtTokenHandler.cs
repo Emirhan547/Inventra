@@ -18,6 +18,7 @@ namespace Inventra.WebUI.Handlers
             if (!string.IsNullOrWhiteSpace(token))
             {
                 request.Headers.Authorization =new AuthenticationHeaderValue("Bearer",token);
+
             }
 
             return await base.SendAsync(request,cancellationToken);

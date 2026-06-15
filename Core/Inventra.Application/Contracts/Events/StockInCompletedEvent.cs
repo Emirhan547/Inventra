@@ -11,5 +11,9 @@ namespace Inventra.Application.Contracts.Events
         public string ProductName { get; set; } = default!;
 
         public int Quantity { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public string UserName { get; set; } = default!;
     }
 }

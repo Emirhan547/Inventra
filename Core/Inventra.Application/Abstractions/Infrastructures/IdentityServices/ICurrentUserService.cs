@@ -7,6 +7,11 @@ namespace Inventra.Application.Abstractions.Infrastructures.IdentityServices
     public interface ICurrentUserService
     {
         Guid UserId { get; }
+
         string UserName { get; }
+
+        List<string> Roles { get; }
+
+        bool IsAdmin { get; }
     }
 }

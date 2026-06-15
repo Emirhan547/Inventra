@@ -2,6 +2,7 @@
 using Inventra.Application.Features.Stocks.Queries;
 using Inventra.Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.API.Endpoints;
 
@@ -17,9 +18,10 @@ public static class StockEndpoints
         group.MapGet(
             "/",
             async (
+                [AsParameters]
+                GetStocksQuery request,
                 IMediator mediator)
-                => await mediator.Send(
-                    new GetStocksQuery()))
+                => await mediator.Send(request))
             .RequireAuthorization();
 
         group.MapPost(

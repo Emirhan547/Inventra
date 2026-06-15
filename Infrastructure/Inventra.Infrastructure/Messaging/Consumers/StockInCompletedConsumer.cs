@@ -38,6 +38,7 @@ namespace Inventra.Infrastructure.Messaging.Consumers
                 Message =
                     $"{context.Message.ProductName} ürününe {context.Message.Quantity} adet giriş yapıldı.",
                 Type = "StockIn",
+                RoleName = Roles.Manager,
                 IsRead = false,
                 CreatedAt = DateTime.UtcNow
             };

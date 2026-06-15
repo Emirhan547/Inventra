@@ -1,4 +1,5 @@
-﻿using Inventra.Application.Abstractions.Infrastructures.SignalR;
+﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+using Inventra.Application.Abstractions.Infrastructures.SignalR;
 using Inventra.Application.Abstractions.Messaging;
 using Inventra.Application.Abstractions.Repositories.StockMovementRepositories;
 using Inventra.Application.Abstractions.Repositories.StockRepositories;
@@ -21,14 +22,15 @@ namespace Inventra.Application.Features.Stocks.Handlers
         private readonly INotificationService _notificationService;
         private readonly IEventBus _eventBus;
         private readonly ILogger<StockOutCommandHandler> _logger;
-
+        private readonly ICurrentUserService _currentUserService;
         public StockOutCommandHandler(
             IStockReadRepository stockReadRepository,
             IStockMovementWriteRepository stockMovementWriteRepository,
             IUnitOfWork unitOfWork,
             INotificationService notificationService,
             IEventBus eventBus,
-            ILogger<StockOutCommandHandler> logger)
+            ILogger<StockOutCommandHandler> logger,
+            ICurrentUserService currentUserService)
         {
             _stockReadRepository = stockReadRepository;
             _stockMovementWriteRepository = stockMovementWriteRepository;
@@ -36,6 +38,7 @@ namespace Inventra.Application.Features.Stocks.Handlers
             _notificationService = notificationService;
             _eventBus = eventBus;
             _logger = logger;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result> Handle(
@@ -82,7 +85,16 @@ namespace Inventra.Application.Features.Stocks.Handlers
                 });
 
             await _unitOfWork.SaveChangeAsync();
+            await _eventBus.PublishAsync(
+    new StockOutCompletedEvent
+    {
+        ProductId = stock.ProductId,
+        ProductName = stock.Product.Name,
+        Quantity = request.Quantity,
 
+        UserId = _currentUserService.UserId,
+        UserName = _currentUserService.UserName
+    });
             _logger.LogInformation(
                 "Stock out completed. ProductName: {ProductName}, Quantity: {Quantity}, RemainingQuantity: {RemainingQuantity}",
                 stock.Product.Name,

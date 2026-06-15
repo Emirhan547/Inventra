@@ -1,5 +1,6 @@
 ﻿using Inventra.Application.Features.StockMovements.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Inventra.API.Endpoints;
 
@@ -15,9 +16,10 @@ public static class StockMovementEndpoints
         group.MapGet(
             "/",
             async (
+                [AsParameters]
+                GetStockMovementsQuery request,
                 IMediator mediator)
-                => await mediator.Send(
-                    new GetStockMovementsQuery()))
+                => await mediator.Send(request))
             .RequireAuthorization();
     }
 }

@@ -7,7 +7,8 @@ namespace Inventra.Domain.Entities
 {
     public sealed class Notification : BaseEntity
     {
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
+        public string? RoleName { get; set; }
 
         public string Title { get; set; } = default!;
 

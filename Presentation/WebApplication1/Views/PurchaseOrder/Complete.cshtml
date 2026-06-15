@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Inventra.WebUI.Dtos.PurchaseOrders.CompletePurchaseOrderDto
+
+@{
     ViewData["Title"] =
         "Siparişi Tamamla";
 }
@@ -22,19 +24,19 @@
     <form asp-action="Complete"
           method="post">
 
-        <input type="hidden"
-               name="id"
-               value="@ViewBag.OrderId" />
+        <input asp-for="PurchaseOrderId"
+               type="hidden" />
 
         <div class="mb-3">
 
-            <label class="form-label">
+            <label asp-for="WarehouseId"
+                   class="form-label">
 
                 Depo
 
             </label>
 
-            <select name="warehouseId"
+            <select asp-for="WarehouseId"
                     asp-items="ViewBag.Warehouses"
                     class="form-select">
 
@@ -45,6 +47,10 @@
                 </option>
 
             </select>
+
+            <span asp-validation-for="WarehouseId"
+                  class="text-danger">
+            </span>
 
         </div>
 
@@ -58,3 +64,8 @@
     </form>
 
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

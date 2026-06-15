@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Erişim Engellendi";
+}
+
+<div class="content-card text-center">
+
+    <h1 class="text-danger mb-4">
+        403
+    </h1>
+
+    <h3>
+        Bu sayfaya erişim yetkiniz bulunmuyor
+    </h3>
+
+    <p class="text-muted mt-3">
+
+        Bu işlemi gerçekleştirmek için gerekli
+        role veya yetkiye sahip değilsiniz.
+
+    </p>
+
+    <div class="mt-4">
+
+        <a asp-controller="Dashboard"
+           asp-action="Index"
+           class="btn btn-primary">
+
+            Dashboard'a Dön
+
+        </a>
+
+    </div>
+
+</div>

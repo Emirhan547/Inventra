@@ -1,4 +1,5 @@
-﻿using Inventra.WebUI.Dtos.AuditLogDtos;
+﻿using Inventra.WebUI.Common;
+using Inventra.WebUI.Dtos.AuditLogDtos;
 
 namespace Inventra.WebUI.Services.AuditLogServices
 {
@@ -15,14 +16,41 @@ namespace Inventra.WebUI.Services.AuditLogServices
                     .CreateClient("InventraApi");
         }
 
-        public async Task<List<ResultAuditLogDto>>
-            GetAllAsync()
+        public async Task<PagedResponse<ResultAuditLogDto>>
+     GetAllAsync(AuditLogFilterDto filter)
         {
-            return await _client
-                .GetFromJsonAsync<
-                    List<ResultAuditLogDto>>(
-                    "auditlogs")
-                ?? [];
+            var query =
+                $"auditlogs?" +
+                $"PageNumber={filter.PageNumber}" +
+                $"&PageSize={filter.PageSize}";
+
+            if (!string.IsNullOrWhiteSpace(filter.EventName))
+            {
+                query += $"&EventName={filter.EventName}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.UserName))
+            {
+                query += $"&UserName={filter.UserName}";
+            }
+
+            if (filter.StartDate.HasValue)
+            {
+                query += $"&StartDate={filter.StartDate:yyyy-MM-dd}";
+            }
+
+            if (filter.EndDate.HasValue)
+            {
+                query += $"&EndDate={filter.EndDate:yyyy-MM-dd}";
+            }
+
+            var response =
+                await _client.GetFromJsonAsync<
+                    PagedResponse<ResultAuditLogDto>>
+                (query);
+
+            return response
+                   ?? new PagedResponse<ResultAuditLogDto>();
         }
     }
 }

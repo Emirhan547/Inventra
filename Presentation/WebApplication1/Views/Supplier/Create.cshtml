@@ -1,86 +1,104 @@
 ﻿@using Inventra.WebUI.Dtos.SupplierDtos
-@model List<ResultSupplierDto>
+@model CreateSupplierDto
 
 <div class="page-header">
 
     <div>
 
-        <h2>Tedarikçiler</h2>
+        <h2>
+            Yeni Tedarikçi
+        </h2>
 
         <p class="text-muted">
-            Tedarikçi yönetimi
+            Sisteme yeni tedarikçi ekleyin
         </p>
 
     </div>
-
-    <a asp-action="Create"
-       class="btn btn-primary">
-
-        Yeni Tedarikçi
-
-    </a>
 
 </div>
 
 <div class="content-card">
 
-    <table class="table table-hover">
+    <form asp-action="Create"
+          method="post">
 
-        <thead>
+        <div class="mb-3">
 
-            <tr>
+            <label asp-for="Name"
+                   class="form-label">
 
-                <th>Firma Adı</th>
+                Firma Adı
 
-                <th>Telefon</th>
+            </label>
 
-                <th>Email</th>
+            <input asp-for="Name"
+                   class="form-control" />
 
-                <th width="180">
-                    İşlemler
-                </th>
+            <span asp-validation-for="Name"
+                  class="text-danger">
+            </span>
 
-            </tr>
+        </div>
 
-        </thead>
+        <div class="mb-3">
 
-        <tbody>
+            <label asp-for="Phone"
+                   class="form-label">
 
-            @foreach (var item in Model)
-            {
-                <tr>
+                Telefon
 
-                    <td>@item.Name</td>
+            </label>
 
-                    <td>@item.Phone</td>
+            <input asp-for="Phone"
+                   class="form-control" />
 
-                    <td>@item.Email</td>
+            <span asp-validation-for="Phone"
+                  class="text-danger">
+            </span>
 
-                    <td>
+        </div>
 
-                        <a asp-action="Update"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-warning">
+        <div class="mb-3">
 
-                            Düzenle
+            <label asp-for="Email"
+                   class="form-label">
 
-                        </a>
+                Email
 
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-danger">
+            </label>
 
-                            Sil
+            <input asp-for="Email"
+                   class="form-control" />
 
-                        </a>
+            <span asp-validation-for="Email"
+                  class="text-danger">
+            </span>
 
-                    </td>
+        </div>
 
-                </tr>
-            }
+        <div class="d-flex gap-2">
 
-        </tbody>
+            <button type="submit"
+                    class="btn btn-primary">
 
-    </table>
+                Kaydet
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Vazgeç
+
+            </a>
+
+        </div>
+
+    </form>
 
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

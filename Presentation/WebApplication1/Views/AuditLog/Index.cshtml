@@ -1,47 +1,296 @@
-﻿@using Inventra.WebUI.Dtos.AuditLogDtos
-@model List<ResultAuditLogDto>
+﻿@using Inventra.WebUI.Common
+@using Inventra.WebUI.Dtos.AuditLogDtos
+
+@model PagedResponse<ResultAuditLogDto>
 
 <div class="page-header">
 
-    <h2>Audit Logları</h2>
+    <div>
+
+        <h2>Audit Logları</h2>
+
+        <p class="text-muted">
+            Toplam @Model.TotalCount kayıt bulundu
+        </p>
+
+    </div>
+
+</div>
+
+<div class="content-card mb-4">
+
+    <form method="get">
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <label class="form-label">
+                    Olay
+                </label>
+
+                <select name="EventName"
+                        class="form-select">
+
+                    <option value="">
+                        Tümü
+                    </option>
+
+                    <option value="ProductCreated"
+                            selected="@(Context.Request.Query["EventName"] == "ProductCreated")">
+                        Product Created
+                    </option>
+
+                    <option value="ProductUpdated"
+                            selected="@(Context.Request.Query["EventName"] == "ProductUpdated")">
+                        Product Updated
+                    </option>
+
+                    <option value="ProductDeleted"
+                            selected="@(Context.Request.Query["EventName"] == "ProductDeleted")">
+                        Product Deleted
+                    </option>
+
+                    <option value="SupplierCreated"
+                            selected="@(Context.Request.Query["EventName"] == "SupplierCreated")">
+                        Supplier Created
+                    </option>
+
+                    <option value="SupplierUpdated"
+                            selected="@(Context.Request.Query["EventName"] == "SupplierUpdated")">
+                        Supplier Updated
+                    </option>
+
+                    <option value="StockIn"
+                            selected="@(Context.Request.Query["EventName"] == "StockIn")">
+                        Stock In
+                    </option>
+
+                    <option value="StockOut"
+                            selected="@(Context.Request.Query["EventName"] == "StockOut")">
+                        Stock Out
+                    </option>
+
+                    <option value="Transfer"
+                            selected="@(Context.Request.Query["EventName"] == "Transfer")">
+                        Transfer
+                    </option>
+
+                    <option value="RoleAssigned"
+                            selected="@(Context.Request.Query["EventName"] == "RoleAssigned")">
+                        Role Assigned
+                    </option>
+
+                    <option value="PurchaseOrderApproved"
+                            selected="@(Context.Request.Query["EventName"] == "PurchaseOrderApproved")">
+                        Purchase Order Approved
+                    </option>
+
+                    <option value="PurchaseOrderCompleted"
+                            selected="@(Context.Request.Query["EventName"] == "PurchaseOrderCompleted")">
+                        Purchase Order Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <label class="form-label">
+                    Kullanıcı
+                </label>
+
+                <input type="text"
+                       name="UserName"
+                       value="@Context.Request.Query["UserName"]"
+                       class="form-control"
+                       placeholder="Kullanıcı adı" />
+
+            </div>
+
+            <div class="col-md-2">
+
+                <label class="form-label">
+                    Başlangıç Tarihi
+                </label>
+
+                <input type="date"
+                       name="StartDate"
+                       value="@Context.Request.Query["StartDate"]"
+                       class="form-control" />
+
+            </div>
+
+            <div class="col-md-2">
+
+                <label class="form-label">
+                    Bitiş Tarihi
+                </label>
+
+                <input type="date"
+                       name="EndDate"
+                       value="@Context.Request.Query["EndDate"]"
+                       class="form-control" />
+
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+
+                <button type="submit"
+                        class="btn btn-primary w-100">
+
+                    Filtrele
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
 
 </div>
 
 <div class="content-card">
 
-    <table class="table table-hover">
+    <table class="table table-hover align-middle">
 
         <thead>
 
             <tr>
-                <th>Tarih</th>
-                <th>Kullanıcı</th>
-                <th>Olay</th>
-                <th>Açıklama</th>
+
+                <th width="180">
+                    Tarih
+                </th>
+
+                <th width="180">
+                    Kullanıcı
+                </th>
+
+                <th width="220">
+                    Olay
+                </th>
+
+                <th>
+                    Açıklama
+                </th>
+
             </tr>
 
         </thead>
 
         <tbody>
 
-            @foreach (var item in Model)
+            @if (Model.Items.Any())
+            {
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+
+                        <td>
+                            @item.OccurredOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @item.UserName
+                        </td>
+
+                        <td>
+
+                            @switch (item.EventName)
+                            {
+                                case "ProductCreated":
+                                    <span class="badge bg-success">
+                                        Product Created
+                                    </span>
+                                    break;
+
+                                case "ProductUpdated":
+                                    <span class="badge bg-info">
+                                        Product Updated
+                                    </span>
+                                    break;
+
+                                case "ProductDeleted":
+                                    <span class="badge bg-danger">
+                                        Product Deleted
+                                    </span>
+                                    break;
+
+                                case "SupplierCreated":
+                                    <span class="badge bg-success">
+                                        Supplier Created
+                                    </span>
+                                    break;
+
+                                case "SupplierUpdated":
+                                    <span class="badge bg-info">
+                                        Supplier Updated
+                                    </span>
+                                    break;
+
+                                case "StockIn":
+                                    <span class="badge bg-primary">
+                                        Stock In
+                                    </span>
+                                    break;
+
+                                case "StockOut":
+                                    <span class="badge bg-warning text-dark">
+                                        Stock Out
+                                    </span>
+                                    break;
+
+                                case "Transfer":
+                                    <span class="badge bg-secondary">
+                                        Transfer
+                                    </span>
+                                    break;
+
+                                case "RoleAssigned":
+                                    <span class="badge bg-dark">
+                                        Role Assigned
+                                    </span>
+                                    break;
+
+                                case "PurchaseOrderApproved":
+                                    <span class="badge bg-primary">
+                                        Purchase Approved
+                                    </span>
+                                    break;
+
+                                case "PurchaseOrderCompleted":
+                                    <span class="badge bg-success">
+                                        Purchase Completed
+                                    </span>
+                                    break;
+
+                                default:
+                                    <span class="badge bg-secondary">
+                                        @item.EventName
+                                    </span>
+                                    break;
+                            }
+
+                        </td>
+
+                        <td>
+                            @item.Description
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
 
-                    <td>
-                        @item.OccurredOn.ToString("dd.MM.yyyy HH:mm")
-                    </td>
+                    <td colspan="4"
+                        class="text-center">
 
-                    <td>
-                        @item.UserName
-                    </td>
+                        Audit kaydı bulunamadı.
 
-                    <td>
-                        @item.EventName
-                    </td>
-
-                    <td>
-                        @item.Description
                     </td>
 
                 </tr>
@@ -50,5 +299,30 @@
         </tbody>
 
     </table>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+
+            <ul class="pagination justify-content-center">
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                        <a class="page-link"
+                           href="?PageNumber=@i&PageSize=@Model.PageSize&EventName=@Context.Request.Query["EventName"]&UserName=@Context.Request.Query["UserName"]&StartDate=@Context.Request.Query["StartDate"]&EndDate=@Context.Request.Query["EndDate"]">
+
+                            @i
+
+                        </a>
+
+                    </li>
+                }
+
+            </ul>
+
+        </nav>
+    }
 
 </div>

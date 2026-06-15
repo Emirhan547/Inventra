@@ -13,9 +13,25 @@ namespace Inventra.WebUI.Controllers
     [Authorize(Roles = RoleGroups.AdminAndManager)]
     public class PurchaseOrderController(IPurchaseOrderService _purchaseOrderService,ISupplierService _supplierService,IProductService _productService, IWarehouseService _warehouseService): Controller
     {
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult>
+    Index(
+        PurchaseOrderFilterDto filter)
         {
-            var orders =await _purchaseOrderService.GetAllAsync();
+            var orders =
+                await _purchaseOrderService
+                    .GetAllAsync(filter);
+
+            var suppliers =
+                await _supplierService
+                    .GetAllAsync();
+
+            ViewBag.Suppliers =
+                new SelectList(
+                    suppliers,
+                    "Id",
+                    "Name",
+                    filter.SupplierId);
+
             return View(orders);
         }
 

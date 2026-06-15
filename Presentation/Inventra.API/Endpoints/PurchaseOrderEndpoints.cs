@@ -24,12 +24,13 @@ public static class PurchaseOrderEndpoints
                 Policies.PurchaseOrderCreate);
 
         group.MapGet(
-            "/",
-            async (
-                IMediator mediator)
-                => await mediator.Send(
-                    new GetPurchaseOrdersQueryRequest()))
-            .RequireAuthorization();
+    "/",
+    async (
+        [AsParameters]
+        GetPurchaseOrdersQueryRequest request,
+        IMediator mediator)
+        => await mediator.Send(request))
+    .RequireAuthorization();
 
         group.MapGet(
             "/{id:guid}",

@@ -1,5 +1,6 @@
 ﻿@using Inventra.WebUI.Common
 @using Inventra.WebUI.Dtos.StockDtos
+
 @model PagedResponse<ResultStockDto>
 
 <div class="page-header">
@@ -101,3 +102,56 @@
     </table>
 
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-PageSize="@Model.PageSize">
+
+                    Önceki
+
+                </a>
+
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-PageNumber="@i"
+                       asp-route-PageSize="@Model.PageSize">
+
+                        @i
+
+                    </a>
+
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-PageSize="@Model.PageSize">
+
+                    Sonraki
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}
