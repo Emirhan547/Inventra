@@ -55,6 +55,10 @@ function getNotificationTypeClass(type) {
 
 function createNotificationItem(notification) {
 
+    const id =
+        notification.id ??
+        notification.Id;
+
     const title =
         notification.title ??
         notification.Title;
@@ -79,7 +83,9 @@ function createNotificationItem(notification) {
         getNotificationTypeClass(type);
 
     return `
-        <div class="notification-item ${!isRead ? "unread" : ""}">
+        <div
+            class="notification-item ${!isRead ? "unread" : ""}"
+            data-id="${id}">
 
             <div class="notification-type ${typeClass}">
                 !
@@ -106,12 +112,37 @@ function createNotificationItem(notification) {
     `;
 }
 
+async function loadUnreadCount() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/Notification/GetUnreadCount");
+
+        if (!response.ok)
+            return;
+
+        unreadCount =
+            await response.json();
+
+        updateUnreadCounter();
+    }
+    catch (error) {
+
+        console.error(
+            "Unread Count Error:",
+            error);
+    }
+}
+
 async function loadNotifications() {
 
     try {
 
         const response =
-            await fetch("/Notification/GetAll");
+            await fetch(
+                "/Notification/GetAll");
 
         if (!response.ok) {
 
@@ -143,13 +174,6 @@ async function loadNotifications() {
                 createNotificationItem(
                     notification));
         });
-
-        unreadCount =
-            notifications.filter(
-                x => !(x.isRead ?? x.IsRead))
-                .length;
-
-        updateUnreadCounter();
     }
     catch (error) {
 
@@ -208,8 +232,9 @@ function showToast(notification) {
 
         toast.classList.remove("show");
 
-        setTimeout(() =>
-            toast.remove(), 300);
+        setTimeout(
+            () => toast.remove(),
+            300);
 
     }, 5000);
 }
@@ -243,33 +268,75 @@ notificationButton?.addEventListener(
                 .contains("d-none")
                 ? "false"
                 : "true");
+    });
 
-        unreadCount = 0;
+notificationList?.addEventListener(
+    "click",
+    async e => {
 
-        updateUnreadCounter();
+        const item =
+            e.target.closest(
+                ".notification-item");
 
-        document
-            .querySelectorAll(
-                ".notification-item.unread")
-            .forEach(x =>
-                x.classList.remove(
-                    "unread"));
+        if (!item)
+            return;
+
+        if (!item.classList.contains(
+            "unread"))
+            return;
+
+        const id =
+            item.dataset.id;
+
+        try {
+
+            await fetch(
+                `/Notification/MarkAsRead?id=${id}`,
+                {
+                    method: "PUT"
+                });
+
+            item.classList.remove(
+                "unread");
+
+            await loadUnreadCount();
+        }
+        catch (error) {
+
+            console.error(
+                "Mark As Read Error:",
+                error);
+        }
     });
 
 clearNotificationsButton
     ?.addEventListener(
         "click",
-        () => {
+        async () => {
 
-            notificationList.innerHTML = `
-                <div class="notification-empty">
-                    Henüz bildirim bulunmuyor
-                </div>
-            `;
+            try {
 
-            unreadCount = 0;
+                await fetch(
+                    "/Notification/MarkAllAsRead",
+                    {
+                        method: "PUT"
+                    });
 
-            updateUnreadCounter();
+                document
+                    .querySelectorAll(
+                        ".notification-item.unread")
+                    .forEach(x =>
+                        x.classList.remove(
+                            "unread"));
+
+                await loadUnreadCount();
+            }
+            catch (error) {
+
+                console.error(
+                    "Mark All Read Error:",
+                    error);
+            }
         });
 
 window.connection.on(
@@ -300,23 +367,25 @@ window.connection.on(
         showToast(notification);
     });
 
-window.connection.onreconnecting(() => {
+window.connection.onreconnecting(
+    () => {
 
-    if (connectionIndicator) {
+        if (connectionIndicator) {
 
-        connectionIndicator.dataset.state =
-            "disconnected";
-    }
-});
+            connectionIndicator.dataset.state =
+                "disconnected";
+        }
+    });
 
-window.connection.onreconnected(() => {
+window.connection.onreconnected(
+    () => {
 
-    if (connectionIndicator) {
+        if (connectionIndicator) {
 
-        connectionIndicator.dataset.state =
-            "connected";
-    }
-});
+            connectionIndicator.dataset.state =
+                "connected";
+        }
+    });
 
 window.connection.start()
     .then(async () => {
@@ -331,6 +400,8 @@ window.connection.start()
         }
 
         await loadNotifications();
+
+        await loadUnreadCount();
     })
     .catch(error =>
         console.error(

@@ -2,6 +2,7 @@
 using Inventra.Application.Common.Pagination;
 using Inventra.Application.Features.Stocks.Results;
 using Inventra.Domain.Entities;
+using Inventra.Domain.Enums;
 using Inventra.Persistence.Context;
 using Inventra.Persistence.Repositories.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,23 @@ namespace Inventra.Persistence.Repositories.StockRepositories
                 TotalCount = totalCount,
                 TotalPages =(int)Math.Ceiling(totalCount /(double)pageSize)
             };
+        }
+        public async Task<List<float>>
+    GetForecastHistoryAsync(
+        Guid productId,
+        CancellationToken cancellationToken = default)
+        {
+            return await _context.StockMovements
+                .Include(x => x.Stock)
+                .Where(x =>
+                    x.Stock.ProductId == productId &&
+                    x.Type == StockMovementType.StockOut)
+                .GroupBy(x =>
+                    x.CreatedDate.Date)
+                .Select(g =>
+                    (float)g.Sum(x =>
+                        x.Quantity))
+                .ToListAsync(cancellationToken);
         }
     }
 }

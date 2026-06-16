@@ -15,6 +15,12 @@
         public int TotalPurchaseOrders { get; set; }
 
         public int PendingPurchaseOrders { get; set; }
+        public int CriticalStockCount { get; set; }
+        public string? AiPurchaseRecommendation
+        {
+            get;
+            set;
+        }
 
         public List<DashboardRecentMovementDto>
             RecentMovements
@@ -22,6 +28,9 @@
 
         public List<DashboardCriticalStockDto>
             CriticalStocks
+        { get; set; } = [];
+        public List<DashboardMovementChartDto>
+    MovementChart
         { get; set; } = [];
     }
 }

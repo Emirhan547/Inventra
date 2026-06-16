@@ -3,6 +3,7 @@ using Inventra.WebUI.Services.AuditLogServices;
 using Inventra.WebUI.Services.AuthServices;
 using Inventra.WebUI.Services.CategoryServices;
 using Inventra.WebUI.Services.DashboardServices;
+using Inventra.WebUI.Services.HealthServices;
 using Inventra.WebUI.Services.NotificationServices;
 using Inventra.WebUI.Services.ProductServices;
 using Inventra.WebUI.Services.PurchaseOrderServices;
@@ -56,6 +57,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<
     IAuditLogService,
     AuditLogService>();
+builder.Services.AddScoped<
+    IHealthService,
+    HealthService>();
 builder.Services.AddHttpClient(
     "InventraApi",
     client =>

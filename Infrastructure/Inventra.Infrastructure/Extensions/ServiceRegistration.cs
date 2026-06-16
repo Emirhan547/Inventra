@@ -1,7 +1,9 @@
-﻿using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
+﻿using Inventra.Application.Abstractions.Infrastructures.AI;
+using Inventra.Application.Abstractions.Infrastructures.IdentityServices;
 using Inventra.Application.Abstractions.Infrastructures.JwtServices;
 using Inventra.Application.Abstractions.Infrastructures.SignalR;
 using Inventra.Application.Abstractions.Messaging;
+using Inventra.Infrastructure.AI;
 using Inventra.Infrastructure.Identity;
 using Inventra.Infrastructure.Identity.AuthServices;
 using Inventra.Infrastructure.JwtServices;
@@ -23,6 +25,12 @@ namespace Inventra.Infrastructure.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             services.AddHttpContextAccessor();
+            services.AddScoped<
+    IAIService,
+    OpenAIService>();
+            services.AddScoped<
+    IStockForecastService,
+    StockForecastService>();
             services.AddScoped< INotificationService, SignalRNotificationService>();
             services.AddScoped<ICurrentUserService,CurrentUserService>();
             services.AddScoped<IEventBus,MassTransitEventBus>();

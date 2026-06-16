@@ -1,0 +1,92 @@
+﻿@using Inventra.WebUI.Dtos.HealthDtos
+
+@model HealthResponseDto
+
+<div class="page-header">
+
+    <h2>Sistem Durumu</h2>
+
+</div>
+
+<div class="content-card">
+
+    <div class="mb-4">
+        <p class="text-muted">
+            Son kontrol:
+            @DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
+        </p>
+        <h4>
+
+            Genel Durum :
+
+            @if (Model.Status == "Healthy")
+            {
+                <span class="badge bg-success">
+                    Healthy
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-danger">
+                    Unhealthy
+                </span>
+            }
+
+        </h4>
+
+    </div>
+
+    <table class="table table-hover">
+
+        <thead>
+
+            <tr>
+
+                <th>Servis</th>
+
+                <th>Durum</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model.Checks)
+            {
+                <tr>
+
+                    <td>
+                        @(item.Name switch
+                        {
+                            "sqlserver" => "SQL Server",
+                            "masstransit-bus" => "MassTransit Bus",
+                            _ => item.Name
+                        })
+                    </td>
+
+                    <td>
+
+                        @if (item.Status == "Healthy")
+                        {
+                            <span class="badge bg-success">
+                                Healthy
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                Unhealthy
+                            </span>
+                        }
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

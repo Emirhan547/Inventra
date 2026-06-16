@@ -26,5 +26,33 @@ namespace Inventra.WebUI.Controllers
 
             return Json(notifications);
         }
+        [HttpGet]
+        public async Task<IActionResult>
+    GetUnreadCount()
+        {
+            var count =
+                await _notificationService
+                    .GetUnreadCountAsync();
+
+            return Json(count);
+        }
+        [HttpPut]
+        public async Task<IActionResult>
+    MarkAllAsRead()
+        {
+            await _notificationService
+                .MarkAllAsReadAsync();
+
+            return Ok();
+        }
+        [HttpPut]
+        public async Task<IActionResult>
+    MarkAsRead(Guid id)
+        {
+            await _notificationService
+                .MarkAsReadAsync(id);
+
+            return Ok();
+        }
     }
 }

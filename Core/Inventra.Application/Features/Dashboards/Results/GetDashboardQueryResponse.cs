@@ -20,12 +20,22 @@ namespace Inventra.Application.Features.Dashboards.Results
 
         public int PendingPurchaseOrders { get; set; }
 
+        public int CriticalStockCount { get; set; }
+        public string? AiPurchaseRecommendation
+        {
+            get;
+            set;
+        }
+
         public List<DashboardRecentMovementResponse>
             RecentMovements
         { get; set; } = [];
 
         public List<DashboardCriticalStockResponse>
             CriticalStocks
+        { get; set; } = [];
+        public List<DashboardMovementChartResponse>
+    MovementChart
         { get; set; } = [];
     }
 }

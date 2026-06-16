@@ -13,5 +13,16 @@
         public string WarehouseName { get; set; }
 
         public int Quantity { get; set; }
+
+        // AI
+
+        public int PredictedConsumption30Days { get; set; }
+
+        public string RiskLevel { get; set; } = string.Empty;
+        public int RecommendedOrderQuantity
+        {
+            get;
+            set;
+        }
     }
 }

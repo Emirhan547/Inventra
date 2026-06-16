@@ -46,7 +46,37 @@
                     Audit Logs
 
                 </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="menu-group">
 
+                        <span class="menu-title">
+                            YÖNETİM
+                        </span>
+
+                        <a asp-controller="User"
+                           asp-action="Index">
+
+                            Users
+
+                        </a>
+
+                        <a asp-controller="AuditLog"
+                           asp-action="Index">
+
+                            Audit Logs
+
+                        </a>
+
+                        <a asp-controller="Health"
+                           asp-action="Index">
+
+                            System Health
+
+                        </a>
+
+                    </div>
+                }
             </div>
         }
 

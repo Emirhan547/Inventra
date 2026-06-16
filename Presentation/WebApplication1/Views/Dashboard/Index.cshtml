@@ -139,9 +139,49 @@
 
     </div>
 
+    <div class="stat-card stat-warning">
+
+        <div class="stat-icon">
+            ⏳
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.PendingPurchaseOrders
+            </h3>
+
+            <span>
+                Bekleyen Talep
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card stat-danger">
+
+        <div class="stat-icon">
+            ⚠️
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.CriticalStockCount
+            </h3>
+
+            <span>
+                Kritik Stok
+            </span>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="dashboard-grid">
+<div class="dashboard-grid mt-4">
 
     <div class="content-card">
 
@@ -197,70 +237,6 @@
 
     </div>
 
-    <div class="content-card">
-
-        <h4>
-            Sistem Özeti
-        </h4>
-
-        <hr />
-
-        <ul class="summary-list">
-
-            <li>
-
-                Toplam ürün sayısı:
-
-                <strong>
-                    @Model.TotalProducts
-                </strong>
-
-            </li>
-
-            <li>
-
-                Toplam depo sayısı:
-
-                <strong>
-                    @Model.TotalWarehouses
-                </strong>
-
-            </li>
-
-            <li>
-
-                Toplam tedarikçi sayısı:
-
-                <strong>
-                    @Model.TotalSuppliers
-                </strong>
-
-            </li>
-
-            <li>
-
-                Toplam satın alma siparişi:
-
-                <strong>
-                    @Model.TotalPurchaseOrders
-                </strong>
-
-            </li>
-
-            <li>
-
-                Bekleyen sipariş sayısı:
-
-                <strong>
-                    @Model.PendingPurchaseOrders
-                </strong>
-
-            </li>
-
-        </ul>
-
-    </div>
-
 </div>
 
 <div class="dashboard-grid mt-4">
@@ -286,6 +262,8 @@
                     <th>Tip</th>
 
                     <th>Miktar</th>
+
+                    <th>Tarih</th>
 
                 </tr>
 
@@ -315,6 +293,10 @@
                                 @item.Quantity
                             </td>
 
+                            <td>
+                                @item.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                            </td>
+
                         </tr>
                     }
                 }
@@ -322,7 +304,7 @@
                 {
                     <tr>
 
-                        <td colspan="4"
+                        <td colspan="5"
                             class="text-center">
 
                             Hareket bulunamadı
@@ -412,3 +394,99 @@
     </div>
 
 </div>
+<div class="content-card mt-4">
+
+    <h4>
+        Son 7 Günlük Stok Hareketleri
+    </h4>
+
+    <hr />
+
+    <canvas id="movementChart"></canvas>
+
+</div>
+<div class="content-card mt-4">
+
+    <h4>
+        🤖 AI Satın Alma Önerileri
+    </h4>
+
+    <hr />
+
+    @if (!string.IsNullOrWhiteSpace(
+            Model.AiPurchaseRecommendation))
+    {
+        <div class="ai-insight-box">
+
+            @Model.AiPurchaseRecommendation
+
+        </div>
+    }
+    else
+    {
+        <div class="text-muted">
+
+            AI önerisi bulunamadı.
+
+        </div>
+    }
+
+</div>
+@section Scripts
+{
+    <script>
+
+        const labels = [
+            @Html.Raw(
+                    string.Join(",",
+                            Model.MovementChart
+                                    .Select(x =>
+                                            $"'{x.Date}'")))
+        ];
+
+        const stockIn = [
+            @string.Join(",",
+                    Model.MovementChart
+                            .Select(x =>
+                                    x.StockInCount))
+        ];
+
+        const stockOut = [
+            @string.Join(",",
+                    Model.MovementChart
+                            .Select(x =>
+                                    x.StockOutCount))
+        ];
+
+        new Chart(
+            document.getElementById(
+                "movementChart"),
+            {
+                type: "bar",
+
+                data:
+                {
+                    labels: labels,
+
+                    datasets:
+                    [
+                        {
+                            label:
+                                "Stok Giriş",
+
+                            data:
+                                stockIn
+                        },
+                        {
+                            label:
+                                "Stok Çıkış",
+
+                            data:
+                                stockOut
+                        }
+                    ]
+                }
+            });
+
+    </script>
+}

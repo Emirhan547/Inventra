@@ -10,7 +10,7 @@
         <h2>Stoklar</h2>
 
         <p class="text-muted">
-            Güncel stok durumu
+            AI destekli stok analizi
         </p>
 
     </div>
@@ -26,12 +26,12 @@
             <tr>
 
                 <th>Ürün</th>
-
                 <th>Depo</th>
-
-                <th>Miktar</th>
-
-                <th>Durum</th>
+                <th>Mevcut Stok</th>
+                <th>30 Gün Tahmini</th>
+                <th>Önerilen Sipariş</th>
+                <th>AI Risk</th>
+               
 
             </tr>
 
@@ -58,27 +58,58 @@
                         </td>
 
                         <td>
+                            @item.PredictedConsumption30Days
+                        </td>
+                        <td>
 
-                            @if (item.Quantity == 0)
+                            @if (item.RecommendedOrderQuantity > 0)
                             {
-                                <span class="badge bg-danger">
-                                    Tükendi
-                                </span>
-                            }
-                            else if (item.Quantity < 10)
-                            {
-                                <span class="badge bg-warning">
-                                    Kritik
+                                <span class="badge bg-primary">
+
+                                    @item.RecommendedOrderQuantity Adet
+
                                 </span>
                             }
                             else
                             {
-                                <span class="badge bg-success">
-                                    Normal
+                                <span class="text-success">
+
+                                    Sipariş Gerekmiyor
+
                                 </span>
                             }
 
                         </td>
+                        <td>
+
+                            @switch (item.RiskLevel)
+                            {
+                                case "High":
+                                    <span class="badge bg-danger">
+                                        🔴 Kritik
+                                    </span>
+
+                                    break;
+
+                                case "Medium":
+
+                                    <span class="badge bg-warning text-dark">
+                                        🟠 Riskli
+                                    </span>
+
+                                    break;
+
+                                default:
+
+                                    <span class="badge bg-success">
+                                        🟢 Güvenli
+                                    </span>
+
+                                    break;
+                            }
+
+                        </td>
+
 
                     </tr>
                 }
@@ -87,7 +118,7 @@
             {
                 <tr>
 
-                    <td colspan="4"
+                    <td colspan="6"
                         class="text-center">
 
                         Kayıt bulunamadı
