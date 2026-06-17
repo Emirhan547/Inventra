@@ -55,7 +55,17 @@ public class ProfileController
             return View(model);
         }
 
-        await _profileService.UpdateAsync(model);
+        try
+        {
+            TempData["SuccessMessage"] =
+                await _profileService.UpdateAsync(model);
+        }
+        catch (InvalidOperationException ex)
+        {
+            AddErrorsToModelState(ex.Message);
+
+            return View(model);
+        }
 
         return RedirectToAction(nameof(Index));
     }
@@ -73,10 +83,33 @@ public class ProfileController
             return View(model);
         }
 
-        await _profileService
-            .ChangePasswordAsync(model);
+        try
+        {
+            TempData["SuccessMessage"] =
+                await _profileService
+                    .ChangePasswordAsync(model);
+        }
+        catch (InvalidOperationException ex)
+        {
+            AddErrorsToModelState(ex.Message);
+
+            return View(model);
+        }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private void AddErrorsToModelState(
+        string message)
+    {
+        foreach (var error in message.Split(
+            Environment.NewLine,
+            StringSplitOptions.RemoveEmptyEntries))
+        {
+            ModelState.AddModelError(
+                string.Empty,
+                error);
+        }
     }
 
 }

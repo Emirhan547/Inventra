@@ -6,17 +6,14 @@
 
     var role =
         User.Claims
-            .FirstOrDefault(
-                x => x.Type == ClaimTypes.Role)
+            .FirstOrDefault(x => x.Type == ClaimTypes.Role)
             ?.Value ?? "Rol Yok";
 
     var initials =
         string.Join(
             "",
             userName
-                .Split(
-                    ' ',
-                    StringSplitOptions.RemoveEmptyEntries)
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x[0]))
         .ToUpper();
 }
@@ -98,23 +95,55 @@
 
         </div>
 
-        <div class="user-info">
+        <div class="user-menu">
 
-            <div class="avatar">
+            <button id="userMenuButton"
+                    type="button"
+                    class="user-info">
 
-                @initials
-
-            </div>
-
-            <div>
-
-                <div>
-                    @userName
+                <div class="avatar">
+                    @initials
                 </div>
 
-                <small>
-                    @role
-                </small>
+                <div>
+
+                    <div>
+                        @userName
+                    </div>
+
+                    <small>
+                        @role
+                    </small>
+
+                </div>
+
+            </button>
+
+            <div id="userDropdown"
+                 class="user-dropdown d-none">
+
+                <a asp-controller="Profile"
+                   asp-action="Index">
+
+                    👤 Profilim
+
+                </a>
+
+                <a asp-controller="Profile"
+                   asp-action="ChangePassword">
+
+                    🔒 Şifre Değiştir
+
+                </a>
+
+                <hr />
+
+                <a asp-controller="Auth"
+                   asp-action="Logout">
+
+                    🚪 Çıkış Yap
+
+                </a>
 
             </div>
 
@@ -127,3 +156,27 @@
 <div id="toastContainer"
      class="notification-toast-container">
 </div>
+
+<script>
+
+    const userButton =
+        document.getElementById("userMenuButton");
+
+    const userDropdown =
+        document.getElementById("userDropdown");
+
+    userButton.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        userDropdown.classList.toggle("d-none");
+
+    });
+
+    document.addEventListener("click", function () {
+
+        userDropdown.classList.add("d-none");
+
+    });
+
+</script>

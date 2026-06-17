@@ -71,13 +71,54 @@ namespace Inventra.Infrastructure.Identity
                     "Kullanıcı bulunamadı.");
             }
 
-            user.FirstName = request.FirstName;
+            var firstName =
+                request.FirstName.Trim();
 
-            user.LastName = request.LastName;
+            var lastName =
+                request.LastName.Trim();
 
-            user.UserName = request.UserName;
+            var userName =
+                request.UserName.Trim();
 
-            user.Email = request.Email;
+            var email =
+                request.Email.Trim();
+
+            if (string.IsNullOrWhiteSpace(firstName) ||
+                string.IsNullOrWhiteSpace(lastName) ||
+                string.IsNullOrWhiteSpace(userName) ||
+                string.IsNullOrWhiteSpace(email))
+            {
+                return Result.Failure(
+                    "Ad, soyad, kullanıcı adı ve e-posta alanları zorunludur.");
+            }
+
+            var userWithSameName =
+                await _userManager.FindByNameAsync(userName);
+
+            if (userWithSameName is not null &&
+                userWithSameName.Id != user.Id)
+            {
+                return Result.Failure(
+                    "Bu kullanıcı adı başka bir hesap tarafından kullanılıyor.");
+            }
+
+            var userWithSameEmail =
+                await _userManager.FindByEmailAsync(email);
+
+            if (userWithSameEmail is not null &&
+                userWithSameEmail.Id != user.Id)
+            {
+                return Result.Failure(
+                    "Bu e-posta adresi başka bir hesap tarafından kullanılıyor.");
+            }
+
+            user.FirstName = firstName;
+
+            user.LastName = lastName;
+
+            user.UserName = userName;
+
+            user.Email = email;
 
             var result =
                 await _userManager.UpdateAsync(user);

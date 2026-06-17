@@ -3,6 +3,13 @@
 
 @model ResultProfileDto
 
+@{
+    var avatarText =
+        string.IsNullOrWhiteSpace(Model.FirstName)
+            ? "?"
+            : Model.FirstName.Trim()[0].ToString().ToUpper();
+}
+
 <div class="page-header">
 
     <div>
@@ -19,6 +26,14 @@
 
 </div>
 
+@if (TempData["SuccessMessage"] is string successMessage &&
+     !string.IsNullOrWhiteSpace(successMessage))
+{
+    <div class="alert alert-success">
+        @successMessage
+    </div>
+}
+
 <div class="row">
 
     <div class="col-lg-4">
@@ -27,7 +42,7 @@
 
             <div class="profile-avatar">
 
-                @Model.FirstName.First()
+                @avatarText
 
             </div>
 

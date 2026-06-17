@@ -1,4 +1,5 @@
 ﻿using Inventra.WebUI.Constants;
+using Inventra.WebUI.Dtos.ProductDtos;
 using Inventra.WebUI.Dtos.StockDtos;
 using Inventra.WebUI.Services.ProductServices;
 using Inventra.WebUI.Services.StockServices;
@@ -24,7 +25,12 @@ namespace Inventra.WebUI.Controllers
         }
         public async Task<IActionResult>StockIn()
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(
+     new ProductFilterDto
+     {
+         PageNumber = 1,
+         PageSize = 1000
+     });
             var warehouses = await _warehouseService.GetAllAsync();
 
             ViewBag.Products =new SelectList(products.Items,"Id","Name");
@@ -58,7 +64,12 @@ namespace Inventra.WebUI.Controllers
         }
         public async Task<IActionResult>Transfer()
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(
+      new ProductFilterDto
+      {
+          PageNumber = 1,
+          PageSize = 1000
+      });
             var warehouses = await _warehouseService.GetAllAsync();
 
             ViewBag.Products =new SelectList(products.Items,"Id", "Name");

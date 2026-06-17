@@ -578,3 +578,45 @@ body {
 .content-card h4 {
     margin-bottom: 0;
 }
+.user-menu {
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 220px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+    .user-dropdown a {
+        display: block;
+        padding: 12px 18px;
+        color: #333;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+        .user-dropdown a:hover {
+            background: #f5f5f5;
+        }
+
+    .user-dropdown hr {
+        margin: 0;
+        border-color: #eee;
+    }

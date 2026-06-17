@@ -19,7 +19,7 @@
             <a asp-controller="Dashboard"
                asp-action="Index">
 
-                Dashboard
+                Gösterge Paneli
 
             </a>
 
@@ -36,47 +36,24 @@
                 <a asp-controller="User"
                    asp-action="Index">
 
-                    Users
+                    Kullanıcılar
 
                 </a>
 
                 <a asp-controller="AuditLog"
                    asp-action="Index">
 
-                    Audit Logs
+                    Denetim Kayıtları
 
                 </a>
-                @if (User.IsInRole("Admin"))
-                {
-                    <div class="menu-group">
 
-                        <span class="menu-title">
-                            YÖNETİM
-                        </span>
+                <a asp-controller="Health"
+                   asp-action="Index">
 
-                        <a asp-controller="User"
-                           asp-action="Index">
+                    Sistem Durumu
 
-                            Users
+                </a>
 
-                        </a>
-
-                        <a asp-controller="AuditLog"
-                           asp-action="Index">
-
-                            Audit Logs
-
-                        </a>
-
-                        <a asp-controller="Health"
-                           asp-action="Index">
-
-                            System Health
-
-                        </a>
-
-                    </div>
-                }
             </div>
         }
 
@@ -92,28 +69,28 @@
                 <a asp-controller="Category"
                    asp-action="Index">
 
-                    Categories
+                    Kategoriler
 
                 </a>
 
                 <a asp-controller="Product"
                    asp-action="Index">
 
-                    Products
+                    Ürünler
 
                 </a>
 
                 <a asp-controller="Supplier"
                    asp-action="Index">
 
-                    Suppliers
+                    Tedarikçiler
 
                 </a>
 
                 <a asp-controller="Warehouse"
                    asp-action="Index">
 
-                    Warehouses
+                    Depolar
 
                 </a>
 
@@ -133,35 +110,35 @@
                 <a asp-controller="Stock"
                    asp-action="Index">
 
-                    Stocks
+                    Stoklar
 
                 </a>
 
                 <a asp-controller="Stock"
                    asp-action="StockIn">
 
-                    Stock In
+                    Stok Girişi
 
                 </a>
 
                 <a asp-controller="Stock"
                    asp-action="StockOut">
 
-                    Stock Out
+                    Stok Çıkışı
 
                 </a>
 
                 <a asp-controller="Stock"
                    asp-action="Transfer">
 
-                    Transfer
+                    Stok Transferi
 
                 </a>
 
                 <a asp-controller="StockMovement"
                    asp-action="Index">
 
-                    Stock Movements
+                    Stok Hareketleri
 
                 </a>
 
@@ -180,7 +157,7 @@
                 <a asp-controller="PurchaseOrder"
                    asp-action="Index">
 
-                    Purchase Orders
+                    Satın Alma Siparişleri
 
                 </a>
 

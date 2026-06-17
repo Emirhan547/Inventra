@@ -26,19 +26,57 @@ namespace Inventra.WebUI.Services.ProfileServices
             return response?.Data
                 ?? new ResultProfileDto();
         }
-        public async Task UpdateAsync(
+        public async Task<string> UpdateAsync(
     UpdateProfileDto model)
         {
-            await _client.PutAsJsonAsync(
+            var result =
+                await _client.PutAsJsonAsync(
                 "profile",
                 model);
+
+            return await ReadResultAsync(result);
         }
-        public async Task ChangePasswordAsync(
+        public async Task<string> ChangePasswordAsync(
     ChangePasswordDto model)
         {
-            await _client.PutAsJsonAsync(
+            var result =
+                await _client.PutAsJsonAsync(
                 "profile/change-password",
                 model);
+
+            return await ReadResultAsync(result);
+        }
+
+        private static async Task<string> ReadResultAsync(
+            HttpResponseMessage response)
+        {
+            var apiResponse =
+                await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+
+            if (!response.IsSuccessStatusCode ||
+                apiResponse is null ||
+                !apiResponse.Success)
+            {
+                var errors =
+                    apiResponse?.Errors?
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .ToList()
+                    ?? [];
+
+                if (!string.IsNullOrWhiteSpace(apiResponse?.Message))
+                {
+                    errors.Insert(
+                        0,
+                        apiResponse.Message);
+                }
+
+                throw new InvalidOperationException(
+                    errors.Count > 0
+                        ? string.Join(Environment.NewLine, errors)
+                        : "İşlem tamamlanamadı.");
+            }
+
+            return apiResponse.Message;
         }
 
     }

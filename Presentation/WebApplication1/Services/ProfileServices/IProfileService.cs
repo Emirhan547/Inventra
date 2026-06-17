@@ -5,9 +5,9 @@ namespace Inventra.WebUI.Services.ProfileServices
     public interface IProfileService
     {
         Task<ResultProfileDto> GetAsync();
-        Task UpdateAsync(
+        Task<string> UpdateAsync(
     UpdateProfileDto model);
-        Task ChangePasswordAsync(
+        Task<string> ChangePasswordAsync(
     ChangePasswordDto model);
 
 
