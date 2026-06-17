@@ -38,5 +38,16 @@ namespace Inventra.WebUI.Services.SupplierServices
         {
             await _client.DeleteAsync($"suppliers/{id}");
         }
+        public async Task<SupplierAiAnalysisDto>
+     GetAiAnalysisAsync(Guid supplierId)
+        {
+            var response =
+                await _client.GetFromJsonAsync<
+                    ApiResponse<SupplierAiAnalysisDto>>(
+                    $"suppliers/{supplierId}/ai-analysis");
+
+            return response?.Data
+                ?? new SupplierAiAnalysisDto();
+        }
     }
 }

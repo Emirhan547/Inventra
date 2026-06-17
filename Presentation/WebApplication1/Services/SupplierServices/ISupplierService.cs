@@ -13,5 +13,6 @@ namespace Inventra.WebUI.Services.SupplierServices
         Task UpdateAsync(UpdateSupplierDto model);
 
         Task DeleteAsync(Guid id);
+        Task<SupplierAiAnalysisDto> GetAiAnalysisAsync(Guid supplierId);
     }
 }

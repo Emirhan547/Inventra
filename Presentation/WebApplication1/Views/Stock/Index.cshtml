@@ -10,15 +10,17 @@
         <h2>Stoklar</h2>
 
         <p class="text-muted">
-            AI destekli stok analizi
+            Güncel stok durumu
         </p>
 
     </div>
+    
 
 </div>
 
 <div class="content-card">
 
+    
     <table class="table table-hover align-middle">
 
         <thead>
@@ -26,12 +28,12 @@
             <tr>
 
                 <th>Ürün</th>
+
                 <th>Depo</th>
-                <th>Mevcut Stok</th>
-                <th>30 Gün Tahmini</th>
-                <th>Önerilen Sipariş</th>
-                <th>AI Risk</th>
-               
+
+                <th>Miktar</th>
+
+                <th>Durum</th>
 
             </tr>
 
@@ -58,58 +60,27 @@
                         </td>
 
                         <td>
-                            @item.PredictedConsumption30Days
-                        </td>
-                        <td>
 
-                            @if (item.RecommendedOrderQuantity > 0)
+                            @if (item.Quantity == 0)
                             {
-                                <span class="badge bg-primary">
-
-                                    @item.RecommendedOrderQuantity Adet
-
+                                <span class="badge bg-danger">
+                                    Tükendi
+                                </span>
+                            }
+                            else if (item.Quantity < 10)
+                            {
+                                <span class="badge bg-warning">
+                                    Kritik
                                 </span>
                             }
                             else
                             {
-                                <span class="text-success">
-
-                                    Sipariş Gerekmiyor
-
+                                <span class="badge bg-success">
+                                    Normal
                                 </span>
                             }
 
                         </td>
-                        <td>
-
-                            @switch (item.RiskLevel)
-                            {
-                                case "High":
-                                    <span class="badge bg-danger">
-                                        🔴 Kritik
-                                    </span>
-
-                                    break;
-
-                                case "Medium":
-
-                                    <span class="badge bg-warning text-dark">
-                                        🟠 Riskli
-                                    </span>
-
-                                    break;
-
-                                default:
-
-                                    <span class="badge bg-success">
-                                        🟢 Güvenli
-                                    </span>
-
-                                    break;
-                            }
-
-                        </td>
-
 
                     </tr>
                 }
@@ -118,7 +89,7 @@
             {
                 <tr>
 
-                    <td colspan="6"
+                    <td colspan="4"
                         class="text-center">
 
                         Kayıt bulunamadı
@@ -131,6 +102,7 @@
         </tbody>
 
     </table>
+    
 
 </div>
 
@@ -138,6 +110,7 @@
 {
     <nav class="mt-4">
 
+        
         <ul class="pagination justify-content-center">
 
             <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
@@ -185,4 +158,5 @@
         </ul>
 
     </nav>
+
 }

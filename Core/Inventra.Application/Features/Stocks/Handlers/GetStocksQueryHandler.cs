@@ -16,139 +16,71 @@ Result<PagedResponse<GetStocksQueryResponse>>>
     private readonly IStockReadRepository
     _stockReadRepository;
 
-private readonly IStockForecastService
-    _stockForecastService;
 
     public GetStocksQueryHandler(
-        IStockReadRepository stockReadRepository,
-        IStockForecastService stockForecastService)
+        IStockReadRepository stockReadRepository
+       )
     {
         _stockReadRepository =
             stockReadRepository;
 
-        _stockForecastService =
-            stockForecastService;
+     
     }
 
-    public async Task<
-        Result<PagedResponse<GetStocksQueryResponse>>>
-        Handle(
-            GetStocksQuery request,
-            CancellationToken cancellationToken)
+    public async Task<Result<PagedResponse<GetStocksQueryResponse>>>Handle(GetStocksQuery request,CancellationToken cancellationToken)
     {
         var pagedStocks =
-            await _stockReadRepository
-                .GetPagedStocksAsync(
-                    request.PageNumber,
-                    request.PageSize,
-                    cancellationToken);
+        await _stockReadRepository
+        .GetPagedStocksAsync(
+        request.PageNumber,
+        request.PageSize,
+        cancellationToken);
 
-        var stockItems =
-            new List<GetStocksQueryResponse>();
+var response =
+    new PagedResponse<GetStocksQueryResponse>
+    {
+        Items =
+            pagedStocks.Items
+                .Select(x =>
+                    new GetStocksQueryResponse
+                    {
+                        Id = x.Id,
 
-        foreach (var stock in pagedStocks.Items)
-        {
-            var history =
-                await _stockReadRepository
-                    .GetForecastHistoryAsync(
-                        stock.ProductId,
-                        cancellationToken);
+                        ProductId =
+                            x.ProductId,
 
-            Console.WriteLine(
-                $"==============================");
+                        ProductName =
+                            x.Product.Name,
 
-            Console.WriteLine(
-                $"Ürün: {stock.Product.Name}");
+                        WarehouseId =
+                            x.WarehouseId,
 
-            Console.WriteLine(
-                $"History Count: {history.Count}");
+                        WarehouseName =
+                            x.Warehouse.Name,
 
-            Console.WriteLine(
-                $"Average: {(history.Any() ? history.Average() : 0)}");
+                        Quantity =
+                            x.Quantity
+                    })
+                .ToList(),
 
-            Console.WriteLine(
-                $"Total: {history.Sum()}");
+        PageNumber =
+            pagedStocks.PageNumber,
 
-            Console.WriteLine(
-                $"Min: {(history.Any() ? history.Min() : 0)}");
+        PageSize =
+            pagedStocks.PageSize,
 
-            Console.WriteLine(
-                $"Max: {(history.Any() ? history.Max() : 0)}");
+        TotalCount =
+            pagedStocks.TotalCount,
 
-            var prediction =
-                _stockForecastService
-                    .PredictNext30Days(
-                        history);
-
-            Console.WriteLine(
-                $"Prediction: {prediction}");
-
-            var recommendedOrder =
-                Math.Max(
-                    prediction - stock.Quantity,
-                    0);
-
-            var risk =
-                prediction > stock.Quantity
-                    ? "High"
-                    : prediction >
-                      stock.Quantity * 0.7
-                        ? "Medium"
-                        : "Low";
-
-            stockItems.Add(
-                new GetStocksQueryResponse
-                {
-                    Id = stock.Id,
-
-                    ProductId =
-                        stock.ProductId,
-
-                    ProductName =
-                        stock.Product.Name,
-
-                    WarehouseId =
-                        stock.WarehouseId,
-
-                    WarehouseName =
-                        stock.Warehouse.Name,
-
-                    Quantity =
-                        stock.Quantity,
-
-                    PredictedConsumption30Days =
-                        prediction,
-
-                    RiskLevel =
-                        risk,
-
-                    RecommendedOrderQuantity =
-                        recommendedOrder
-                });
-        }
-
-        var response =
-            new PagedResponse<GetStocksQueryResponse>
-            {
-                Items =
-                    stockItems,
-
-                PageNumber =
-                    pagedStocks.PageNumber,
-
-                PageSize =
-                    pagedStocks.PageSize,
-
-                TotalCount =
-                    pagedStocks.TotalCount,
-
-                TotalPages =
-                    pagedStocks.TotalPages
-            };
+        TotalPages =
+            pagedStocks.TotalPages
+    };
 
         return Result<
             PagedResponse<GetStocksQueryResponse>>
             .SuccessResult(response);
-    }
+
+}
+
 
 }

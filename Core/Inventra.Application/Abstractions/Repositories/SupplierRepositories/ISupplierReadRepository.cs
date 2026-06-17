@@ -11,5 +11,9 @@ namespace Inventra.Application.Abstractions.Repositories.SupplierRepositories
     {
         Task<List<GetSuppliersQueryResponse>>GetSuppliersAsync(CancellationToken cancellationToken = default);
         Task<GetSupplierByIdQueryResponse?>GetSupplierByIdAsync(Guid id,CancellationToken cancellationToken = default);
+        Task<SupplierAiAnalysisData>
+    GetSupplierAiAnalysisDataAsync(
+        Guid supplierId,
+        CancellationToken cancellationToken = default);
     }
 }

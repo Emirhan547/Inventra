@@ -13,9 +13,6 @@ namespace Inventra.Application.Abstractions.Repositories.StockRepositories
         Task<Stock?> GetByProductAndWarehouseAsync(Guid productId,Guid warehouseId, bool tracking = true,CancellationToken cancellationToken = default);
 
         Task<PagedResponse<Stock>> GetPagedStocksAsync(int pageNumber,int pageSize,CancellationToken cancellationToken = default);
-        Task<List<float>>
-        GetForecastHistoryAsync(
-            Guid productId,
-            CancellationToken cancellationToken = default);
+       
     }
 }

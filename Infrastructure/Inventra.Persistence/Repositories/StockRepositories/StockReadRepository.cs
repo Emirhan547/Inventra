@@ -18,7 +18,7 @@ namespace Inventra.Persistence.Repositories.StockRepositories
         {
         }
 
-        public async Task<Stock?> GetByProductAndWarehouseAsync(Guid productId,Guid warehouseId,bool tracking = true,CancellationToken cancellationToken = default)
+        public async Task<Stock?> GetByProductAndWarehouseAsync(Guid productId, Guid warehouseId, bool tracking = true, CancellationToken cancellationToken = default)
         {
             var query = Table.AsQueryable();
 
@@ -27,14 +27,14 @@ namespace Inventra.Persistence.Repositories.StockRepositories
                 query = query.AsNoTracking();
             }
 
-            return await query.Include(x => x.Product).Include(x => x.Warehouse).FirstOrDefaultAsync( x => x.ProductId == productId && x.WarehouseId == warehouseId, cancellationToken);
+            return await query.Include(x => x.Product).Include(x => x.Warehouse).FirstOrDefaultAsync(x => x.ProductId == productId && x.WarehouseId == warehouseId, cancellationToken);
         }
 
-        public async Task<PagedResponse<Stock>>GetPagedStocksAsync(int pageNumber,int pageSize,CancellationToken cancellationToken = default)
+        public async Task<PagedResponse<Stock>> GetPagedStocksAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             var query = Table.AsNoTracking().Include(x => x.Product).Include(x => x.Warehouse);
 
-            var totalCount =await query.CountAsync(cancellationToken);
+            var totalCount = await query.CountAsync(cancellationToken);
 
             var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
 
@@ -44,25 +44,9 @@ namespace Inventra.Persistence.Repositories.StockRepositories
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                TotalPages =(int)Math.Ceiling(totalCount /(double)pageSize)
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
         }
-        public async Task<List<float>>
-    GetForecastHistoryAsync(
-        Guid productId,
-        CancellationToken cancellationToken = default)
-        {
-            return await _context.StockMovements
-                .Include(x => x.Stock)
-                .Where(x =>
-                    x.Stock.ProductId == productId &&
-                    x.Type == StockMovementType.StockOut)
-                .GroupBy(x =>
-                    x.CreatedDate.Date)
-                .Select(g =>
-                    (float)g.Sum(x =>
-                        x.Quantity))
-                .ToListAsync(cancellationToken);
-        }
+
     }
 }

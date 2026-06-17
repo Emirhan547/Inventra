@@ -51,5 +51,14 @@ namespace Inventra.WebUI.Controllers
             await _supplierService.DeleteAsync(id);
             return RedirectToAction( nameof(Index));
         }
+        public async Task<IActionResult>
+    AiAnalysis(Guid id)
+        {
+            var model =
+                await _supplierService
+                    .GetAiAnalysisAsync(id);
+
+            return View(model);
+        }
     }
 }

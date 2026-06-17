@@ -28,9 +28,8 @@ namespace Inventra.Infrastructure.Extensions
             services.AddScoped<
     IAIService,
     OpenAIService>();
-            services.AddScoped<
-    IStockForecastService,
-    StockForecastService>();
+          services.AddScoped<IProfileService, ProfileService>();
+
             services.AddScoped< INotificationService, SignalRNotificationService>();
             services.AddScoped<ICurrentUserService,CurrentUserService>();
             services.AddScoped<IEventBus,MassTransitEventBus>();

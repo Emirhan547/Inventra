@@ -8,7 +8,6 @@ using Inventra.Infrastructure.Identity;
 using Inventra.Infrastructure.SignalR;
 using Inventra.Persistence.Context;
 using Inventra.Persistence.Extensions;
-using Inventra.Persistence.Seed;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Scalar.AspNetCore;
@@ -110,17 +109,7 @@ using (var scope = app.Services.CreateScope())
     await RoleSeeder.SeedAsync(
         roleManager);
 }
-using (var scope = app.Services.CreateScope())
-{
-    var context =
-        scope.ServiceProvider
-            .GetRequiredService<
-                InventraDbContext>();
 
-    await DemoDataGenerator
-        .GenerateStockMovementsAsync(
-            context);
-}
 app.MapHealthChecks(
     "/health",
     new HealthCheckOptions

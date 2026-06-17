@@ -63,5 +63,18 @@ public static class SupplierEndpoints
                         new RemoveSupplierCommand(id)))
             .RequireAuthorization(
                 Policies.SupplierManagement);
+        group.MapGet(
+    "/{id:guid}/ai-analysis",
+    async (
+        Guid id,
+        ISender sender) =>
+    {
+        var result =
+            await sender.Send(
+                new GetSupplierAiAnalysisQuery(id));
+
+        return Results.Ok(result);
+    })
+.WithName("GetSupplierAiAnalysis");
     }
 }

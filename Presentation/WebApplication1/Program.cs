@@ -6,6 +6,7 @@ using Inventra.WebUI.Services.DashboardServices;
 using Inventra.WebUI.Services.HealthServices;
 using Inventra.WebUI.Services.NotificationServices;
 using Inventra.WebUI.Services.ProductServices;
+using Inventra.WebUI.Services.ProfileServices;
 using Inventra.WebUI.Services.PurchaseOrderServices;
 using Inventra.WebUI.Services.StockMovementServices;
 using Inventra.WebUI.Services.StockServices;
@@ -29,6 +30,9 @@ builder.Services
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<
+    IProfileService,
+    ProfileService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<
     IProductService,

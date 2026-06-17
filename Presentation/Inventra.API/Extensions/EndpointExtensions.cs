@@ -18,7 +18,7 @@ namespace Inventra.API.Extensions
             app.MapUserEndpoints();
             app.MapNotificationEndpoints();
             app.MapAuditLogEndpoints();
-
+            app.MapProfileEndpoints();
         }
     }
 }
