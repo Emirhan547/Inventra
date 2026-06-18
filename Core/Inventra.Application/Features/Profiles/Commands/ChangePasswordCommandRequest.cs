@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Profiles.Commands
 {
-    public sealed class ChangePasswordCommandRequest
-     : IRequest<Result>
+    public sealed class ChangePasswordCommandRequest : IRequest<Result>
     {
         public string CurrentPassword { get; set; } = string.Empty;
 

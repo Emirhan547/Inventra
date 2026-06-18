@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Notifications.Queries
 {
-    public sealed record GetNotificationsQuery
-     : IRequest<List<GetNotificationsResponse>>;
+    public sealed record GetNotificationsQuery: IRequest<List<GetNotificationsResponse>>;
     
     
 }

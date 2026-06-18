@@ -10,63 +10,32 @@ using System.Text;
 
 namespace Inventra.Application.Features.Notifications.Handlers
 {
-    public sealed class GetNotificationsQueryHandler
-    : IRequestHandler<
-        GetNotificationsQuery,
-        List<GetNotificationsResponse>>
+    public sealed class GetNotificationsQueryHandler: IRequestHandler<GetNotificationsQuery,List<GetNotificationsResponse>>
     {
-        private readonly INotificationReadRepository
-            _notificationReadRepository;
+        private readonly INotificationReadRepository _notificationReadRepository;
 
-        private readonly ICurrentUserService
-            _currentUserService;
+        private readonly ICurrentUserService _currentUserService;
 
-        public GetNotificationsQueryHandler(
-            INotificationReadRepository notificationReadRepository,
-            ICurrentUserService currentUserService)
+        public GetNotificationsQueryHandler( INotificationReadRepository notificationReadRepository,ICurrentUserService currentUserService)
         {
-            _notificationReadRepository =
-                notificationReadRepository;
-
-            _currentUserService =
-                currentUserService;
+            _notificationReadRepository = notificationReadRepository;
+            _currentUserService =currentUserService;
         }
 
-        public async Task<List<GetNotificationsResponse>>
-    Handle(
-        GetNotificationsQuery request,
-        CancellationToken cancellationToken)
+        public async Task<List<GetNotificationsResponse>>Handle(GetNotificationsQuery request,CancellationToken cancellationToken)
         {
             List<Notification> notifications;
 
             if (_currentUserService.IsAdmin)
             {
-                notifications =
-                    await _notificationReadRepository
-                        .GetAllAsync(false, cancellationToken);
+                notifications =await _notificationReadRepository.GetAllAsync(false, cancellationToken);
             }
             else
             {
-                notifications =
-                    await _notificationReadRepository
-                        .GetWhereAsync(
-                            x =>
-                                (x.UserId != null &&
-                                 x.UserId == _currentUserService.UserId)
-
-                                ||
-
-                                (x.RoleName != null &&
-                                 _currentUserService.Roles.Contains(
-                                     x.RoleName)),
-                            false,
-                            cancellationToken);
+                notifications = await _notificationReadRepository.GetWhereAsync(x =>(x.UserId != null &&x.UserId == _currentUserService.UserId)||(x.RoleName != null && _currentUserService.Roles.Contains(x.RoleName)),false,cancellationToken);
             }
 
-            return notifications
-                .OrderByDescending(x => x.CreatedAt)
-                .Take(20)
-                .Select(x => new GetNotificationsResponse
+            return notifications.OrderByDescending(x => x.CreatedAt).Take(20).Select(x => new GetNotificationsResponse
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -74,8 +43,7 @@ namespace Inventra.Application.Features.Notifications.Handlers
                     Type = x.Type,
                     IsRead = x.IsRead,
                     CreatedAt = x.CreatedAt,
-                })
-                .ToList();
+                }).ToList();
         }
     }
    

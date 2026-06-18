@@ -6,7 +6,5 @@ using System.Text;
 
 namespace Inventra.Application.Features.Notifications.Commands
 {
-    public sealed record MarkNotificationAsReadCommand(
-       Guid NotificationId)
-       : IRequest<Result>;
+    public sealed record MarkNotificationAsReadCommand( Guid NotificationId): IRequest<Result>;
 }

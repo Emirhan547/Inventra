@@ -10,20 +10,9 @@ namespace Inventra.API.Endpoints
         public static void MapAuditLogEndpoints(
             this IEndpointRouteBuilder app)
         {
-            var group =
-                app.MapGroup("/auditlogs")
-                   .WithTags("AuditLogs");
+            var group =app.MapGroup("/auditlogs").WithTags("AuditLogs");
 
-            group.MapGet(
-     "/",
-     async (
-         string? userName,
-         string? eventName,
-         DateTime? startDate,
-         DateTime? endDate,
-         int? pageNumber,
-         int? pageSize,
-         IMediator mediator) =>
+            group.MapGet( "/",async (string? userName,string? eventName,DateTime? startDate,DateTime? endDate,int? pageNumber,int? pageSize,IMediator mediator) =>
      {
          var query = new GetAuditLogsQuery
          {
@@ -36,9 +25,7 @@ namespace Inventra.API.Endpoints
          };
 
          return await mediator.Send(query);
-     })
-                .RequireAuthorization(
-                    Policies.AuditLogView);
+     }).RequireAuthorization(Policies.AuditLogView);
         }
     }
 }

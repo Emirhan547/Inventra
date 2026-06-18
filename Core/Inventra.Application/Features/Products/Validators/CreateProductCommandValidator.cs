@@ -3,8 +3,7 @@ using Inventra.Application.Features.Products.Commands;
 
 namespace Inventra.Application.Features.Products.Validators;
 
-public class CreateProductCommandValidator
-    : AbstractValidator<CreateProductCommandRequest>
+public class CreateProductCommandValidator : AbstractValidator<CreateProductCommandRequest>
 {
     public CreateProductCommandValidator()
     {

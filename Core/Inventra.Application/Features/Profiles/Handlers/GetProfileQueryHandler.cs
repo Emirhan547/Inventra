@@ -6,20 +6,16 @@ using MediatR;
 
 namespace Inventra.Application.Features.Profile.Handlers;
 
-public class GetProfileQueryHandler
-    : IRequestHandler<GetProfileQuery, Result<GetProfileQueryResponse>>
+public class GetProfileQueryHandler: IRequestHandler<GetProfileQuery, Result<GetProfileQueryResponse>>
 {
     private readonly IProfileService _profileService;
 
-    public GetProfileQueryHandler(
-        IProfileService profileService)
+    public GetProfileQueryHandler(IProfileService profileService)
     {
         _profileService = profileService;
     }
 
-    public async Task<Result<GetProfileQueryResponse>> Handle(
-        GetProfileQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Result<GetProfileQueryResponse>> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
         return await _profileService.GetProfileAsync();
     }

@@ -13,9 +13,6 @@ namespace Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositori
     {
         Task<PurchaseOrder?> GetDetailAsync(Guid id,CancellationToken cancellationToken = default);
         Task<PagedResponse<PurchaseOrder>>GetPagedAsync(int pageNumber,int pageSize,PurchaseOrderStatus? status,Guid? supplierId, CancellationToken cancellationToken = default);
-        Task<PurchaseOrderAiDto>
-    GetAiAnalysisDataAsync(
-        Guid id,
-        CancellationToken cancellationToken = default);
+        Task<PurchaseOrderAiDto>GetAiAnalysisDataAsync(Guid id,CancellationToken cancellationToken = default);
     }
 }

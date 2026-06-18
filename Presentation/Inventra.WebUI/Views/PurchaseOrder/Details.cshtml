@@ -37,8 +37,7 @@
 
             <br />
 
-            @Model.CreatedDate
-            .ToString("dd.MM.yyyy HH:mm")
+            @(Model.CreatedDate.ToString("dd.MM.yyyy HH:mm"))
 
         </div>
 
@@ -83,53 +82,7 @@
         </div>
 
     </div>
-    <table class="table">
-
-        <thead>
-
-            <tr>
-
-                <th>Ürün</th>
-
-                <th>Miktar</th>
-
-                <th>Birim Fiyat</th>
-
-                <th>Tutar</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-
-                    <td>
-                        @item.ProductName
-                    </td>
-
-                    <td>
-                        @item.Quantity
-                    </td>
-
-                    <td>
-                        @item.UnitPrice.ToString("C")
-                    </td>
-
-                    <td>
-                        @((item.Quantity * item.UnitPrice)
-                            .ToString("C"))
-                    </td>
-
-                </tr>
-            }
-
-        </tbody>
-
-    </table>
+  
 
 </div>
 @section Scripts {

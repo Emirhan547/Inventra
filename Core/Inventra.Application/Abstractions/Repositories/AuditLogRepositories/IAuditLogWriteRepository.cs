@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Abstractions.Repositories.AuditLogRepositories
 {
-    public interface IAuditLogWriteRepository
-    : IWriteRepository<AuditLog>
+    public interface IAuditLogWriteRepository: IWriteRepository<AuditLog>
     {
     }
 }

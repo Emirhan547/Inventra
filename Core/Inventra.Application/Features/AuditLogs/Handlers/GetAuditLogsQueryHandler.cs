@@ -6,43 +6,22 @@ using MediatR;
 
 namespace Inventra.Application.Features.AuditLogs.Handlers
 {
-    public sealed class GetAuditLogsQueryHandler
-        : IRequestHandler<
-            GetAuditLogsQuery,
-            PagedResponse<GetAuditLogsResponse>>
+    public sealed class GetAuditLogsQueryHandler: IRequestHandler< GetAuditLogsQuery,PagedResponse<GetAuditLogsResponse>>
     {
-        private readonly IAuditLogReadRepository
-            _auditLogReadRepository;
+        private readonly IAuditLogReadRepository _auditLogReadRepository;
 
-        public GetAuditLogsQueryHandler(
-            IAuditLogReadRepository auditLogReadRepository)
+        public GetAuditLogsQueryHandler(IAuditLogReadRepository auditLogReadRepository)
         {
-            _auditLogReadRepository =
-                auditLogReadRepository;
+            _auditLogReadRepository = auditLogReadRepository;
         }
 
-        public async Task<
-            PagedResponse<GetAuditLogsResponse>>
-            Handle(
-                GetAuditLogsQuery request,
-                CancellationToken cancellationToken)
+        public async Task<PagedResponse<GetAuditLogsResponse>>Handle(GetAuditLogsQuery request,CancellationToken cancellationToken)
         {
-            var pagedLogs =
-                await _auditLogReadRepository
-                    .GetPagedAsync(
-                        request.PageNumber,
-                        request.PageSize,
-                        request.UserName,
-                        request.EventName,
-                        request.StartDate,
-                        request.EndDate,
-                        cancellationToken);
+            var pagedLogs =await _auditLogReadRepository.GetPagedAsync(request.PageNumber,request.PageSize,request.UserName,request.EventName,request.StartDate,request.EndDate,cancellationToken);
 
-            return new PagedResponse<
-                GetAuditLogsResponse>
+            return new PagedResponse< GetAuditLogsResponse>
             {
-                Items = pagedLogs.Items
-                    .Select(x =>
+                Items = pagedLogs.Items.Select(x =>
                         new GetAuditLogsResponse
                         {
                             Id = x.Id,
@@ -53,17 +32,10 @@ namespace Inventra.Application.Features.AuditLogs.Handlers
                         })
                     .ToList(),
 
-                PageNumber =
-                    pagedLogs.PageNumber,
-
-                PageSize =
-                    pagedLogs.PageSize,
-
-                TotalCount =
-                    pagedLogs.TotalCount,
-
-                TotalPages =
-                    pagedLogs.TotalPages
+                PageNumber =pagedLogs.PageNumber,
+                PageSize =pagedLogs.PageSize,
+                TotalCount =pagedLogs.TotalCount,
+                TotalPages = pagedLogs.TotalPages
             };
         }
     }

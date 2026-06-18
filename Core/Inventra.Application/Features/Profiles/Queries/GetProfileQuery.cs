@@ -7,6 +7,5 @@ using System.Text;
 
 namespace Inventra.Application.Features.Profiles.Queries
 {
-    public sealed record GetProfileQuery
-     : IRequest<Result<GetProfileQueryResponse>>;
+    public sealed record GetProfileQuery: IRequest<Result<GetProfileQueryResponse>>;
 }

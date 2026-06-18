@@ -6,8 +6,7 @@ namespace Inventra.Application.Common.Pagination
 {
     public sealed class PagedResponse<T>
     {
-        public IReadOnlyList<T> Items { get; init; }
-            = [];
+        public IReadOnlyList<T> Items { get; init; } = [];
 
         public int PageNumber { get; init; }
 

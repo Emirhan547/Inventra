@@ -10,14 +10,6 @@ namespace Inventra.Application.Abstractions.Repositories.AuditLogRepositories
     public interface IAuditLogReadRepository
     : IReadRepository<AuditLog>
     {
-        Task<PagedResponse<AuditLog>>
-    GetPagedAsync(
-        int pageNumber,
-        int pageSize,
-        string? userName,
-        string? eventName,
-        DateTime? startDate,
-        DateTime? endDate,
-        CancellationToken cancellationToken = default);
+        Task<PagedResponse<AuditLog>>GetPagedAsync(int pageNumber,int pageSize, string? userName,string? eventName,DateTime? startDate,DateTime? endDate,CancellationToken cancellationToken = default);
     }
 }

@@ -31,8 +31,7 @@ public class Result
         };
     }
 
-    public static Result Failure(
-        List<string> errors)
+    public static Result Failure(List<string> errors)
     {
         return new Result
         {
@@ -46,9 +45,7 @@ public class Result<T> : Result
 {
     public T? Data { get; set; }
 
-    public static Result<T> SuccessResult(
-        T data,
-        string message = "")
+    public static Result<T> SuccessResult(T data,string message = "")
     {
         return new Result<T>
         {
@@ -58,8 +55,7 @@ public class Result<T> : Result
         };
     }
 
-    public new static Result<T> Failure(
-        string error)
+    public new static Result<T> Failure(string error)
     {
         return new Result<T>
         {
@@ -71,8 +67,7 @@ public class Result<T> : Result
         };
     }
 
-    public new static Result<T> Failure(
-        List<string> errors)
+    public new static Result<T> Failure(List<string> errors)
     {
         return new Result<T>
         {

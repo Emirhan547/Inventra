@@ -3,6 +3,5 @@ using MediatR;
 
 namespace Inventra.Application.Features.Notifications.Commands
 {
-    public sealed record MarkAllNotificationsAsReadCommand
-        : IRequest<Result>;
+    public sealed record MarkAllNotificationsAsReadCommand: IRequest<Result>;
 }

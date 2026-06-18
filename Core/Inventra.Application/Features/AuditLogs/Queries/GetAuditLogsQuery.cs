@@ -7,8 +7,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.AuditLogs.Queries
 {
-    public sealed class GetAuditLogsQuery
-        : IRequest<PagedResponse<GetAuditLogsResponse>>
+    public sealed class GetAuditLogsQuery: IRequest<PagedResponse<GetAuditLogsResponse>>
     {
         public string? UserName { get; set; }
 

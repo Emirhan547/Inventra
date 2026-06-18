@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.PurchaseOrderItems.Validators
 {
-    public class CreatePurchaseOrderItemValidator
-    : AbstractValidator<CreatePurchaseOrderItemRequest>
+    public class CreatePurchaseOrderItemValidator: AbstractValidator<CreatePurchaseOrderItemRequest>
     {
         public CreatePurchaseOrderItemValidator()
         {

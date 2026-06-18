@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Profiles.Commands
 {
-    public sealed class UpdateProfileCommandRequest
-     : IRequest<Result>
+    public sealed class UpdateProfileCommandRequest : IRequest<Result>
     {
         public string FirstName { get; set; } = string.Empty;
 

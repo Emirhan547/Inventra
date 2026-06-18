@@ -7,31 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace Inventra.WebUI.Controllers
 {
     [Authorize(Roles = RoleGroups.AdminOnly)]
-    public class UserController(
-        IUserService _userService)
-        : Controller
+    public class UserController(IUserService _userService): Controller
     {
         public async Task<IActionResult>
             Index(UserFilterDto filter)
         {
-            var users =
-                await _userService
-                    .GetAllAsync(filter);
-
+            var users = await _userService.GetAllAsync(filter);
             return View(users);
         }
 
-        public async Task<IActionResult>
-            Details(Guid id)
+        public async Task<IActionResult>Details(Guid id)
         {
-            var user =
-                await _userService
-                    .GetByIdAsync(id);
+            var user =await _userService.GetByIdAsync(id);
 
             if (user is null)
             {
-                return RedirectToAction(
-                    nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
 
             return View(user);

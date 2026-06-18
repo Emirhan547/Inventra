@@ -6,8 +6,6 @@ namespace Inventra.Application.Abstractions.Infrastructures.AI
 {
     public interface IAIService
     {
-        Task<string> GenerateAsync(
-            string prompt,
-            CancellationToken cancellationToken = default);
+        Task<string> GenerateAsync(string prompt,CancellationToken cancellationToken = default);
     }
 }

@@ -7,12 +7,10 @@ using System.Text;
 
 namespace Inventra.Application.Features.PurchaseOrders.Commands
 {
-    public class CreatePurchaseOrderCommandRequest
-     : IRequest<Result<CreatePurchaseOrderCommandResponse>>
+    public class CreatePurchaseOrderCommandRequest: IRequest<Result<CreatePurchaseOrderCommandResponse>>
     {
         public Guid SupplierId { get; set; }
 
-        public List<CreatePurchaseOrderItemRequest> Items
-        { get; set; } = [];
+        public List<CreatePurchaseOrderItemRequest> Items{ get; set; } = [];
     }
 }

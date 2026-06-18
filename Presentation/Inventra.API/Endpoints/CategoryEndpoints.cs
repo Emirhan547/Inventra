@@ -12,49 +12,33 @@ namespace Inventra.API.Endpoints
         {
             var group = app.MapGroup("/categories").WithTags("Categories");
 
-            group.MapPost(
-     "/",
-     async (
-         CreateCategoryCommandRequest request,
-         IMediator mediator) =>
+            group.MapPost( "/",async (
+         CreateCategoryCommandRequest request,IMediator mediator) =>
      {
-         var result =
-             await mediator.Send(request);
+         var result = await mediator.Send(request);
 
          if (!result.Success)
          {
              return Results.BadRequest(result);
          }
 
-         return Results.Created(
-             $"/categories/{result.Data}",
-             result);
+         return Results.Created( $"/categories/{result.Data}",result);
      })
-     .RequireAuthorization(
-         Policies.CategoryManagement);
+     .RequireAuthorization(Policies.CategoryManagement);
 
-            group.MapGet(
-                "/",
-                async (
-                    IMediator mediator) =>
+            group.MapGet( "/",async (IMediator mediator) =>
                 {
-                    var result =
-                        await mediator.Send(
-                            new GetCategoriesQueryRequest());
+                    var result = await mediator.Send(new GetCategoriesQueryRequest());
 
                     return Results.Ok(result);
                 })
                 .RequireAuthorization();
 
-            group.MapGet(
-                "/{id:guid}",
-                async (
+            group.MapGet("/{id:guid}",async (
                     Guid id,
                     IMediator mediator) =>
                 {
-                    var result =
-                        await mediator.Send(
-                            new GetCategoryByIdQueryRequest
+                    var result =await mediator.Send(new GetCategoryByIdQueryRequest
                             {
                                 Id = id
                             });
@@ -65,20 +49,13 @@ namespace Inventra.API.Endpoints
                     }
 
                     return Results.Ok(result);
-                })
-                .RequireAuthorization();
+                }).RequireAuthorization();
 
-            group.MapPut(
-                "/{id:guid}",
-                async (
-                    Guid id,
-                    UpdateCategoryCommand command,
-                    IMediator mediator) =>
+            group.MapPut("/{id:guid}",async (Guid id,UpdateCategoryCommand command,IMediator mediator) =>
                 {
                     command.Id = id;
 
-                    var result =
-                        await mediator.Send(command);
+                    var result =await mediator.Send(command);
 
                     if (!result.Success)
                     {
@@ -87,18 +64,11 @@ namespace Inventra.API.Endpoints
 
                     return Results.Ok(result);
                 })
-                .RequireAuthorization(
-                    Policies.CategoryManagement);
+                .RequireAuthorization( Policies.CategoryManagement);
 
-            group.MapDelete(
-                "/{id:guid}",
-                async (
-                    Guid id,
-                    IMediator mediator) =>
+            group.MapDelete("/{id:guid}",async (Guid id,IMediator mediator) =>
                 {
-                    var result =
-                        await mediator.Send(
-                            new RemoveCategoryCommand
+                    var result = await mediator.Send(new RemoveCategoryCommand
                             {
                                 Id = id
                             });
@@ -109,9 +79,7 @@ namespace Inventra.API.Endpoints
                     }
 
                     return Results.Ok(result);
-                })
-                .RequireAuthorization(
-                    Policies.CategoryManagement);
-        }
+                }).RequireAuthorization(Policies.CategoryManagement);
+@#£        }
     }
 }

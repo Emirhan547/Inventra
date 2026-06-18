@@ -8,23 +8,18 @@ using System.Text;
 
 namespace Inventra.Application.Features.Profiles.Handlers
 {
-    public sealed class UpdateProfileCommandHandler
-    : IRequestHandler<UpdateProfileCommandRequest, Result>
+    public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommandRequest, Result>
     {
         private readonly IProfileService _profileService;
 
-        public UpdateProfileCommandHandler(
-            IProfileService profileService)
+        public UpdateProfileCommandHandler( IProfileService profileService)
         {
             _profileService = profileService;
         }
 
-        public async Task<Result> Handle(
-            UpdateProfileCommandRequest request,
-            CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateProfileCommandRequest request,CancellationToken cancellationToken)
         {
-            return await _profileService
-                .UpdateProfileAsync(request);
+            return await _profileService.UpdateProfileAsync(request);
         }
 
     }

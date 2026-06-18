@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.PurchaseOrders.Commands
 {
-    public class CompletePurchaseOrderCommand
-    : IRequest<Result>
+    public class CompletePurchaseOrderCommand: IRequest<Result>
     {
         public Guid Id { get; set; }
 

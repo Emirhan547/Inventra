@@ -12,11 +12,7 @@ using MediatR;
 
 namespace Inventra.Application.Features.Products.Handlers
 {
-    public class CreateProductCommandHandler (IProductWriteRepository _writeRepository,
-    IProductReadRepository _readRepository,
-    IUnitOfWork _unitOfWork,
-    ICategoryReadRepository _categoryReadRepository,
-    IEventBus _eventBus,
+    public class CreateProductCommandHandler (IProductWriteRepository _writeRepository,IProductReadRepository _readRepository,IUnitOfWork _unitOfWork, ICategoryReadRepository _categoryReadRepository,IEventBus _eventBus,
     ICurrentUserService _currentUserService) : IRequestHandler<CreateProductCommandRequest, Result<CreateProductCommandResponse>>
     {
         public async Task<Result<CreateProductCommandResponse>>Handle(CreateProductCommandRequest request,CancellationToken cancellationToken)

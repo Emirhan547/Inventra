@@ -17,14 +17,12 @@ using System.Text;
 
 namespace Inventra.Application.Features.PurchaseOrders.Handlers
 {
-    public class ApprovePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IUnitOfWork _unitOfWork
-    , IEventBus _eventBus, ICurrentUserService _currentUserService, ILogger<ApprovePurchaseOrderCommandHandler> _logger) : IRequestHandler<ApprovePurchaseOrderCommand,Result>
+    public class ApprovePurchaseOrderCommandHandler(IPurchaseOrderReadRepository _repository,IUnitOfWork _unitOfWork, IEventBus _eventBus, ICurrentUserService _currentUserService, ILogger<ApprovePurchaseOrderCommandHandler> _logger) : IRequestHandler<ApprovePurchaseOrderCommand,Result>
     {
 
         public async Task<Result> Handle(ApprovePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
-            var purchaseOrder =
-       await _repository.GetByIdAsync(request.Id, tracking: true);
+            var purchaseOrder =await _repository.GetByIdAsync(request.Id, tracking: true);
 
             if (purchaseOrder is null)
             {
@@ -36,21 +34,20 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
             }
             purchaseOrder.Status =PurchaseOrderStatus.Approved;
             await _unitOfWork.SaveChangeAsync();
-            _logger.LogInformation(
-    "Purchase order approved. OrderNumber: {OrderNumber}, ApprovedBy: {UserName}",
-    purchaseOrder.OrderNumber,
-    _currentUserService.UserName);
+            _logger.LogInformation("Purchase order approved. OrderNumber: {OrderNumber}, ApprovedBy: {UserName}",
+             purchaseOrder.OrderNumber,
+             _currentUserService.UserName);
 
             await _eventBus.PublishAsync(
-    new PurchaseOrderApprovedEvent
-    {
-        PurchaseOrderId = purchaseOrder.Id,
-        OrderNumber = purchaseOrder.OrderNumber,
+              new PurchaseOrderApprovedEvent
+         {
+           PurchaseOrderId = purchaseOrder.Id,
+           OrderNumber = purchaseOrder.OrderNumber,
 
-        UserId = _currentUserService.UserId,
-        UserName = _currentUserService.UserName
-    });
+           UserId = _currentUserService.UserId,
+           UserName = _currentUserService.UserName
+         });
             return Result.SuccessResult("Purchase order approved.");
-        }
-    }
-}
+           }
+       }
+     }

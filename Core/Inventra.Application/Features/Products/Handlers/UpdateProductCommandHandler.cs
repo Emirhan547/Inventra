@@ -13,10 +13,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Products.Handlers
 {
-    public class UpdateProductCommandHandler (IProductReadRepository _readRepository,
-    IProductWriteRepository _writeRepository,
-    IUnitOfWork _unitOfWork,
-    IEventBus _eventBus,
+    public class UpdateProductCommandHandler (IProductReadRepository _readRepository,IProductWriteRepository _writeRepository,IUnitOfWork _unitOfWork,IEventBus _eventBus,
     ICurrentUserService _currentUserService) : IRequestHandler<UpdateProductCommand, Result>
     {
         public async Task<Result> Handle(UpdateProductCommand request, CancellationToken cancellationToken)

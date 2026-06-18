@@ -12,28 +12,21 @@ using System.Text;
 
 namespace Inventra.Application.Features.Products.Handlers
 {
-    public class RemoveProductCommandHandler(IProductReadRepository _productRead,
-    IProductWriteRepository _productWrite,
-    IUnitOfWork _unitOfWork,
-    IEventBus _eventBus,
+    public class RemoveProductCommandHandler(IProductReadRepository _productRead,IProductWriteRepository _productWrite,IUnitOfWork _unitOfWork,IEventBus _eventBus,
     ICurrentUserService _currentUserService) : IRequestHandler<RemoveProductCommand, Result>
     {
         public async Task<Result> Handle(
      RemoveProductCommand request,
      CancellationToken cancellationToken)
         {
-            var product =
-                await _productRead.GetByIdAsync(
+            var product =await _productRead.GetByIdAsync(
                     request.Id);
-
             if (product == null)
             {
-                return Result.Failure(
-                    "Product Bulunamadı");
+                return Result.Failure("Product Bulunamadı");
             }
 
-            var productName =
-                product.Name;
+            var productName =product.Name;
 
             _productWrite.Remove(product);
 

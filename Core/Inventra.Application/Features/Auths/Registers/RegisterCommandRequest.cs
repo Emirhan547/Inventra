@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Inventra.Application.Features.Auths.Registers
 {
-    public class RegisterCommandRequest
-    : IRequest<Result>
+    public class RegisterCommandRequest: IRequest<Result>
     {
         public string FirstName { get; set; }
 
