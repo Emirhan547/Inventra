@@ -25,21 +25,7 @@ Proje yalnızca temel CRUD işlemlerini değil; CQRS, Event-Driven Architecture,
 
 ---
 
-# 🖼️ Uygulama Görselleri
 
-> Dashboard
-
-> Ürün Yönetimi
-
-> Stok Yönetimi
-
-> Satın Alma Siparişi
-
-> Yapay Zekâ Analizi
-
-(Buraya ekran görüntüleri eklenecek.)
-
----
 
 # 🏗️ Kullanılan Teknolojiler
 
