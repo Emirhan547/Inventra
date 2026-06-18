@@ -47,7 +47,12 @@ namespace Inventra.WebUI.Controllers
         }
         public async Task<IActionResult>StockOut()
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(
+     new ProductFilterDto
+     {
+         PageNumber = 1,
+         PageSize = 1000
+     });
             var warehouses = await _warehouseService.GetAllAsync();
 
             ViewBag.Products =new SelectList(products.Items,"Id","Name");

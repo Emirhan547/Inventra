@@ -1,89 +1,203 @@
 ﻿@using Inventra.WebUI.Dtos.StockDtos
 @model CreateTransferStockDto
 
-<div class="content-card">
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
 
-    <h2 class="mb-4">
+    <div>
 
-        Depolar Arası Transfer
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-arrow-left-right text-primary"></i>
+            Depolar Arası Transfer
+        </h2>
 
-    </h2>
+        <p class="text-muted mb-0">
+            Ürünleri depolar arasında güvenli şekilde transfer edin.
+        </p>
 
-    <form asp-action="Transfer">
+    </div>
 
-        <div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary">
 
-            <label>Ürün</label>
+        <i class="bi bi-arrow-left"></i>
+        Geri Dön
 
-            <select asp-for="ProductId"
-                    asp-items="ViewBag.Products"
-                    class="form-select">
-
-                <option value="">
-                    Ürün Seçiniz
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Kaynak Depo</label>
-
-            <select asp-for="SourceWarehouseId"
-                    asp-items="ViewBag.Warehouses"
-                    class="form-select">
-
-                <option value="">
-                    Kaynak Depo Seçiniz
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Hedef Depo</label>
-
-            <select asp-for="DestinationWarehouseId"
-                    asp-items="ViewBag.Warehouses"
-                    class="form-select">
-
-                <option value="">
-                    Hedef Depo Seçiniz
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Miktar</label>
-
-            <input asp-for="Quantity"
-                   class="form-control" />
-
-        </div>
-
-        <div class="mb-3">
-
-            <label>Açıklama</label>
-
-            <textarea asp-for="Description"
-                      class="form-control">
-            </textarea>
-
-        </div>
-
-        <button class="btn btn-primary">
-
-            Transfer Et
-
-        </button>
-
-    </form>
+    </a>
 
 </div>
+
+<div class="row">
+
+    <div class="col-lg-8">
+
+        <div class="content-card">
+
+            <form asp-action="Transfer">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="ProductId" class="form-label fw-semibold">
+                            Ürün
+                        </label>
+
+                        <select asp-for="ProductId"
+                                asp-items="ViewBag.Products"
+                                class="form-select">
+
+                            <option value="">
+                                Ürün Seçiniz
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="Quantity"
+                               class="form-label fw-semibold">
+
+                            Transfer Miktarı
+
+                        </label>
+
+                        <input asp-for="Quantity"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="SourceWarehouseId"
+                               class="form-label fw-semibold">
+
+                            Kaynak Depo
+
+                        </label>
+
+                        <select asp-for="SourceWarehouseId"
+                                asp-items="ViewBag.Warehouses"
+                                class="form-select">
+
+                            <option value="">
+                                Kaynak Depo Seçiniz
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="DestinationWarehouseId"
+                               class="form-label fw-semibold">
+
+                            Hedef Depo
+
+                        </label>
+
+                        <select asp-for="DestinationWarehouseId"
+                                asp-items="ViewBag.Warehouses"
+                                class="form-select">
+
+                            <option value="">
+                                Hedef Depo Seçiniz
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Description"
+                           class="form-label fw-semibold">
+
+                        Açıklama
+
+                    </label>
+
+                    <textarea asp-for="Description"
+                              rows="4"
+                              class="form-control"
+                              placeholder="Transfer hakkında kısa açıklama yazabilirsiniz...">
+                    </textarea>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-light">
+
+                        Vazgeç
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-arrow-left-right"></i>
+
+                        Transferi Tamamla
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="content-card">
+
+            <h5 class="fw-bold mb-3">
+
+                <i class="bi bi-info-circle-fill text-primary"></i>
+
+                Transfer Bilgisi
+
+            </h5>
+
+            <div class="alert alert-info mb-0">
+
+                <ul class="mb-0 ps-3">
+
+                    <li>Kaynak ve hedef depo farklı olmalıdır.</li>
+
+                    <li>Transfer miktarı mevcut stoktan fazla olamaz.</li>
+
+                    <li>İşlem tamamlandığında stok hareketi otomatik oluşturulur.</li>
+
+                    <li>Tüm transferler sistem tarafından kayıt altına alınır.</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

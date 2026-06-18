@@ -1,6 +1,11 @@
 ﻿@using Inventra.WebUI.Common
 @using Inventra.WebUI.Dtos.StockMovementDtos
+
 @model PagedResponse<ResultStockMovementDto>
+
+@{
+    ViewData["Title"] = "Stok Hareketleri";
+}
 
 <div class="page-header">
 
@@ -8,199 +13,270 @@
 
         <h2>Stok Hareketleri</h2>
 
-        <p class="text-muted">
-            Tüm stok hareketleri
+        <p class="text-muted mb-0">
+
+            Toplam <strong>@Model.TotalCount</strong> hareket bulunmaktadır.
+
         </p>
 
     </div>
 
 </div>
 
-<form method="get" class="mb-4">
+<div class="content-card mb-4">
 
-    <div class="row g-2">
+    <form method="get">
 
-        <div class="col-md-3">
+        <div class="row g-3 align-items-end">
 
-            <select name="Type"
-                    class="form-select">
+            <div class="col-lg-3">
 
-                <option value="">
-                    Tüm Hareketler
-                </option>
+                <label class="form-label fw-semibold">
 
-                <option value="1"
-                        selected="@(Context.Request.Query["Type"] == "1")">
+                    Hareket Tipi
 
-                    Stok Girişi
+                </label>
 
-                </option>
+                <select name="Type"
+                        class="form-select">
 
-                <option value="2"
-                        selected="@(Context.Request.Query["Type"] == "2")">
+                    <option value="">
+                        Tüm Hareketler
+                    </option>
 
-                    Stok Çıkışı
+                    <option value="1"
+                            selected="@(Context.Request.Query["Type"] == "1")">
 
-                </option>
+                        Stok Girişi
 
-                <option value="3"
-                        selected="@(Context.Request.Query["Type"] == "3")">
+                    </option>
 
-                    Transfer
+                    <option value="2"
+                            selected="@(Context.Request.Query["Type"] == "2")">
 
-                </option>
+                        Stok Çıkışı
 
-            </select>
+                    </option>
+
+                    <option value="3"
+                            selected="@(Context.Request.Query["Type"] == "3")">
+
+                        Transfer
+
+                    </option>
+
+                    <option value="4"
+                            selected="@(Context.Request.Query["Type"] == "4")">
+
+                        Düzeltme
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <label class="form-label fw-semibold">
+
+                    Başlangıç Tarihi
+
+                </label>
+
+                <input type="date"
+                       name="StartDate"
+                       value="@Context.Request.Query["StartDate"]"
+                       class="form-control" />
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <label class="form-label fw-semibold">
+
+                    Bitiş Tarihi
+
+                </label>
+
+                <input type="date"
+                       name="EndDate"
+                       value="@Context.Request.Query["EndDate"]"
+                       class="form-control" />
+
+            </div>
+
+            <div class="col-lg-3">
+
+                <div class="d-flex gap-2">
+
+                    <button class="btn btn-primary flex-fill">
+
+                        <i class="bi bi-funnel me-2"></i>
+
+                        Filtrele
+
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="col-md-3">
+    </form>
 
-            <input type="date"
-                   name="StartDate"
-                   value="@Context.Request.Query["StartDate"]"
-                   class="form-control" />
-
-        </div>
-
-        <div class="col-md-3">
-
-            <input type="date"
-                   name="EndDate"
-                   value="@Context.Request.Query["EndDate"]"
-                   class="form-control" />
-
-        </div>
-
-        <div class="col-md-3 d-flex gap-2">
-
-            <button type="submit"
-                    class="btn btn-primary">
-
-                Filtrele
-
-            </button>
-
-            <a asp-action="Index"
-               class="btn btn-outline-secondary">
-
-                Temizle
-
-            </a>
-
-        </div>
-
-    </div>
-
-</form>
+</div>
 
 <div class="content-card">
 
-    <table class="table table-hover align-middle">
+    @if (Model.Items.Any())
+    {
+        <div class="table-responsive">
 
-        <thead>
+            <table class="table table-hover align-middle inventory-table">
 
-            <tr>
+                <thead>
 
-                <th>Tarih</th>
-
-                <th>Ürün</th>
-
-                <th>Depo</th>
-
-                <th>Tip</th>
-
-                <th>Miktar</th>
-
-                <th>Açıklama</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            @if (Model.Items.Any())
-            {
-                @foreach (var item in Model.Items)
-                {
                     <tr>
 
-                        <td>
-                            @item.CreatedDate.ToString("dd.MM.yyyy HH:mm")
-                        </td>
+                        <th>Tarih</th>
 
-                        <td>
-                            @item.ProductName
-                        </td>
+                        <th>Ürün</th>
 
-                        <td>
-                            @item.WarehouseName
-                        </td>
+                        <th>Depo</th>
 
-                        <td>
+                        <th>Hareket</th>
 
-                            @switch (item.Type)
-                            {
-                                case StockMovementType.StockIn:
+                        <th class="text-center">Miktar</th>
 
-                                    <span class="badge bg-success">
-                                        Giriş
-                                    </span>
-                                    break;
-
-                                case StockMovementType.StockOut:
-
-                                    <span class="badge bg-danger">
-                                        Çıkış
-                                    </span>
-                                    break;
-
-                                case StockMovementType.Transfer:
-
-                                    <span class="badge bg-primary">
-                                        Transfer
-                                    </span>
-                                    break;
-
-                                case StockMovementType.Adjustment:
-
-                                    <span class="badge bg-warning text-dark">
-                                        Düzeltme
-                                    </span>
-                                    break;
-                            }
-
-                        </td>
-
-                        <td>
-                            @item.Quantity
-                        </td>
-
-                        <td>
-                            @item.Description
-                        </td>
+                        <th>Açıklama</th>
 
                     </tr>
-                }
-            }
-            else
-            {
-                <tr>
 
-                    <td colspan="6"
-                        class="text-center">
+                </thead>
 
-                        Hareket bulunamadı
+                <tbody>
 
-                    </td>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
 
-                </tr>
-            }
+                            <td>
 
-        </tbody>
+                                @item.CreatedDate.ToString("dd.MM.yyyy")
 
-    </table>
+                                <br />
+
+                                <small class="text-muted">
+
+                                    @item.CreatedDate.ToString("HH:mm")
+
+                                </small>
+
+                            </td>
+
+                            <td class="fw-semibold">
+
+                                @item.ProductName
+
+                            </td>
+
+                            <td>
+
+                                @item.WarehouseName
+
+                            </td>
+
+                            <td>
+
+                                @switch (item.Type)
+                                {
+                                    case StockMovementType.StockIn:
+
+                                        <span class="badge bg-success">
+                                            Giriş
+                                        </span>
+
+                                        break;
+
+                                    case StockMovementType.StockOut:
+
+                                        <span class="badge bg-danger">
+                                            Çıkış
+                                        </span>
+
+                                        break;
+
+                                    case StockMovementType.Transfer:
+
+                                        <span class="badge bg-primary">
+                                            Transfer
+                                        </span>
+
+                                        break;
+
+                                    case StockMovementType.Adjustment:
+
+                                        <span class="badge bg-warning text-dark">
+                                            Düzeltme
+                                        </span>
+
+                                        break;
+                                }
+
+                            </td>
+
+                            <td class="text-center fw-semibold">
+
+                                @item.Quantity
+
+                            </td>
+
+                            <td>
+
+                                @(string.IsNullOrWhiteSpace(item.Description)
+                                    ? "-"
+                                    : item.Description)
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="bi bi-clock-history display-5 text-primary"></i>
+
+            <h4 class="mt-3">
+
+                Hareket bulunamadı
+
+            </h4>
+
+            <p class="text-muted">
+
+                Seçilen filtrelere uygun stok hareketi bulunmamaktadır.
+
+            </p>
+
+        </div>
+    }
 
 </div>
 
@@ -220,7 +296,7 @@
                    asp-route-StartDate="@Context.Request.Query["StartDate"]"
                    asp-route-EndDate="@Context.Request.Query["EndDate"]">
 
-                    Önceki
+                    <i class="bi bi-chevron-left"></i>
 
                 </a>
 
@@ -255,7 +331,7 @@
                    asp-route-StartDate="@Context.Request.Query["StartDate"]"
                    asp-route-EndDate="@Context.Request.Query["EndDate"]">
 
-                    Sonraki
+                    <i class="bi bi-chevron-right"></i>
 
                 </a>
 

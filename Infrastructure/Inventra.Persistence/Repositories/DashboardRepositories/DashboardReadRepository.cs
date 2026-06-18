@@ -17,38 +17,7 @@ public class DashboardReadRepository
         _context = context;
     }
 
-    public async Task<List<DashboardAiProductResponse>>
-     GetAiAnalysisDataAsync(
-         CancellationToken cancellationToken = default)
-    {
-        var thirtyDaysAgo =
-            DateTime.UtcNow.AddDays(-30);
-
-        return await _context.Stocks
-            .Include(x => x.Product)
-            .Select(x =>
-                new DashboardAiProductResponse
-                {
-                    ProductName =
-                        x.Product.Name,
-
-                    CurrentStock =
-                        x.Quantity,
-
-                    MinimumStockLevel =
-                        x.Product.MinimumStockLevel,
-
-                    Last30DaysMovement =
-                        _context.StockMovements
-                            .Where(m =>
-                                m.StockId == x.Id &&
-                                m.CreatedDate >=
-                                thirtyDaysAgo)
-                            .Sum(m =>
-                                (int?)m.Quantity) ?? 0
-                })
-            .ToListAsync(cancellationToken);
-    }
+    
 
     public async Task<GetDashboardQueryResponse>
         GetDashboardAsync(

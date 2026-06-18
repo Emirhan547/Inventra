@@ -12,100 +12,195 @@
     };
 }
 
-<div class="page-header">
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
 
     <div>
-        <h2>Kullanıcı Rolleri</h2>
-        <p class="text-muted">
-            Rol yönetimi
+
+        <h2 class="fw-bold mb-1">
+
+            <i class="bi bi-person-gear text-primary"></i>
+
+            Kullanıcı Rol Yönetimi
+
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            Kullanıcının sistem rollerini yönetin.
+
         </p>
+
     </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Kullanıcılara Dön
+
+    </a>
 
 </div>
 
-<div class="content-card">
+<div class="row">
 
-    <h5 class="mb-4">
-        Atanmış Roller
-    </h5>
+    <!-- Atanmış Roller -->
 
-    @foreach (var role in Model.Roles)
-    {
-        <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+    <div class="col-lg-7">
 
-            <span>
-                @role
-            </span>
+        <div class="content-card h-100">
 
-            <form asp-action="RemoveRole"
+            <h5 class="fw-semibold mb-4">
+
+                <i class="bi bi-shield-check text-success"></i>
+
+                Atanmış Roller
+
+            </h5>
+
+            @if (Model.Roles.Any())
+            {
+                @foreach (var role in Model.Roles)
+                {
+                    string badgeClass = role switch
+                    {
+                        "Admin" => "bg-danger",
+                        "Manager" => "bg-warning text-dark",
+                        "Employee" => "bg-primary",
+                        _ => "bg-secondary"
+                    };
+
+                    <div class="d-flex justify-content-between align-items-center border rounded-3 p-3 mb-3">
+
+                        <div>
+
+                            <span class="badge @badgeClass fs-6">
+
+                                @role
+
+                            </span>
+
+                        </div>
+
+                        <form asp-action="RemoveRole"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="userId"
+                                   value="@userId" />
+
+                            <input type="hidden"
+                                   name="roleName"
+                                   value="@role" />
+
+                            <button class="btn btn-outline-danger btn-sm">
+
+                                <i class="bi bi-trash"></i>
+
+                                Kaldır
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5 text-muted">
+
+                    <i class="bi bi-person-x fs-1"></i>
+
+                    <p class="mt-3 mb-0">
+
+                        Bu kullanıcıya henüz rol atanmadı.
+
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- Rol Ata -->
+
+    <div class="col-lg-5">
+
+        <div class="content-card">
+
+            <h5 class="fw-semibold mb-4">
+
+                <i class="bi bi-plus-circle text-primary"></i>
+
+                Yeni Rol Ata
+
+            </h5>
+
+            <form asp-action="AssignRole"
                   method="post">
 
                 <input type="hidden"
                        name="userId"
                        value="@userId" />
 
-                <input type="hidden"
-                       name="roleName"
-                       value="@role" />
+                <div class="mb-4">
 
-                <button type="submit"
-                        class="btn btn-danger btn-sm">
+                    <label class="form-label">
 
-                    Kaldır
+                        Rol Seçiniz
 
-                </button>
+                    </label>
 
-            </form>
+                    <select name="roleName"
+                            class="form-select">
 
-        </div>
-    }
+                        @foreach (var role in allRoles)
+                        {
+                            <option value="@role">
 
-</div>
+                                @role
 
-<div class="content-card mt-4">
+                            </option>
+                        }
 
-    <h5 class="mb-4">
-        Rol Ekle
-    </h5>
+                    </select>
 
-    <form asp-action="AssignRole"
-          method="post">
+                </div>
 
-        <input type="hidden"
-               name="userId"
-               value="@userId" />
+                <button class="btn btn-primary w-100">
 
-        <div class="row">
-
-            <div class="col-md-6">
-
-                <select name="roleName"
-                        class="form-select">
-
-                    @foreach (var role in allRoles)
-                    {
-                        <option value="@role">
-                            @role
-                        </option>
-                    }
-
-                </select>
-
-            </div>
-
-            <div class="col-md-3">
-
-                <button type="submit"
-                        class="btn btn-primary">
+                    <i class="bi bi-person-plus-fill"></i>
 
                     Rol Ata
 
                 </button>
 
+            </form>
+
+            <hr />
+
+            <div class="alert alert-info mb-0">
+
+                <strong>Bilgi</strong>
+
+                <ul class="mb-0 mt-2">
+
+                    <li>Admin tüm yetkilere sahiptir.</li>
+
+                    <li>Manager operasyonları yönetebilir.</li>
+
+                    <li>Employee günlük işlemleri gerçekleştirebilir.</li>
+
+                </ul>
+
             </div>
 
         </div>
 
-    </form>
+    </div>
 
 </div>

@@ -79,5 +79,15 @@ namespace Inventra.WebUI.Controllers
             await _purchaseOrderService .CompleteAsync(model);
             return RedirectToAction( nameof(Index));
         }
+        public async Task<IActionResult> AiAnalysis(Guid id)
+        {
+            var analysis =
+                await _purchaseOrderService
+                    .GetAiAnalysisAsync(id);
+
+            return PartialView(
+                "_AiAnalysisPartial",
+                analysis);
+        }
     }
 }

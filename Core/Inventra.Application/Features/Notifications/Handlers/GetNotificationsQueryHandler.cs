@@ -73,7 +73,7 @@ namespace Inventra.Application.Features.Notifications.Handlers
                     Message = x.Message,
                     Type = x.Type,
                     IsRead = x.IsRead,
-                    CreatedAt = x.CreatedAt
+                    CreatedAt = x.CreatedAt,
                 })
                 .ToList();
         }

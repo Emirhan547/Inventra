@@ -14,7 +14,8 @@ namespace Inventra.WebUI.Services.PurchaseOrderServices
         Task CreateAsync(CreatePurchaseOrderDto model);
 
         Task ApproveAsync(Guid id);
-
+        Task<PurchaseOrderAiAnalysisDto?>
+    GetAiAnalysisAsync(Guid id);
         Task CompleteAsync(CompletePurchaseOrderDto model);
     }
 }

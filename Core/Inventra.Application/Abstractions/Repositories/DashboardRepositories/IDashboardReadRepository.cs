@@ -8,8 +8,6 @@ namespace Inventra.Application.Abstractions.Repositories.DashboardRepositories
     public interface IDashboardReadRepository
     {
         Task<GetDashboardQueryResponse>GetDashboardAsync(CancellationToken cancellationToken = default);
-        Task<List<DashboardAiProductResponse>>
-    GetAiAnalysisDataAsync(
-        CancellationToken cancellationToken = default);
+       
     }
 }

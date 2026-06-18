@@ -84,5 +84,14 @@ namespace Inventra.WebUI.Services.PurchaseOrderServices
         {
             await _client.PatchAsync($"purchase-orders/{model.PurchaseOrderId}/complete?warehouseId={model.WarehouseId}",null);
         }
+        public async Task<PurchaseOrderAiAnalysisDto?> GetAiAnalysisAsync(Guid id)
+        {
+            var response =
+                await _client.GetFromJsonAsync<
+                    ApiResponse<PurchaseOrderAiAnalysisDto>>
+                    ($"purchase-orders/{id}/ai-analysis");
+
+            return response?.Data;
+        }
     }
 }

@@ -51,7 +51,38 @@
 <div class="content-card">
 
     <h4>Sipariş Kalemleri</h4>
+    <br />
 
+    <div class="content-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h4 class="mb-0">
+                🤖 AI Satın Alma Analizi
+            </h4>
+
+            <button id="btnGenerateAi"
+                    class="btn btn-primary"
+                    data-id="@Model.Id">
+
+                Analiz Oluştur
+
+            </button>
+
+        </div>
+
+        <div id="aiAnalysisContainer">
+
+            <div class="text-muted">
+
+                Satın alma siparişini yapay zekaya analiz ettirmek için
+                <strong>Analiz Oluştur</strong> butonuna tıklayın.
+
+            </div>
+
+        </div>
+
+    </div>
     <table class="table">
 
         <thead>
@@ -101,3 +132,38 @@
     </table>
 
 </div>
+@section Scripts {
+
+    <script>
+
+        document
+        .getElementById("btnGenerateAi")
+        .addEventListener("click", async function () {
+
+            const button = this;
+
+            const id = button.dataset.id;
+
+            button.disabled = true;
+
+            button.innerText = "Analiz hazırlanıyor...";
+
+            const response =
+                await fetch(`/PurchaseOrder/AiAnalysis?id=${id}`);
+
+            const html =
+                await response.text();
+
+            document
+                .getElementById("aiAnalysisContainer")
+                .innerHTML = html;
+
+            button.innerText = "Tekrar Analiz Et";
+
+            button.disabled = false;
+
+        });
+
+    </script>
+
+}

@@ -71,5 +71,16 @@ public static class PurchaseOrderEndpoints
                     }))
             .RequireAuthorization(
                 Policies.PurchaseOrderComplete);
+        group.MapGet(
+    "/{id:guid}/ai-analysis",
+    async (
+        Guid id,
+        IMediator mediator)
+        => await mediator.Send(
+            new GetPurchaseOrderAiAnalysisQueryRequest
+            {
+                Id = id
+            }))
+.RequireAuthorization();
     }
 }

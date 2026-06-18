@@ -1,20 +1,30 @@
 ﻿@using Inventra.WebUI.Dtos.WarehouseDtos
 @model List<ResultWarehouseDto>
 
+@{
+    ViewData["Title"] = "Depolar";
+}
+
 <div class="page-header">
 
     <div>
 
-        <h2>Depolar</h2>
+        <h2>
+            Depolar
+        </h2>
 
-        <p class="text-muted">
-            Depo yönetimi
+        <p class="text-muted mb-0">
+
+            Toplam <strong>@Model.Count</strong> depo bulunmaktadır.
+
         </p>
 
     </div>
 
     <a asp-action="Create"
        class="btn btn-primary">
+
+        <i class="bi bi-plus-lg me-2"></i>
 
         Yeni Depo
 
@@ -24,59 +34,113 @@
 
 <div class="content-card">
 
-    <table class="table table-hover">
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
 
-        <thead>
+            <table class="table table-hover align-middle inventory-table">
 
-            <tr>
+                <thead>
 
-                <th>Depo Adı</th>
+                    <tr>
 
-                <th>Lokasyon</th>
+                        <th>Depo Adı</th>
 
-                <th width="180">
-                    İşlemler
-                </th>
+                        <th>Lokasyon</th>
 
-            </tr>
+                        <th class="text-end" style="width:220px">
 
-        </thead>
+                            İşlemler
 
-        <tbody>
+                        </th>
 
-            @foreach (var item in Model)
-            {
-                <tr>
+                    </tr>
 
-                    <td>@item.Name</td>
+                </thead>
 
-                    <td>@item.Location</td>
+                <tbody>
 
-                    <td>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
 
-                        <a asp-action="Update"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-warning">
+                            <td class="fw-semibold">
 
-                            Düzenle
+                                @item.Name
 
-                        </a>
+                            </td>
 
-                        <a asp-action="Delete"
-                           asp-route-id="@item.Id"
-                           class="btn btn-sm btn-danger">
+                            <td>
 
-                            Sil
+                                @item.Location
 
-                        </a>
+                            </td>
 
-                    </td>
+                            <td class="text-end">
 
-                </tr>
-            }
+                                <div class="d-inline-flex gap-2">
 
-        </tbody>
+                                    <a asp-action="Update"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-outline-primary btn-sm">
 
-    </table>
+                                        <i class="bi bi-pencil-square me-1"></i>
+
+                                        Düzenle
+
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-outline-danger btn-sm">
+
+                                        <i class="bi bi-trash me-1"></i>
+
+                                        Sil
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+
+            <i class="bi bi-building display-5 text-primary"></i>
+
+            <h4 class="mt-3">
+
+                Henüz depo bulunmuyor
+
+            </h4>
+
+            <p class="text-muted">
+
+                İlk deponuzu oluşturarak başlayabilirsiniz.
+
+            </p>
+
+            <a asp-action="Create"
+               class="btn btn-primary mt-2">
+
+                <i class="bi bi-plus-lg me-2"></i>
+
+                İlk Depoyu Oluştur
+
+            </a>
+
+        </div>
+    }
 
 </div>

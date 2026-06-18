@@ -6,140 +6,305 @@
 
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
 
     <title>Inventra | Kayıt Ol</title>
 
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
           rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
 </head>
 
-<body class="bg-light">
+<body>
 
-    <div class="container">
+    <div class="login-page register-page">
 
-        <div class="row min-vh-100 align-items-center justify-content-center">
+        <div class="login-background"></div>
 
-            <div class="col-md-7 col-lg-6">
+        <div class="container">
 
-                <div class="card border-0 shadow-lg">
+            <div class="row justify-content-center align-items-center min-vh-100">
 
-                    <div class="card-body p-5">
+                <div class="col-xl-11 col-lg-12">
 
-                        <div class="text-center mb-4">
+                    <div class="login-card">
 
-                            <h2 class="fw-bold">
-                                Inventra
-                            </h2>
+                        <div class="row g-0">
 
-                            <p class="text-muted">
-                                Yeni Kullanıcı Kaydı
-                            </p>
+                            <div class="col-lg-5 d-none d-lg-flex">
 
-                        </div>
+                                <div class="login-left">
 
-                        <form asp-action="Register"
-                              method="post">
+                                    <div>
 
-                            <div asp-validation-summary="ModelOnly"
-                                 class="text-danger mb-3">
-                            </div>
+                                        <span class="login-badge">
+                                            INVENTRA
+                                        </span>
 
-                            <div class="row">
+                                        <h1 class="login-title">
+                                            Inventra'ya
+                                            Katılın
+                                        </h1>
 
-                                <div class="col-md-6 mb-3">
+                                        <p class="login-description">
 
-                                    <label asp-for="FirstName"
-                                           class="form-label">
-                                        Ad
-                                    </label>
+                                            Dakikalar içerisinde hesabınızı
+                                            oluşturun ve envanterinizi,
+                                            stoklarınızı ve satın alma
+                                            süreçlerinizi tek panelden
+                                            yönetmeye başlayın.
 
-                                    <input asp-for="FirstName"
-                                           class="form-control" />
+                                        </p>
+
+                                    </div>
+
+                                    <div class="login-feature-list">
+
+                                        <div class="login-feature">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            <span>
+                                                Güvenli Kullanıcı Yönetimi
+                                            </span>
+
+                                        </div>
+
+                                        <div class="login-feature">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            <span>
+                                                AI Destekli Analizler
+                                            </span>
+
+                                        </div>
+
+                                        <div class="login-feature">
+
+                                            <i class="bi bi-check-circle-fill"></i>
+
+                                            <span>
+                                                Modern Dashboard Deneyimi
+                                            </span>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
-                                <div class="col-md-6 mb-3">
+                            </div>
 
-                                    <label asp-for="LastName"
-                                           class="form-label">
-                                        Soyad
-                                    </label>
+                            <div class="col-lg-7">
 
-                                    <input asp-for="LastName"
-                                           class="form-control" />
+                                <div class="login-right">
+
+                                    <div class="login-header">
+
+                                        <h2>
+                                            Hesap Oluştur
+                                        </h2>
+
+                                        <p>
+                                            Bilgilerinizi doldurarak kayıt olun.
+                                        </p>
+
+                                    </div>
+
+                                    <form asp-action="Register"
+                                          method="post">
+
+                                        <div asp-validation-summary="ModelOnly"
+                                             class="alert alert-danger">
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-6 mb-3">
+
+                                                <label asp-for="FirstName"
+                                                       class="form-label">
+                                                    Ad
+                                                </label>
+
+                                                <div class="input-icon">
+
+                                                    <i class="bi bi-person"></i>
+
+                                                    <input asp-for="FirstName"
+                                                           class="form-control login-input"
+                                                           placeholder="Adınız" />
+
+                                                </div>
+
+                                                <span asp-validation-for="FirstName"
+                                                      class="text-danger"></span>
+
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+
+                                                <label asp-for="LastName"
+                                                       class="form-label">
+                                                    Soyad
+                                                </label>
+
+                                                <div class="input-icon">
+
+                                                    <i class="bi bi-person"></i>
+
+                                                    <input asp-for="LastName"
+                                                           class="form-control login-input"
+                                                           placeholder="Soyadınız" />
+
+                                                </div>
+
+                                                <span asp-validation-for="LastName"
+                                                      class="text-danger"></span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label asp-for="UserName"
+                                                   class="form-label">
+                                                Kullanıcı Adı
+                                            </label>
+
+                                            <div class="input-icon">
+
+                                                <i class="bi bi-at"></i>
+
+                                                <input asp-for="UserName"
+                                                       class="form-control login-input"
+                                                       placeholder="Kullanıcı adınız" />
+
+                                            </div>
+
+                                            <span asp-validation-for="UserName"
+                                                  class="text-danger"></span>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label asp-for="Email"
+                                                   class="form-label">
+                                                E-Posta
+                                            </label>
+
+                                            <div class="input-icon">
+
+                                                <i class="bi bi-envelope"></i>
+
+                                                <input asp-for="Email"
+                                                       class="form-control login-input"
+                                                       placeholder="ornek@mail.com" />
+
+                                            </div>
+
+                                            <span asp-validation-for="Email"
+                                                  class="text-danger"></span>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label asp-for="Password"
+                                                   class="form-label">
+                                                Şifre
+                                            </label>
+
+                                            <div class="input-icon">
+
+                                                <i class="bi bi-lock"></i>
+
+                                                <input asp-for="Password"
+                                                       type="password"
+                                                       class="form-control login-input"
+                                                       placeholder="Şifreniz" />
+
+                                            </div>
+
+                                            <span asp-validation-for="Password"
+                                                  class="text-danger"></span>
+
+                                        </div>
+
+                                        <div class="mb-4">
+
+                                            <label asp-for="ConfirmPassword"
+                                                   class="form-label">
+                                                Şifre Tekrar
+                                            </label>
+
+                                            <div class="input-icon">
+
+                                                <i class="bi bi-shield-lock"></i>
+
+                                                <input asp-for="ConfirmPassword"
+                                                       type="password"
+                                                       class="form-control login-input"
+                                                       placeholder="Şifrenizi tekrar girin" />
+
+                                            </div>
+
+                                            <span asp-validation-for="ConfirmPassword"
+                                                  class="text-danger"></span>
+
+                                        </div>
+
+                                        <button type="submit"
+                                                class="btn btn-primary login-button">
+
+                                            <i class="bi bi-person-plus-fill me-2"></i>
+
+                                            Hesap Oluştur
+
+                                        </button>
+
+                                    </form>
+
+                                    <div class="login-footer">
+
+                                        <span>
+                                            Zaten hesabınız var mı?
+                                        </span>
+
+                                        <a asp-action="Login">
+                                            Giriş Yap
+                                        </a>
+
+                                    </div>
 
                                 </div>
 
                             </div>
-
-                            <div class="mb-3">
-
-                                <label asp-for="UserName"
-                                       class="form-label">
-                                    Kullanıcı Adı
-                                </label>
-
-                                <input asp-for="UserName"
-                                       class="form-control" />
-
-                            </div>
-
-                            <div class="mb-3">
-
-                                <label asp-for="Email"
-                                       class="form-label">
-                                    E-Posta
-                                </label>
-
-                                <input asp-for="Email"
-                                       class="form-control" />
-
-                            </div>
-
-                            <div class="mb-3">
-
-                                <label asp-for="Password"
-                                       class="form-label">
-                                    Şifre
-                                </label>
-
-                                <input asp-for="Password"
-                                       type="password"
-                                       class="form-control" />
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label asp-for="ConfirmPassword"
-                                       class="form-label">
-                                    Şifre Tekrar
-                                </label>
-
-                                <input asp-for="ConfirmPassword"
-                                       type="password"
-                                       class="form-control" />
-
-                            </div>
-
-                            <button type="submit"
-                                    class="btn btn-success w-100">
-                                Kayıt Ol
-                            </button>
-
-                        </form>
-
-                        <hr />
-
-                        <div class="text-center">
-
-                            <a asp-action="Login"
-                               class="text-decoration-none">
-                                Giriş ekranına dön
-                            </a>
 
                         </div>
 
@@ -156,4 +321,5 @@
     <partial name="_ValidationScriptsPartial" />
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 ﻿using Inventra.Application.Abstractions.Repositories.PurchaseOrderRepositories;
 using Inventra.Application.Common.Pagination;
+using Inventra.Application.Features.PurchaseOrders.Results;
 using Inventra.Domain.Entities;
 using Inventra.Domain.Enums;
 using Inventra.Persistence.Context;
@@ -15,6 +16,41 @@ namespace Inventra.Persistence.Repositories.PurchaseOrderRepositories
     {
         public PurchaseOrderReadRepository(InventraDbContext context) : base(context)
         {
+        }
+
+        public async Task<PurchaseOrderAiDto?> GetAiAnalysisDataAsync(
+    Guid id,
+    CancellationToken cancellationToken = default)
+        {
+            return await Table
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new PurchaseOrderAiDto
+                {
+                    SupplierName = x.Supplier.Name,
+
+                    TotalAmount = x.TotalAmount,
+
+                    Items = x.Item.Select(i => new PurchaseOrderAiItemDto
+                    {
+                        ProductName = i.Product.Name,
+
+                        Quantity = i.Quantity,
+
+                        UnitPrice = i.UnitPrice,
+
+                        CurrentStock = i.Product.Stocks
+                            .Sum(s => (int?)s.Quantity) ?? 0,
+
+                        MinimumStockLevel = i.Product.MinimumStockLevel,
+
+                        Last30DaysMovement = i.Product.Stocks
+                            .SelectMany(s => s.StockMovements)
+                            .Where(m => m.CreatedDate >= DateTime.UtcNow.AddDays(-30))
+                            .Sum(m => (int?)m.Quantity) ?? 0
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<PurchaseOrder?> GetDetailAsync(Guid id, CancellationToken cancellationToken = default)

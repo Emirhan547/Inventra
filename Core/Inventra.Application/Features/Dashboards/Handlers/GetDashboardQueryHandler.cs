@@ -14,14 +14,13 @@ public class GetDashboardQueryHandler
 {
     private readonly IDashboardReadRepository _repository;
 
-    private readonly IAIService _aiService;
 
     public GetDashboardQueryHandler(
-        IDashboardReadRepository repository,
-        IAIService aiService)
+        IDashboardReadRepository repository
+        )
     {
         _repository = repository;
-        _aiService = aiService;
+       
     }
 
     public async Task<Result<GetDashboardQueryResponse>>
@@ -33,41 +32,6 @@ public class GetDashboardQueryHandler
             await _repository
                 .GetDashboardAsync(
                     cancellationToken);
-
-        var aiData =
-            await _repository
-                .GetAiAnalysisDataAsync(
-                    cancellationToken);
-
-        var prompt =
-$"""
-Aşağıdaki envanter verilerini analiz et.
-
-Her ürün için:
-
-- Stok yeterli mi?
-- Satın alma gerekli mi?
-- Öncelik seviyesi nedir?
-
-Veriler:
-
-{string.Join(
-    Environment.NewLine,
-    aiData.Select(x =>
-        $"{x.ProductName} | " +
-        $"Stok:{x.CurrentStock} | " +
-        $"Min:{x.MinimumStockLevel} | " +
-        $"30Gun:{x.Last30DaysMovement}"))}
-""";
-
-        var aiResult =
-            await _aiService
-                .GenerateAsync(
-                    prompt,
-                    cancellationToken);
-
-        dashboard.AiPurchaseRecommendation =
-            aiResult;
 
         return Result<GetDashboardQueryResponse>
             .SuccessResult(dashboard);

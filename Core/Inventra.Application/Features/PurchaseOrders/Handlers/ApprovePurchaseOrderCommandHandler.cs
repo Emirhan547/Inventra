@@ -23,7 +23,8 @@ namespace Inventra.Application.Features.PurchaseOrders.Handlers
 
         public async Task<Result> Handle(ApprovePurchaseOrderCommand request,CancellationToken cancellationToken)
         {
-            var purchaseOrder =await _repository.GetByIdAsync(request.Id);
+            var purchaseOrder =
+       await _repository.GetByIdAsync(request.Id, tracking: true);
 
             if (purchaseOrder is null)
             {

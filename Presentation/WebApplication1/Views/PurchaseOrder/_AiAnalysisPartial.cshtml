@@ -1,0 +1,21 @@
+@using Inventra.WebUI.Dtos.PurchaseOrders
+@model PurchaseOrderAiAnalysisDto
+
+@if (Model is null)
+{
+    <div class="alert alert-danger">
+
+        AI analizi oluşturulamadı.
+
+    </div>
+}
+else
+{
+    <div class="alert alert-light border">
+
+        @Html.Raw(
+            Markdig.Markdown.ToHtml(
+                Model.Analysis))
+
+    </div>
+}
